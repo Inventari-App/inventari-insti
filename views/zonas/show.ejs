@@ -1,0 +1,27 @@
+<% layout('layouts/boilerplate')%>
+
+
+    <div class="row">
+        <div class="col-6 offset-3">
+            <div class="card">
+                
+                        <h5 class="card-title">
+                            <%= zona.nom %>
+                        </h5>
+                        
+                    </div>
+                    
+                    <% if( currentUser && zona.responsable.equals(currentUser.id)) { %>
+                    <div class="card-body">
+                        <a href="/zonas/<%=zona.id%>/edit" class="card-link btn btn-info" class="card-link">Editar
+                            Zona</a>
+                        <form class="d-inline" action="/zonas/<%=zona._id%>?_method=DELETE" method="POST">
+                            <button class="btn btn-danger">Esborrar Zona</button>
+                        </form>
+                    </div>
+                    <% } %>
+                    <div class="card-footer text-muted">
+                        <a href="/zonas">Totes les zonas</a>
+                    </div>
+                </div>
+            </div>

@@ -1,0 +1,53 @@
+<% layout('layouts/boilerplate')%>
+
+
+    <div class="row">
+        <div class="col-6 offset-3">
+            <div class="card">
+                <div class="card mb-3">
+                    <img src="<%= unitat.imatge %>" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <%= unitat.nom %>
+                        </h5>
+                        <p class="card-text">
+                            <%= unitat.descripcio %>
+                        </p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-unitat text-muted"><b>Responsable: </b>
+                            <%= unitat.responsable.username %> %>
+                        </li>
+                        <li class="list-group-unitat text-muted"><b>Zona: </b>
+                            <%= unitat.zona %>
+                        </li>
+                        <li class="list-group-unitat text-muted"><b>Planta: </b>
+                            <%= unitat.planta %>
+                        </li>
+                        <li class="list-group-unitat text-muted"><b>Àrea: </b>
+                            <%= unitat.area %>
+                        </li>
+                        <li class="list-group-unitat text-muted"><b>Unitat: </b>
+                            <%= unitat.unitat %>
+                        </li>
+                        <li class="list-group-unitat text-muted"><b>Planta: </b>
+                            <%= unitat.planta %>
+                        </li>
+                        <li class="list-group-unitat text-muted"><b>Preu de cost: </b>
+                            <%= unitat.preu %>€
+                        </li>
+                    </ul>
+                    <% if( currentUser && unitat.responsable.equals(currentUser.id)) { %>
+                    <div class="card-body">
+                        <a href="/unitats/<%=unitat.id%>/edit" class="card-link btn btn-info" class="card-link">Editar
+                            Unitat</a>
+                        <form class="d-inline" action="/unitats/<%=unitat._id%>?_method=DELETE" method="POST">
+                            <button class="btn btn-danger">Esborrar Unitat</button>
+                        </form>
+                    </div>
+                    <% } %>
+                    <div class="card-footer text-muted">
+                        <a href="/unitats">Totes les unitats</a>
+                    </div>
+                </div>
+            </div>

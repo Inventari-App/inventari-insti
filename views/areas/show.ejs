@@ -1,0 +1,53 @@
+<% layout('layouts/boilerplate')%>
+
+
+    <div class="row">
+        <div class="col-6 offset-3">
+            <div class="card">
+                <div class="card mb-3">
+                    <img src="<%= area.imatge %>" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <%= area.nom %>
+                        </h5>
+                        <p class="card-text">
+                            <%= area.descripcio %>
+                        </p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-area text-muted"><b>Responsable: </b>
+                            <%= area.responsable.username %> %>
+                        </li>
+                        <li class="list-group-area text-muted"><b>Zona: </b>
+                            <%= area.zona %>
+                        </li>
+                        <li class="list-group-area text-muted"><b>Planta: </b>
+                            <%= area.planta %>
+                        </li>
+                        <li class="list-group-area text-muted"><b>Àrea: </b>
+                            <%= area.area %>
+                        </li>
+                        <li class="list-group-area text-muted"><b>Area: </b>
+                            <%= area.area %>
+                        </li>
+                        <li class="list-group-area text-muted"><b>Planta: </b>
+                            <%= area.planta %>
+                        </li>
+                        <li class="list-group-area text-muted"><b>Preu de cost: </b>
+                            <%= area.preu %>€
+                        </li>
+                    </ul>
+                    <% if( currentUser && area.responsable.equals(currentUser.id)) { %>
+                    <div class="card-body">
+                        <a href="/areas/<%=area.id%>/edit" class="card-link btn btn-info" class="card-link">Editar
+                            Area</a>
+                        <form class="d-inline" action="/areas/<%=area._id%>?_method=DELETE" method="POST">
+                            <button class="btn btn-danger">Esborrar Area</button>
+                        </form>
+                    </div>
+                    <% } %>
+                    <div class="card-footer text-muted">
+                        <a href="/areas">Totes les àrees</a>
+                    </div>
+                </div>
+            </div>

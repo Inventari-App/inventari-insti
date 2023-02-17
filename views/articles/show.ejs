@@ -1,0 +1,53 @@
+<% layout('layouts/boilerplate')%>
+
+
+    <div class="row">
+        <div class="col-6 offset-3">
+            <div class="card">
+                <div class="card mb-3">
+                    <img src="<%= article.imatge %>" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <%= article.nom %>
+                        </h5>
+                        <p class="card-text">
+                            <%= article.descripcio %>
+                        </p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item text-muted"><b>Responsable: </b>
+                            <%= article.responsable.username %> %>
+                        </li>
+                        <li class="list-group-item text-muted"><b>Zona: </b>
+                            <%= article.zona %>
+                        </li>
+                        <li class="list-group-item text-muted"><b>Planta: </b>
+                            <%= article.planta %>
+                        </li>
+                        <li class="list-group-item text-muted"><b>Àrea: </b>
+                            <%= article.area %>
+                        </li>
+                        <li class="list-group-item text-muted"><b>Unitat: </b>
+                            <%= article.unitat %>
+                        </li>
+                        <li class="list-group-item text-muted"><b>Planta: </b>
+                            <%= article.planta %>
+                        </li>
+                        <li class="list-group-item text-muted"><b>Preu de cost: </b>
+                            <%= article.preu %>€
+                        </li>
+                    </ul>
+                    <% if( currentUser && article.responsable.equals(currentUser.id)) { %>
+                    <div class="card-body">
+                        <a href="/articles/<%=article.id%>/edit" class="card-link btn btn-info" class="card-link">Editar
+                            Article</a>
+                        <form class="d-inline" action="/articles/<%=article._id%>?_method=DELETE" method="POST">
+                            <button class="btn btn-danger">Esborrar Article</button>
+                        </form>
+                    </div>
+                    <% } %>
+                    <div class="card-footer text-muted">
+                        <a href="/articles">Tots els articles</a>
+                    </div>
+                </div>
+            </div>

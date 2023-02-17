@@ -1,0 +1,11 @@
+<% layout('layouts/boilerplate')%>
+
+    <h1>Tots els Usuaris</h1>
+    <div>
+        <a href='register'>Afegeix Usuari</a>
+    </div>
+    <ul>
+        <% for (let user of users){%>
+        <li><a href="/users/<%= user._id %>"><%= user.username %></a></li>
+        <% }%>
+    </ul>

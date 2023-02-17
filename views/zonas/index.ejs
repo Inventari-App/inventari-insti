@@ -1,0 +1,20 @@
+<% layout('layouts/boilerplate')%>
+    <h1>Totes les Zones</h1>
+    <div>
+        <a href="/zonas/new">Afegeix Zona</a>
+    </div>
+
+    <% for (let zona of zonas){%>
+        <div class="col-6 offset-3">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <%= zona.nom %>
+                        </h5>
+                        <a class="btn btn-primary" href="/zonas/<%=zona.id%>">Veure <%=zona.nom%> </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% }%>

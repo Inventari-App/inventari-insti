@@ -1,0 +1,172 @@
+<% layout('layouts/boilerplate')%>
+
+    <h1>Editar Comanda núm. <%= invoice.numInvoice %>
+    </h1>
+    <p>
+        <b>Responsable: <%= invoice.responsable.username %> </b>
+    </p>
+    <div class="table-responsive">
+        <table id="taulaOriginal" class="table table-condensed table-striped table-hover">
+            <form action="/invoices/<%=invoice._id%>?_method=PUT" method="POST" id="formulari"
+                class="validated-form form-inline">
+                <tr>
+
+
+                    <!--
+                <th><small>Naturalesa</th></small>
+                <th><small>Tipus</th></small>
+            -->
+                    <th><small>Quantitat</small></th>
+                    <th><small>Article</th>
+                    <th><small>€/Unitat</small></th>
+                    <th><small>% IVA</small></th>
+                    <th><small>Subtotal €</small></th>
+                    <th><small>Unitat de destí</small></th>
+                    <th><small>Proveidor</small></th>
+                    <th></th>
+
+
+                </tr>
+                <% let i=0; for (let linia of invoice.invoice) { i++ %>
+                    <tr class="trs">
+                        <div class="form-group container">
+
+
+
+
+
+                            <input type="hidden" class="tr<%=i%>" value=" <%= linia[0] %>" id="naturalesaInput"></small>
+
+                            <input type="hidden" class="tr<%=i%>" value="<%= linia[1] %>" id="tipusInput"> </small>
+
+
+                            </td>
+
+                            <div class="row">
+                                <td>
+                                    <div class="numeros form-control-sm"><small><input
+                                                class=" petit form-control unitari numeros tr<%=i%>" type="number"
+                                                id="quantitatInput" value="<%= linia[3] %>"></small>
+                                    </div>
+                                </td>
+
+                            </div>
+
+                            <div class="row">
+
+                                <td>
+                                    <div class="form-control-sm"><small><input type="text"
+                                                class=" form-control mitja esquerra tr<%=i%>" value="<%= linia[2] %>"
+                                                id="articleInput"> </small> </div>
+                                </td>
+
+
+                            </div>
+
+                            <div class="row">
+
+                                <td>
+                                    <div class="numeros form-control-sm"><small><input
+                                                class=" form-control petit numeros tr<%=i%>" type="number"
+                                                id="preuInput" value="<%= linia[4] %>"></small> </div>
+                                </td>
+
+                            </div>
+
+                            <div class="row">
+                                <td>
+                                    <div class="numeros form-control-sm"><small><input
+                                                class=" form-control numeros unitari tr<%=i%>" type="number"
+                                                id="ivaInput" value="<%= linia[5] %>"></small>
+                                    </div>
+                                </td>
+
+                            </div>
+
+                            <div class="row">
+                                <td>
+                                    <div class="numeros form-control-sm"><small><input readonly
+                                                class=" form-control petit_mitja numeros tr<%=i%>" type="text"
+                                                id="subtotalInput"
+                                                value="<%= (linia[3]*linia[4]*(1+linia[5]/100)).toFixed(2) %>"></small>
+                                    </div>
+                                </td>
+
+
+                            </div>
+                            <div class="row">
+                                <td>
+                                    <div class="camps form-control-sm"><small><input
+                                                class=" form-control mitja esquerra tr<%=i%>" type="text"
+                                                id="unitatInput" value="<%= linia[6] %>">
+                                        </small> </div>
+                                </td>
+
+
+                                <input type="hidden" class="tr<%=i%>" id="zonaInput" value="<%= linia[7] %>">
+                                <input type="hidden" class="tr<%=i%>" id="plantaInput" value="<%= linia[8] %>">
+                                <input type="hidden" class="tr<%=i%>" id="areaInput" value="<%= linia[9] %>">
+
+
+                                <div class="row">
+                                    <td>
+                                        <div class="camps form-control-sm"><small><input
+                                                    class=" form-control mitja esquerra tr<%=i%>" type="text"
+                                                    id="proveidorInput" value="<%= linia[10] %>"> </small>
+                                        </div>
+                                    </td>
+
+                                </div>
+
+                                <div class="row">
+                                    <td>
+                                        <p>X</p>
+                                    </td>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </tr>
+                    <% } %>
+
+
+                        <tr>
+
+                            <td><button id="relative" class="btn btn-primary form-control">Modificar Comanda</button>
+                            </td>
+
+                        </tr>
+
+
+
+            </form>
+
+        </table>
+        <p class="h5 row numeros">
+            <span class="sumatori-total">Total Comanda: <%= invoice.total %>€ (IVA inclòs) </span>
+        </p>
+        <p class="row numeros">
+            <a id="afegir" href="#" class="link-primary">Afegir Article</a>
+        </p>
+    </div>
+
+
+
+
+    <script>
+        const afegirLinia = document.querySelector('#afegir');
+        afegirLinia.addEventListener('click', () => {
+const taulaOriginal = document.querySelector('#taulaOriginal');
+const trNou = document.createElement('tr');
+
+console.log(taula);
+
+
+
+
+            console.log('hola');
+        })
+
+
+    </script>

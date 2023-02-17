@@ -1,0 +1,27 @@
+<% layout('layouts/boilerplate')%>
+
+
+    <div class="row">
+        <div class="col-6 offset-3">
+            <div class="card">
+                
+                        <h5 class="card-title">
+                            <%= planta.nom %>
+                        </h5>
+                        
+                    </div>
+                    
+                    <% if( currentUser && planta.responsable.equals(currentUser.id)) { %>
+                    <div class="card-body">
+                        <a href="/plantas/<%=planta.id%>/edit" class="card-link btn btn-info" class="card-link">Editar
+                            Planta</a>
+                        <form class="d-inline" action="/plantas/<%=planta._id%>?_method=DELETE" method="POST">
+                            <button class="btn btn-danger">Esborrar Planta</button>
+                        </form>
+                    </div>
+                    <% } %>
+                    <div class="card-footer text-muted">
+                        <a href="/plantas">Totes les plantes</a>
+                    </div>
+                </div>
+            </div>

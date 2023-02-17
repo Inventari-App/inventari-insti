@@ -1,0 +1,180 @@
+<% layout('layouts/boilerplate')%>
+  <div class="row">
+    <h1 class="text-center">Nova unitat</h1>
+    <p></p>
+    <p></p>
+    <div class="col-6 offset-3">
+      <form id="unitats" action="/unitats" method="POST"  class="validated-form">
+        <div class="mb-3">
+          <label class="form-label" for="nom">Nom Unitat</label>
+          <input class="form-control" type="text" id="nom" name="unitat[nom]" required>
+          <div class="valid-feedback">Sembla correcte!</div>
+        </div>
+        <select name="unitat[zona]" class="form-select mb-3" aria-label="tipus" id="zonas">
+          <option value="default" selected>Selecciona una zona</option>
+          <option id="new" class="text-danger" value="new">Crea una nova zona</option>
+        </select>
+        <select id="plantas" class="form-select mb-3" aria-label="tipus" name="unitat[planta]" required>
+          <option value="default" selected>Selecciona una planta</option>
+          <option id="new" class="text-danger" value="new">Crea una nova planta</option>
+        </select>
+        <select id="areas" class="form-select mb-3" aria-label="tipus" name="unitat[area]" required>
+          <option value="default" selected>Selecciona una àrea</option>
+          <option id="new" class="text-danger" value="new">Crea una nova àrea</option>
+        </select>
+        <div class="mb-3">
+          <button class="btn btn-success">Afegeix Unitat</button>
+        </div>
+      </form>
+      <a href="/unitats">Totes les Unitats</a>
+    </div>
+  </div>
+  <script>
+    // Main
+    const selectElZona = document.querySelector('#zonas')       // zonas, plantas o areas
+    const newSelectedZona = document.querySelector('#zonas')    // zonas, plantas o areas
+    appendOptionsZona(selectElZona)
+    // Listeners
+    selectElZona.addEventListener('focus', () => {
+      removeZonaOptions(selectElZona)
+      appendOptionsZona(selectElZona)
+      blur
+    })
+    newSelectedZona.addEventListener('click', () => {
+      if (newSelectedZona.value == "new") {
+        selectElZona.value = 'default'
+        window.open('../zonas/new')    // zonas, plantas o areas
+      }
+    })
+    function removeZonaOptions(targetElZona) {
+      const zonaOptionElZonas = targetElZona.querySelectorAll('option.zona')
+      for (const zonaOptionElZona of zonaOptionElZonas) {
+        zonaOptionElZona.remove()
+      }
+    }
+    function appendOptionsZona(targetElZona) {
+      buildOptionsZona()
+        .then(zonaOptionElZonas => {
+          for (const zonaOptionElZona of zonaOptionElZonas) {
+            targetElZona.insertAdjacentElement('beforeend', zonaOptionElZona)
+          }
+        })
+    }
+    function buildOptionsZona() {
+      return getZonas()
+        .then(zonas => {
+          const optionEls = zonas.map(zona => {
+            const zonaName = zona.nom
+            const optionEl = document.createElement('option')
+            optionEl.value = zonaName
+            optionEl.innerText = zonaName
+            optionEl.name = zonaName
+            optionEl.classList.add('zona')
+            return optionEl
+          })
+          return optionEls
+        })
+    }
+    function getZonas() {
+      return fetch('../zonas/all')   //zonas,plantas o areas
+        .then(res => res.json())
+    }
+    // Main Plantas
+    const selectElPlanta = document.querySelector('#plantas')       // plantas, plantas o areas
+    const newSelectedPlanta = document.querySelector('#plantas')    // plantas, plantas o areas
+    appendOptionsPlanta(selectElPlanta)
+    // Listeners
+    selectElPlanta.addEventListener('focus', () => {
+      removePlantaOptions(selectElPlanta)
+      appendOptionsPlanta(selectElPlanta)
+      blur
+    })
+    newSelectedPlanta.addEventListener('click', () => {
+      if (newSelectedPlanta.value == "new") {
+        selectElPlanta.value = 'default'
+        window.open('../plantas/new')    // plantas, plantas o areas
+      }
+    })
+    function removePlantaOptions(targetElPlanta) {
+      const plantaOptionElPlantas = targetElPlanta.querySelectorAll('option.planta')
+      for (const plantaOptionElPlanta of plantaOptionElPlantas) {
+        plantaOptionElPlanta.remove()
+      }
+    }
+    function appendOptionsPlanta(targetElPlanta) {
+      buildOptionsPlanta()
+        .then(plantaOptionElPlantas => {
+          for (const plantaOptionElPlanta of plantaOptionElPlantas) {
+            targetElPlanta.insertAdjacentElement('beforeend', plantaOptionElPlanta)
+          }
+        })
+    }
+    function buildOptionsPlanta() {
+      return getPlantas()
+        .then(plantas => {
+          const optionEls = plantas.map(planta => {
+            const plantaName = planta.nom
+            const optionEl = document.createElement('option')
+            optionEl.value = plantaName
+            optionEl.innerText = plantaName
+            optionEl.name = plantaName
+            optionEl.classList.add('planta')
+            return optionEl
+          })
+          return optionEls
+        })
+    }
+    function getPlantas() {
+      return fetch('../plantas/all')   //plantas,plantas o areas
+        .then(res => res.json())
+    }
+    // Main Areas
+    const selectElArea = document.querySelector('#areas')       // areas, areas o areas
+    const newSelectedArea = document.querySelector('#areas')    // areas, areas o areas
+    appendOptionsArea(selectElArea)
+    // Listeners
+    selectElArea.addEventListener('focus', () => {
+      removeAreaOptions(selectElArea)
+      appendOptionsArea(selectElArea)
+      blur
+    })
+    newSelectedArea.addEventListener('click', () => {
+      if (newSelectedArea.value == "new") {
+        selectElArea.value = 'default'
+        window.open('../areas/new')    // areas, areas o areas
+      }
+    })
+    function removeAreaOptions(targetElArea) {
+      const areaOptionElAreas = targetElArea.querySelectorAll('option.area')
+      for (const areaOptionElArea of areaOptionElAreas) {
+        areaOptionElArea.remove()
+      }
+    }
+    function appendOptionsArea(targetElArea) {
+      buildOptionsArea()
+        .then(areaOptionElAreas => {
+          for (const areaOptionElArea of areaOptionElAreas) {
+            targetElArea.insertAdjacentElement('beforeend', areaOptionElArea)
+          }
+        })
+    }
+    function buildOptionsArea() {
+      return getAreas()
+        .then(areas => {
+          const optionEls = areas.map(area => {
+            const areaName = area.nom
+            const optionEl = document.createElement('option')
+            optionEl.value = areaName
+            optionEl.innerText = areaName
+            optionEl.name = areaName
+            optionEl.classList.add('area')
+            return optionEl
+          })
+          return optionEls
+        })
+    }
+    function getAreas() {
+      return fetch('../areas/all')   //areas,areas o areas
+        .then(res => res.json())
+    }
+  </script>

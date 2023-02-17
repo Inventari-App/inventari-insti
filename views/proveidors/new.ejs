@@ -1,0 +1,48 @@
+<% layout('layouts/boilerplate')%>
+    <div class="row">
+        <h1 class="text-center">Nou Proveidor</h1>
+        <p></p>
+        <p></p>
+        <div class="col-6 offset-3">
+            <form action="/proveidors" method="POST"  class="validated-form">
+
+                <div class="mb-3">
+                    <label class="form-label" for="nom">Nom</label>
+                    <input class="form-control" type="text" id="nom" name="proveidor[nom]" required>
+                    <div class="valid-feedback">Sembla correcte!</div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="cif">CIF</label>
+                    <input class="form-control" type="text" id="cif" name="proveidor[cif]" required>
+                    <div class="valid-feedback">Sembla correcte!</div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="adreca">Adreça</label>
+                    <input class="form-control" type="text" id="adreca" name="proveidor[adreca]" required>
+                    <div class="valid-feedback">Sembla correcte!</div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="telefon">Telèfon</label>
+                    <input class="form-control" type="text" id="telefon" name="proveidor[telefon]" required>
+                    <div class="valid-feedback">Sembla correcte!</div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="email">Email</label>
+                    <input class="form-control" type="email" id="email" name="proveidor[email]" required>
+                    <div class="valid-feedback">Sembla correcte!</div>
+                </div>
+              
+            </div>
+                <!--
+-->
+                <div class="mb-3">
+                    <button class="btn btn-success">Afegeix Proveidor</button>
+                </div>
+            </form>
+            <a href="/proveidors">Tots els proveidors</a>
+        </div>
+    </div>

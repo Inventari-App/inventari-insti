@@ -1,0 +1,48 @@
+<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Inventari</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" aria-current="location" href="/">Inici</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" aria-current="location" href="/articles">Articles</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" aria-current="location" href="/invoices">Comandes</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" aria-current="location" href="/items">Items</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" aria-current="location" href="/utilitats">Utilitats</a>
+        </li>
+
+
+        <li class="nav-item">
+          <a class="nav-link" href="/users">Usuaris</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/proveidors">Proveidors</a>
+        </li>
+      </ul>
+    </div>
+    <div class="navbar-nav ml-auto">
+      <% if(!currentUser) { %>
+        <a class="nav-link" href="/login">Connexió</a>
+        <a class="nav-link" href="/register">Registre</a>
+        <% } else { %>
+          <a class="nav-link" href="/logout">Desconnexió</a>
+          <% } %>
+    </div>
+  </div>
+</nav>

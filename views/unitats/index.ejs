@@ -1,0 +1,27 @@
+<% layout('layouts/boilerplate')%>
+    <h1>Tots els Unitats</h1>
+    <div>
+        <a href="/unitats/new">Afegeix Unitat</a>
+    </div>
+
+    <% for (let unitat of unitats){%>
+        <div class="card mb-3">
+            <div class="row">
+                <div class="col-md-4">
+                    <img class="img-fluid" alt="" src="<%=unitat.imatge%>">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title"><%= unitat.nom %></h5>
+
+                        <p class="card-text"><%= unitat.unitat %></p>
+<p class="card-text"><%= unitat.descripcio %></p>
+                        <p class="card-text">
+                        <small class="text-muted"><%= unitat.username %></small>
+                        </p>
+                        <a class="btn btn-primary" href="/unitats/<%=unitat.id%>">Veure <%=unitat.nom%> </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% }%>

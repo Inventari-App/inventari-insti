@@ -1,0 +1,20 @@
+<% layout('layouts/boilerplate')%>
+    <h1>Tots els proveidors</h1>
+    <div>
+        <a href="/proveidors/new">Afegeix Proveidor</a>
+    </div>
+
+    <% for (let proveidor of proveidors){%>
+        <div class="col-6 offset-3">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <%= proveidor.nom %>
+                        </h5>
+                        <a class="btn btn-primary" href="/proveidors/<%=proveidor.id%>">Veure <%=proveidor.nom%> </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% }%>

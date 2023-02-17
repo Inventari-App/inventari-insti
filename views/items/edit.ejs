@@ -1,0 +1,68 @@
+<% layout('layouts/boilerplate')%>
+
+    <div class="row">
+        <h1 class="text-center">Editar item</h1>
+        <div class="col-6 offset-3">
+            <form action="/items/<%=item._id%>?_method=PUT" method="POST"  class="validated-form">
+                
+                <div class="form-select mb-3">
+                    <input class="form-check-input" type="radio" name="item[naturalesa]" required id="naturalesa2" value="Inventariable">
+                    <label class="form-check-label" for="inventariable">
+                        Inventariable
+                    </label>
+                </div>
+
+
+
+                <div class="form-select mb-3">
+                    <input class="form-check-input" type="radio" name="item[naturalesa]" required id="naturalesa1" value="No inventariable">
+                    <label class="form-check-label" for="naturalesa1">
+                        No inventariable
+                    </label>
+                </div>
+                
+                
+                <p></p>
+                <p></p>
+                
+                
+                
+                
+                <div class="mb-3">
+                    <label class="form-label" for="nom">Nom Item</label>
+                    <input class="form-control" type="text" id="nom" name="item[nom]" value="<%=item.nom %>" required>
+                    <div class="valid-feedback">Sembla correcte!</div>
+                </div>
+
+
+
+
+                <select class="form-select mb-3" aria-label="tipus" name="item[tipus]" required >
+                    <option selected>Escull un tipus d'article</option>
+                    <option value="maquinaria">Maquinària</option>
+                    <option value="moble">Moble</option>
+                    <option value="utillatge">Utillatge</option>
+                    <option value="Consumible">Consumible</option>
+                    <option value="construccio">Material de construcciò</option>
+                    <option value="lampisteria">Material elèctric i lampisteria</option>
+                    
+
+                  </select>
+
+      
+
+
+                <div class="mb-3">
+                    <label class="form-label" for="descripcio">Descripció</label>
+                    <textarea class="form-control" type="text" id="descripcio" required
+                        name="item[descripcio]"><%= item.descripcio%></textarea>
+                </div>
+
+
+                <div class="mb-3">
+                    <button class="btn btn-success">Modifica item</button>
+                </div>
+            </form>
+            <a href="/items">Tots els Items</a>
+        </div>
+    </div>

@@ -1,0 +1,23 @@
+<% layout('layouts/boilerplate')%>
+
+    <h1>Editar User</h1>
+    <form action="/users/<%=user._id%>?_method=PUT" method="POST"  class="validated-form">
+        <div class="mb-3">
+            <label for="username">Responsable</label>
+            <input class="form-control" type="text" id="username" name="user[username]" value="<%=user.username %>" required>
+        </div>
+        <div class="mb-3">
+            <label for="email">Email</label>
+            <input class="form-control" type="email" id="email" name="user[email]" value="<%= user.email%>" required>
+        </div>
+        <div class="mb-3">
+            <label for="password">Password</label>
+            <input class="form-control" type="text" id="password" name="user[password]" value="<%= user.password%>" required>
+            
+        </div>
+<div class="mb-3">
+        <button class="btn btn-warning">Actualitzar User</button>
+    </div>
+    </form>
+    <a href="/users/<%= user._id%>">Tornar a l'User</a>
+

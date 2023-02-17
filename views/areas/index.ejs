@@ -1,0 +1,27 @@
+<% layout('layouts/boilerplate')%>
+    <h1>Totes les àrees</h1>
+    <div>
+        <a href="/areas/new">Afegeix àrea</a>
+    </div>
+
+    <% for (let area of areas){%>
+        <div class="card mb-3">
+            <div class="row">
+                <div class="col-md-4">
+                    <img class="img-fluid" alt="" src="<%=area.imatge%>">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title"><%= area.nom %></h5>
+
+                        <p class="card-text"><%= area.area %></p>
+<p class="card-text"><%= area.descripcio %></p>
+                        <p class="card-text">
+                        <small class="text-muted"><%= area.username %></small>
+                        </p>
+                        <a class="btn btn-primary" href="/areas/<%=area.id%>">Veure <%=area.nom%> </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% }%>

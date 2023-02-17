@@ -1,0 +1,38 @@
+<% layout('layouts/boilerplate')%>
+    <h1>Tots els Invoices</h1>
+    <div>
+        <a href="/invoices/new">Afegeix Invoice</a>
+    </div>
+
+    <% for (let invoice of invoices){%>
+        <div class="card mb-3">
+            <div class="row">
+                
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">Comanda núm. <%= invoice.numInvoice %> </h5> <h6>De <%= invoice.responsable.username %> per a <%= invoice.invoice[0][10] %> </h6><span> </span>
+                        
+
+                        <p class="card-text">
+                            <%
+                            for (let linia of invoice.invoice){
+                                %>
+
+                            </p>
+                            <ul>
+<li class="card-text"><%=linia[3]%> <%= linia[2] %></li>
+                        </ul>
+
+ <% } %>
+
+<p class="card-text">
+                        <small class="text-muted">Import total: <%= invoice.total %>€ (IVA inclòs)</small>
+                        </p>
+
+
+                        <a class="btn btn-primary" href="/invoices/<%=invoice.id%>">Veure <%=invoice.nom%> </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% }%>

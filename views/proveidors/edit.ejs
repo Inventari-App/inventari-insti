@@ -1,0 +1,42 @@
+<% layout('layouts/boilerplate')%>
+
+    <div class="row">
+        <h1 class="text-center">Editar proveidor</h1>
+        <div class="col-6 offset-3">
+            <form action="/proveidors/<%=proveidor._id%>?_method=PUT" method="POST"  class="validated-form">
+                <div class="mb-3">
+                    <label class="form-label" for="nom">Nom</label>
+                    <input class="form-control" type="text" id="nom" readonly name="proveidor[nom]" value="<%=proveidor.nom %>" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="nom">CIF</label>
+                    <input class="form-control" type="text" id="cif" readonly name="proveidor[cif]" value="<%=proveidor.cif %>" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="nom">Adreça</label>
+                    <input class="form-control" type="text" id="adreca" name="proveidor[adreca]" value="<%=proveidor.adreca %>" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="nom">Telèfon</label>
+                    <input class="form-control" type="text" id="telefon" name="proveidor[telefon]" value="<%=proveidor.telefon %>" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="nom">Email</label>
+                    <input class="form-control" type="text" id="email" name="proveidor[email]" value="<%=proveidor.email %>" required>
+                </div>
+                
+                <div class="mb-3">
+                    <button class="btn btn-success">Modifica proveidor</button>
+                </div>
+            </form>
+            <a href="/proveidors">Tots els Proveidors</a>
+        </div>
+    </div>
+
+    <script>
+
+    </script>

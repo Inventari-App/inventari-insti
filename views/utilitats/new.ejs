@@ -1,0 +1,48 @@
+<% layout('layouts/boilerplate')%>
+    <div class="row">
+        <h1 class="text-center">Nova area</h1>
+        <p></p>
+        <p></p>
+        <div class="col-6 offset-3">
+            <form action="/areas" method="POST"  class="validated-form">
+
+                <div class="mb-3">
+                    <label class="form-label" for="nom">Nom Area</label>
+                    <input class="form-control" type="text" id="nom" name="area[nom]" required>
+                    <div class="valid-feedback">Sembla correcte!</div>
+                </div>
+
+                <select class="form-select mb-3" aria-label="tipus" name="area[zona]" required>
+                    <option selected>Escull una zona</option>
+                    <option value="edifici_principal">Edifici Principal</option>
+                    <option value="edifici_enologia">Edifici Enologia</option>
+                    <option value="gimnas">Gimnàs</option>
+                    <option value="esbarjo">Esbarjo</option>
+                    <option value="instal·lacions_vinya">Instal·lacions/Vinya</option>
+                </select>
+
+                <select class="form-select mb-3" aria-label="tipus" name="area[planta]" required>
+                    <option selected>Escull una planta</option>
+                    <option value="soterrani">Soterrani</option>
+                    <option value="baixa">Planta baixa</option>
+                    <option value="primera">Primer pis</option>
+                    <option value="segona">Segon pis</option>
+                    <option value="tercera">Tercer Pis</option>
+                    <option value="terrat">Terrat</option>
+                </select>
+
+                <select class="form-select mb-3" aria-label="tipus" name="area[area]" required>
+                    <option selected>Escull una àrea</option>
+                    <option value="soterrani">Docent-Alumnes</option>
+                    <option value="baixa">Departaments-Despatxos-Professors</option>
+                    <option value="primera">Magatzems i Despatxos Operatius</option>
+                    <option value="terrat">WC</option>
+                </select>
+
+                <div class="mb-3">
+                    <button class="btn btn-success">Afegeix Area</button>
+                </div>
+            </form>
+            <a href="/areas">Totes les àrees</a>
+        </div>
+    </div>

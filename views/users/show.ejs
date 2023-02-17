@@ -1,0 +1,15 @@
+<% layout('layouts/boilerplate')%>
+
+    <h1><%= user.username %></h1>
+    <h2><%= user.email %></h2>
+    <h2><%= user.password %></h2>
+    <p> <a href="/users/<%=user._id%>/edit">Editar User</a>
+    </p>
+    <p>
+    <form action="/users/<%=user._id%>?_method=DELETE" method="POST">
+        <button class="btn btn-danger">Esborrar User</button>
+    </form>
+    </p>
+    <footer>
+        <a href="/users">Tots els Usuaris</a>
+    </footer>
