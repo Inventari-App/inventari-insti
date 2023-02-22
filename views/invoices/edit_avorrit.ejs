@@ -130,20 +130,19 @@
                     </tr>
                     <% } %>
 
-    </table>
-                        
-<table>
-                        <td>    <button id="relative" class="btn btn-primary form-control">Modificar Comanda</button></td>
-                            
-</table>
-                        
+
+                        <tr>
+
+                            <td><button id="relative" class="btn btn-primary form-control">Modificar Comanda</button>
+                            </td>
+
+                        </tr>
 
 
 
             </form>
 
-    
-        
+        </table>
         <p class="h5 row numeros">
             <span class="sumatori-total">Total Comanda: <%= invoice.total %>€ (IVA inclòs) </span>
         </p>
@@ -156,82 +155,70 @@
 
 
     <script>
-        const afegirLinia = document.querySelector("#afegir");
-const taulaOriginal = document.querySelector("#taulaOriginal");
-const liniesTaulaOriginal = document.querySelectorAll(".trs");
+        const afegirLinia = document.querySelector('#afegir');
 
-// Afegeixo el listener a la taula i comprovo cada click
-taulaOriginal.addEventListener('click', event => {
-  event.stopPropagation()
-  const clickedEl = event.target
-  // Comprovo que el click vingui de una row o els elements
-  // que hi han a dins, a la vegada agafo la rowEl
-  const rowEl = clickedEl.closest('.trs')
-  // Si no hi ha rowEl vol dir que s'ha clickat en algun lloc
-  // de la taula que no es una row? no se si es possible
-  if (rowEl) {
-    rowEl.remove()
-  }
-})
-
-afegirLinia.addEventListener("click", () => {
-  const row = crearLinia();
-});
-
-function crearLinia() {
-  const rowNova = taulaOriginal.insertRow();
-  rowNova.className = "trs";
-
-  const nouQuantitatCell = rowNova.insertCell();
-  const nouInputQuantitat = document.createElement("input");
-  nouInputQuantitat.className = 'petit form-control unitari numeros'
-  nouInputQuantitat.type = 'number'
-  nouQuantitatCell.appendChild(nouInputQuantitat);
+        const taulaOriginal = document.querySelector('#taulaOriginal');
+        const numLiniesTaulaOriginal = document.querySelectorAll('.trs');
+        
 
 
-  const nouArticleCell = rowNova.insertCell();
-  const nouInputArticle = document.createElement("input");
-  nouInputArticle.className = 'form-control mitja esquerra';
-  nouInputArticle.type = 'text';
-  nouArticleCell.appendChild(nouInputArticle);
 
-  const nouPreuCell = rowNova.insertCell();
-  const nouInputPreu = document.createElement("input");
-  nouInputPreu.className = 'form-control petit numeros';
-  nouPreuCell.appendChild(nouInputPreu);
-  nouInputPreu.type = 'number';
-
-  const nouIvaCell = rowNova.insertCell();
-  const nouInputIva = document.createElement("input");
-  nouInputIva.className = 'form-control numeros unitari';
-  nouInputIva.type = 'number';
-  nouIvaCell.appendChild(nouInputIva);
-
-  const nouSubtotalCell = rowNova.insertCell();
-  const nouInputSubtotal = document.createElement("input");
-  nouInputSubtotal.className = 'form-control petit_mitja numeros'
-  nouInputSubtotal.type = 'number'
-  nouSubtotalCell.appendChild(nouInputSubtotal);
-  
-  const nouUnitatCell = rowNova.insertCell();
-  const nouInputUnitat = document.createElement("input");
-  nouUnitatCell.appendChild(nouInputUnitat);
-
-  const nouProveidorCell = rowNova.insertCell();
-  const nouInputProveidor = document.createElement("input");
-  nouProveidorCell.appendChild(nouInputProveidor);
+        afegirLinia.addEventListener('click', ()=>{
+            crearLinia(taulaOriginal)});
 
 
-  return rowNova
-}
+        function crearLinia() {
+
+            //const trNou = document.createElement('tr');
+
+            //const numLiniesTaulaOriginal = document.querySelectorAll('.trs');
+            //const numTrs = (numLiniesTaulaOriginal.length)
+
+
+
+            const rowNova = taulaOriginal.insertRow(0);
+            rowNova.className = 'trs';
+
+
+            const novaQuantitatCell = rowNova.insertCell();
+            const input = document.createElement('input');
+            input.value = rowNova.rowIndex;
+            novaQuantitatCell.appendChild(input)
+            
+
+
+
+
+
+            
+        }
+
+        const taula = document.querySelector('#taulaOriginal');
+        const row = document.querySelectorAll('.trs');
+
+
+
+
+
+        for (let fila of row) {
+
+            fila.addEventListener('click', () => {
+
+                const indexAesborrqr = fila.rowIndex
+
+                console.log('fila a esborrar =', fila.rowIndex)
+                taula.deleteRow(fila.rowIndex);
+            })
+
+        }
+
+
+
+
+
+
+
+
 
 
     </script>
-
-    <th><small>Quantitat</small></th>
-                    <th><small>Article</th>
-                    <th><small>€/Unitat</small></th>
-                    <th><small>% IVA</small></th>
-                    <th><small>Subtotal €</small></th>
-                    <th><small>Unitat de destí</small></th>
-                    <th><small>Proveidor</small></th>
