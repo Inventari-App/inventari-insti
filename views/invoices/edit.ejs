@@ -118,11 +118,11 @@
 
                                 </div>
 
-                                <div class="row">
-                                    <td>
-                                        <p>X</p>
-                                    </td>
-                                </div>
+
+                                <td>
+                                    <button class="botoEsborrar" type="button">X</p>
+                                </td>
+
 
                             </div>
                         </div>
@@ -130,20 +130,20 @@
                     </tr>
                     <% } %>
 
-    </table>
-                        
-<table>
-                        <td>    <button id="relative" class="btn btn-primary form-control">Modificar Comanda</button></td>
-                            
-</table>
-                        
+        </table>
+
+        <table>
+            <td> <button id="relative" class="btn btn-primary form-control">Modificar Comanda</button></td>
+
+        </table>
 
 
 
-            </form>
 
-    
-        
+        </form>
+
+
+
         <p class="h5 row numeros">
             <span class="sumatori-total">Total Comanda: <%= invoice.total %>€ (IVA inclòs) </span>
         </p>
@@ -157,81 +157,105 @@
 
     <script>
         const afegirLinia = document.querySelector("#afegir");
-const taulaOriginal = document.querySelector("#taulaOriginal");
-const liniesTaulaOriginal = document.querySelectorAll(".trs");
-
-// Afegeixo el listener a la taula i comprovo cada click
-taulaOriginal.addEventListener('click', event => {
-  event.stopPropagation()
-  const clickedEl = event.target
-  // Comprovo que el click vingui de una row o els elements
-  // que hi han a dins, a la vegada agafo la rowEl
-  const rowEl = clickedEl.closest('.trs')
-  // Si no hi ha rowEl vol dir que s'ha clickat en algun lloc
-  // de la taula que no es una row? no se si es possible
-  if (rowEl) {
-    rowEl.remove()
-  }
-})
-
-afegirLinia.addEventListener("click", () => {
-  const row = crearLinia();
-});
-
-function crearLinia() {
-  const rowNova = taulaOriginal.insertRow();
-  rowNova.className = "trs";
-
-  const nouQuantitatCell = rowNova.insertCell();
-  const nouInputQuantitat = document.createElement("input");
-  nouInputQuantitat.className = 'petit form-control unitari numeros'
-  nouInputQuantitat.type = 'number'
-  nouQuantitatCell.appendChild(nouInputQuantitat);
+        const taulaOriginal = document.querySelector("#taulaOriginal");
 
 
-  const nouArticleCell = rowNova.insertCell();
-  const nouInputArticle = document.createElement("input");
-  nouInputArticle.className = 'form-control mitja esquerra';
-  nouInputArticle.type = 'text';
-  nouArticleCell.appendChild(nouInputArticle);
+        // Afegeixo el listener a la taula i comprovo cada click
+        taulaOriginal.addEventListener('click', event => {
+            event.stopPropagation()
+            const clickedEl = event.target
 
-  const nouPreuCell = rowNova.insertCell();
-  const nouInputPreu = document.createElement("input");
-  nouInputPreu.className = 'form-control petit numeros';
-  nouPreuCell.appendChild(nouInputPreu);
-  nouInputPreu.type = 'number';
+            const Trs = document.querySelectorAll('.trs');
+            for (let trAesborrar of Trs) {
+                trAesborrar.addEventListener('click', () => {
 
-  const nouIvaCell = rowNova.insertCell();
-  const nouInputIva = document.createElement("input");
-  nouInputIva.className = 'form-control numeros unitari';
-  nouInputIva.type = 'number';
-  nouIvaCell.appendChild(nouInputIva);
-
-  const nouSubtotalCell = rowNova.insertCell();
-  const nouInputSubtotal = document.createElement("input");
-  nouInputSubtotal.className = 'form-control petit_mitja numeros'
-  nouInputSubtotal.type = 'number'
-  nouSubtotalCell.appendChild(nouInputSubtotal);
-  
-  const nouUnitatCell = rowNova.insertCell();
-  const nouInputUnitat = document.createElement("input");
-  nouUnitatCell.appendChild(nouInputUnitat);
-
-  const nouProveidorCell = rowNova.insertCell();
-  const nouInputProveidor = document.createElement("input");
-  nouProveidorCell.appendChild(nouInputProveidor);
+                    esborrarTr(trAesborrar);
+                    //console.log(trAesborrar);
+                })
+            }
 
 
-  return rowNova
-}
+
+
+
+            function esborrarTr(trAesborrar) {
+
+                // Comprovo que el click vingui de una row o els elements
+                // que hi han a dins, a la vegada agafo la rowEl
+                const botoEl = clickedEl.closest('.botoEsborrar');
+                // Si no hi ha rowEl vol dir que s'ha clickat en algun lloc
+                // de la taula que no es una row? no se si es possible
+
+
+
+
+                if (botoEl) {
+                    trAesborrar.remove()
+                }
+            }
+        })
+
+        afegirLinia.addEventListener("click", () => {
+            const row = crearLinia();
+        });
+
+        function crearLinia() {
+            const rowNova = taulaOriginal.insertRow();
+            rowNova.className = "trs";
+
+            const nouQuantitatCell = rowNova.insertCell();
+            const nouInputQuantitat = document.createElement("input");
+            nouInputQuantitat.className = 'petit form-control unitari numeros';
+            nouInputQuantitat.type = 'number';
+            nouQuantitatCell.appendChild(nouInputQuantitat);
+
+
+            const nouArticleCell = rowNova.insertCell();
+            const nouInputArticle = document.createElement("input");
+            nouInputArticle.className = 'form-control mitja esquerra';
+            nouInputArticle.type = 'text';
+            nouArticleCell.appendChild(nouInputArticle);
+
+            const nouPreuCell = rowNova.insertCell();
+            const nouInputPreu = document.createElement("input");
+            nouInputPreu.className = 'form-control petit numeros';
+            nouPreuCell.appendChild(nouInputPreu);
+            nouInputPreu.type = 'number';
+
+            const nouIvaCell = rowNova.insertCell();
+            const nouInputIva = document.createElement("input");
+            nouInputIva.className = 'form-control numeros unitari';
+            nouInputIva.type = 'number';
+            nouIvaCell.appendChild(nouInputIva);
+
+            const nouSubtotalCell = rowNova.insertCell();
+            const nouInputSubtotal = document.createElement("input");
+            nouInputSubtotal.className = 'form-control petit_mitja numeros';
+            nouInputSubtotal.type = 'number';
+            nouSubtotalCell.appendChild(nouInputSubtotal);
+
+            const nouUnitatCell = rowNova.insertCell();
+            const nouInputUnitat = document.createElement("input");
+            nouInputUnitat.className = 'form-control mitja esquerra';
+            nouInputUnitat.type = 'text';
+            nouUnitatCell.appendChild(nouInputUnitat);
+
+            const nouProveidorCell = rowNova.insertCell();
+            const nouInputProveidor = document.createElement("input");
+            nouInputProveidor.className = 'form-control mitja esquerra'
+            nouInputProveidor.type = 'text';
+            nouProveidorCell.appendChild(nouInputProveidor);
+
+
+            const tdCell = rowNova.insertCell();
+            const botoEsborrar = document.createElement("button");
+            botoEsborrar.className = 'botoEsborrar'
+            botoEsborrar.innerText = 'X';
+            tdCell.appendChild(botoEsborrar);
+
+
+            return rowNova
+        }
 
 
     </script>
-
-    <th><small>Quantitat</small></th>
-                    <th><small>Article</th>
-                    <th><small>€/Unitat</small></th>
-                    <th><small>% IVA</small></th>
-                    <th><small>Subtotal €</small></th>
-                    <th><small>Unitat de destí</small></th>
-                    <th><small>Proveidor</small></th>
