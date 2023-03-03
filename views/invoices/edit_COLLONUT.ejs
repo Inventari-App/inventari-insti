@@ -20,55 +20,103 @@
                     <th><small>Proveidor</small></th>
                     <th></th>
 
-                    
 
                 </tr>
                 <% let i=0; for (let linia of invoice.invoice) { i++ %>
                     <tr class="trs">
                         <div class="form-group container">
 
+                            <input type="hidden" class="tr<%=i%>" value=" <%= linia[0] %>" id="naturalesaInput"></small>
+                            <input type="hidden" class="tr<%=i%>" value="<%= linia[1] %>" id="tipusInput"> </small>
 
 
+                            <div class="row">
+
+                                <td>
+                                    <div class="numeros form-control-sm"><small><input
+                                                class="variable petit form-control unitari numeros tr<%=i%>" type="number"
+                                                id="quantitatInput" value="<%= linia[3] %>"></small>
+                                    </div>
+                                </td>
+
+                            </div>
+
+                            <div class="row">
+
+                                <td>
+                                    <div class="form-control-sm"><small><input type="text"
+                                                class=" form-control mitja esquerra tr<%=i%>" value="<%= linia[2] %>"
+                                                id="articleInput"> </small> </div>
+                                </td>
 
 
-                            <!-- COMENÇAMENT CAMPS -->
+                            </div>
+
+                            <div class="row">
+
+                                <td>
+                                    <div class="numeros form-control-sm"><small><input
+                                                class="variable form-control petit numeros tr<%=i%>" type="number"
+                                                id="preuInput" value="<%= linia[4] %>"></small> </div>
+                                </td>
+
+                            </div>
+
+                            <div class="row">
+                                <td>
+                                    <div class="numeros form-control-sm"><small><input
+                                                class="variable form-control numeros unitari tr<%=i%>" type="number"
+                                                id="ivaInput" value="<%= linia[5] %>"></small>
+                                    </div>
+                                </td>
+
+                            </div>
+
+                            <div class="row">
+                                <td>
+                                    <div class="numeros form-control-sm"><small><input readonly
+                                                class=" form-control petit_mitja numeros tr<%=i%>" type="text"
+                                                id="subtotalInput"
+                                                value="<%= (linia[3]*linia[4]*(1+linia[5]/100)).toFixed(2) %>"></small>
+                                    </div>
+                                </td>
 
 
-                                                        
-                                    <input type="hidden" class="tr<%=i%>" id="quantitatInputTr<%=i%>" value="<%= linia[3] %>">
-                                    <input type="hidden" class="tr<%=i%>" id="articleInputTr<%=i%>"   value="<%= linia[2] %>">     
-                                    <input type="hidden" class="tr<%=i%>" id="preuInputTr<%=i%>"      value="<%= linia[4] %>">
-                                    <input type="hidden" class="tr<%=i%>" id="ivaInputTr<%=i%>"       value="<%= linia[5] %>">
-                                    <input type="hidden" class="tr<%=i%>" id="subtotalInputTr<%=i%>"  value="<%= (linia[3]*linia[4]*(1+linia[5]/100)).toFixed(2) %>">
-                                    <input type="hidden" class="tr<%=i%>" id="unitatInputTr<%=i%>"    value="<%= linia[6] %>">
-                                    <input type="hidden" class="tr<%=i%>" id="proveidorInputTr<%=i%>" value="<%= linia[10] %>">
+                            </div>
+                            <div class="row">
+                                <td>
+                                    <div class="camps form-control-sm"><small><input
+                                                class=" form-control mitja esquerra tr<%=i%>" type="text"
+                                                id="unitatInput" value="<%= linia[6] %>">
+                                        </small> </div>
+                                </td>
 
 
-                                <!-- FINAL CAMPS -->
-
-
-
-                                <input type="hidden" class="tr<%=i%>" value=" <%= linia[0] %>" id="naturalesaInput">
-                                <input type="hidden" class="tr<%=i%>" value="<%= linia[1] %>" id="tipusInput">
                                 <input type="hidden" class="tr<%=i%>" id="zonaInput" value="<%= linia[7] %>">
                                 <input type="hidden" class="tr<%=i%>" id="plantaInput" value="<%= linia[8] %>">
                                 <input type="hidden" class="tr<%=i%>" id="areaInput" value="<%= linia[9] %>">
 
 
+                                <div class="row">
+                                    <td>
+                                        <div class="camps form-control-sm"><small><input
+                                                    class=" form-control mitja esquerra tr<%=i%>" type="text"
+                                                    id="proveidorInput" value="<%= linia[10] %>"> </small>
+                                        </div>
+                                    </td>
+
+                                </div>
 
 
-
-                                
                                 <td>
                                     <button class="botoEsborrar" type="button">X</p>
                                 </td>
+
 
                             </div>
                         </div>
 
                     </tr>
-
-                    
                     <% } %>
 
         </table>
@@ -92,51 +140,12 @@
 
     <script>
 
-
-
-function crearTaula(){
-
-    const taulaNova = document.querySelector('#taulaOriginal');
-
-    const taulaNovaLength = taulaNova.rows.length;
-
-//for(r=1; r=taulaNova.rows.length; r++){
-
-
-
-    
-const quantitatTaulaNova = document.querySelector('#quantitatInputTr<%=2%>')
-quantitatTaulaNova.type = 'number'
-taulaNova.appendChild(quantitatTaulaNova)
-//}
-console.log(taulaNova.rows.length)
-
-
-    
-
-
-
-
-}
-
-
-crearTaula()
-
-
-
-
-
-
-
-
-
-
-
+        
         const afegirLinia = document.querySelector("#afegir");
         const taulaOriginal = document.querySelector("#taulaOriginal");
         const TrsAesborrar = document.querySelectorAll('.trs');
 
-
+        
 
 
 
@@ -163,27 +172,27 @@ crearTaula()
         })
 
 
-        // Afegeixo el listener a la taula i comprovo cada click
-        taulaOriginal.addEventListener('input', () => {
-            //event.stopPropagation()
+// Afegeixo el listener a la taula i comprovo cada click
+taulaOriginal.addEventListener('input', () => {
+    //event.stopPropagation()
 
-            clickedEl = event.target;
+    clickedEl = event.target;
 
-            // Comprovo que el click vingui de una row o els elements
-            // que hi han a dins, a la vegada agafo la rowEl
-            const botoEl = clickedEl.closest('.variable');
-            const trEl = clickedEl.closest('.trs')
+    // Comprovo que el click vingui de una row o els elements
+    // que hi han a dins, a la vegada agafo la rowEl
+    const botoEl = clickedEl.closest('.variable');
+    const trEl = clickedEl.closest('.trs')
 
-            // Si no hi ha rowEl vol dir que s'ha clickat en algun lloc
-            // de la taula que no es una row? no se si es possible
+    // Si no hi ha rowEl vol dir que s'ha clickat en algun lloc
+    // de la taula que no es una row? no se si es possible
 
-            if (botoEl) {
+    if (botoEl) {
 
-                console.log(trEl);
+        console.log(trEl);
 
-            }
+    }
 
-        })
+})
 
 
 
@@ -258,7 +267,7 @@ crearTaula()
 
             console.log('hola!');
 
-
+            
 
         }
 
