@@ -35,13 +35,20 @@
                                 value="<%= (linia[3]*linia[4]*(1+linia[5]/100)).toFixed(2) %>">
                             <input type="hidden" class="tr<%=i%>" id="unitatInputTr<%=i%>" value="<%= linia[6] %>">
                             <input type="hidden" class="tr<%=i%>" id="proveidorInputTr<%=i%>" value="<%= linia[10] %>">
-                            <!-- FINAL CAMPS -->
+
                             <input type="hidden" class="tr<%=i%>" value=" <%= linia[0] %>" id="naturalesaInput">
                             <input type="hidden" class="tr<%=i%>" value="<%= linia[1] %>" id="tipusInput">
                             <input type="hidden" class="tr<%=i%>" id="zonaInput" value="<%= linia[7] %>">
                             <input type="hidden" class="tr<%=i%>" id="plantaInput" value="<%= linia[8] %>">
                             <input type="hidden" class="tr<%=i%>" id="areaInput" value="<%= linia[9] %>">
                             <input type="hidden" id="invoice" name="invoice[invoice]">
+                            <input type="hidden" id="total" name="invoice[total]">
+                            <input type="hidden" id="timestamp" name="invoice[timestamp]">
+
+
+                            <!-- FINAL CAMPS -->
+
+
                         </div>
     </div>
     </tr>
@@ -52,7 +59,13 @@
         <table>
             <td> <button id="relative" class="btn btn-primary form-control">Modificar Comanda</button></td>
 
+            <div class="h5 row numeros">
+                <span class="sumatori-total">Total Comanda: <%= invoice.total %>€ </span>
+            </div>
+
         </table>
+
+
 
         </form>
 
@@ -66,53 +79,78 @@
         </div>
 
         <script>
+
+
+
             // CREO LA TAULA ORIGINAL
+
+            function recalcularTaula() {
+
+                const quantitatLinia = document.querySelectorAll('.quantitat');
+                const preuLinia = document.querySelectorAll('.preu');
+                const ivaLinia = document.querySelectorAll('.iva');
+                const resultatLinia = document.querySelectorAll('.resultat')
+                const inputsSubtotals = document.querySelectorAll('.subtotal');
+
+                y = 0;
+
+
+
+                for (let inputSubtotal of inputsSubtotals) {
+
+
+                    resultatLinia[y].value = new Number(quantitatLinia[y].value * preuLinia[y].value * (1 + ivaLinia[y].value / 100)).toFixed(2);
+
+                    console.log(resultatLinia);
+
+                    y++
+
+
+                    totalInvoice = totalInvoice + new Number(inputSubtotal.value);
+
+                    console.log(totalInvoice);
+
+                }
+
+
+                mostrarTotal(totalInvoice);
+
+                totalInvoice = 0;
+
+            }
+
+
+
             const afegirLinia = document.querySelector("#afegir");
             const taulaOriginal = document.querySelector("#taulaOriginal");
             const taulaOriginalLength = taulaOriginal.rows.length - 1;
 
+
+
+
+
+
+
+
+
             taulaOriginal.addEventListener('input', () => {
 
 
-                const inputsSubtotals = document.querySelectorAll('.subtotal');
+
+
+
+
+
+
 
                 totalInvoice = 0;
 
 
 
-                function recalcularTaula() {
 
-                    y = 0;
-
-
-                    let quantitatLinia = document.querySelectorAll('.quantitat');
-                    let preuLinia = document.querySelectorAll('.preu');
-                    let ivaLinia = document.querySelectorAll('.iva');
-                    let resultatLinia = document.querySelectorAll('.resultat')
-
-
-
-                    for (let inputSubtotal of inputsSubtotals) {
-
-
-                        resultatLinia[y].value = new Number(quantitatLinia[y].value * preuLinia[y].value * (1 + ivaLinia[y].value / 100)).toFixed(2);
-
-                        console.log(resultatLinia);
-
-                        y++
-
-
-                        totalInvoice = totalInvoice + new Number(inputSubtotal.value);
-
-
-                    }
-
-
-                    mostrarTotal(totalInvoice);
-
-                }
 
                 recalcularTaula();
+
             })
 
 
@@ -185,12 +223,17 @@
                     botoEsborrar.innerText = 'X';
                     tdCell.appendChild(botoEsborrar);
 
+
                 }
 
 
             }
 
+
+
             crearTaulaOriginal()
+
+
 
             // Afegeixo el listener a la taula i comprovo cada click
             taulaOriginal.addEventListener('click', () => {
@@ -204,8 +247,10 @@
                 // de la taula que no es una row? no se si es possible
                 if (botoEl) {
                     trEl.remove();
-                    recalcularTaula()
+
+                    recalcularTaula();
                 }
+
             })
             // Afegeixo el listener a la taula i comprovo cada click
             taulaOriginal.addEventListener('input', () => {
@@ -267,10 +312,11 @@
                 botoEsborrar.innerText = 'X';
                 tdCell.appendChild(botoEsborrar);
 
-                recalcularTaula()
+                recalcularTaula();
 
                 return rowNova
             }
+
 
 
         </script>
