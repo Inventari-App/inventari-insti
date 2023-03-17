@@ -80,31 +80,7 @@
 
                 recalcularTaula();
 
-                /*
                 
-                                const naturalesaLinia = document.querySelectorAll('.naturalesa');
-                                const tipusLinia = document.querySelectorAll('.tipus');
-                                const quantitatLinia = document.querySelectorAll('.quantitat');
-                                const articleLinia = document.querySelectorAll('.article');
-                                const preuLinia = document.querySelectorAll('.preu');
-                                const ivaLinia = document.querySelectorAll('.iva');
-                                const unitatLinia = document.querySelectorAll('.unitat');
-                                const zonaLinia = document.querySelectorAll('.zona');
-                                const plantaLinia = document.querySelectorAll('.planta');
-                                const areaLinia = document.querySelectorAll('.area');
-                                const proveidorLinia = document.querySelectorAll('.proveidor');
-                                const resultatLinia = document.querySelectorAll('.resultat')
-                                const inputsSubtotals = document.querySelectorAll('.subtotal');
-                
-                
-                                
-                                for(y=0; y= taulaOriginalLength; y++){
-                
-                
-                
-                                    console.log (naturalesaLinia)
-                
-                                }*/
 
             })
 
@@ -130,7 +106,7 @@
                 const resultatLinia = document.querySelectorAll('.resultat')
                 const inputsSubtotals = document.querySelectorAll('.subtotal');
 
-
+                const autocomplete = <%- autocomplete %>
 
 
 
@@ -151,18 +127,51 @@
                         sumatoriTotal.innerText = (`Total comanda: ${totalInvoice}€ (IVA inclòs)`);
 
 
-                        console.log(sumatoriTotal)
 
 
-                        if (quantitatLinia[y] && preuLinia[y] && ivaLinia[y]) {
+                        var countries = [
+                            { label: 'United Kingdom', value: 'UK' },
+                            { label: 'United States', value: 'US' }
+                        ];
+                        
+                        var input = document.getElementById("country");
+                        
+                        autocomplete({
+                            input: input,
+                            fetch: function(text, update) {
+                                text = text.toLowerCase();
+                                // you can also use AJAX requests instead of preloaded data
+                                var suggestions = countries.filter(n => n.label.toLowerCase().startsWith(text))
+                                update(suggestions);
+                            },
+                            onSelect: function(item) {
+                                input.value = item.label;
+                            }
+                        });
 
 
 
-                            const liniaAenviar = [quantitatLinia[y].value, preuLinia[y].value, ivaLinia[y].value];
+
+
+
+
+
+
+
+
+
+
+
+                        if (naturalesaLinia[y] && tipusLinia[y] && quantitatLinia[y] && articleLinia[y] && preuLinia[y] && ivaLinia[y] && unitatLinia[y] && zonaLinia[y] && plantaLinia[y] && areaLinia[y] && proveidorLinia[y]) {
+
+
+
+                            const liniaAenviar = [naturalesaLinia[y].value, tipusLinia[y].value, quantitatLinia[y].value, articleLinia[y].value, preuLinia[y].value, ivaLinia[y].value,
+                            unitatLinia[y].value, zonaLinia[y].value, plantaLinia[y].value, areaLinia[y].value, proveidorLinia[y].value];
 
                             albara.push(liniaAenviar);
 
-                            console.log(albara);
+console.log(albara);
 
 
 
@@ -303,7 +312,7 @@
 
                     albara.push(liniaAenviar);
 
-                    console.log(albara);
+console.log(albara);
 
                 }
 
@@ -397,5 +406,9 @@
 
                 return rowNova
             }
+
+console.log(taulaOriginalLength)
+
+            
 
         </script>
