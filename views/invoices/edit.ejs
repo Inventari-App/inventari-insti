@@ -1,414 +1,431 @@
 <% layout('layouts/boilerplate')%>
 
-    <h3>Editar Comanda núm. <%= invoice.numInvoice %>
-    </h3>
-    <p>
-        <b>Responsable: <%= invoice.responsable.username %> </b>
-    </p>
-    <div class="table-responsive">
-        <table id="taulaOriginal" class="table table-condensed table-hover">
-            <form action="/invoices/<%=invoice._id%>?_method=PUT" method="POST" id="formulari"
-                class="validated-form form-inline">
-                <tr>
+  <h3>Editar Comanda núm. <%= invoice.numInvoice %>
+  </h3>
+  <p>
+    <b>Responsable: <%= invoice.responsable.username %> </b>
+  </p>
+  <div class="table-responsive">
+    <table id="taulaOriginal" class="table table-condensed table-hover">
+      <form action="/invoices/<%=invoice._id%>?_method=PUT" method="POST" id="formulari"
+        class="validated-form form-inline">
+        <tr>
 
-                    <th><small>Quantitat</small></th>
-                    <th><small>Article</th>
-                    <th><small>€/Unitat</small></th>
-                    <th><small>% IVA</small></th>
-                    <th><small>Subtotal €</small></th>
-                    <th><small>Unitat de destí</small></th>
-                    <th><small>Proveidor</small></th>
-                    <th></th>
+          <th><small>Quantitat</small></th>
+          <th><small>Article</th>
+          <th><small>€/Unitat</small></th>
+          <th><small>% IVA</small></th>
+          <th><small>Subtotal €</small></th>
+          <th><small>Unitat de destí</small></th>
+          <th><small>Proveidor</small></th>
+          <th></th>
 
-                </tr>
-                <% let i=0; for (let linia of invoice.invoice) { i++ %>
-                    <tr class="trs">
-                        <div class="form-group container">
-                            <!-- COMENÇAMENT CAMPS -->
-                            <input type="hidden" class="tr<%=i%>" id="quantitatInputTr<%=i%>" value="<%= linia[3] %>">
-                            <input type="hidden" class="tr<%=i%>" id="articleInputTr<%=i%>" value="<%= linia[2] %>">
-                            <input type="hidden" class="tr<%=i%>" id="preuInputTr<%=i%>" value="<%= linia[4] %>">
-                            <input type="hidden" class="tr<%=i%>" id="ivaInputTr<%=i%>" value="<%= linia[5] %>">
-                            <input type="hidden" class="tr<%=i%>" id="subtotalInputTr<%=i%>"
-                                value="<%= (linia[3]*linia[4]*(1+linia[5]/100))%>">
-                            <input type="hidden" class="tr<%=i%>" id="unitatInputTr<%=i%>" value="<%= linia[6] %>">
-                            <input type="hidden" class="tr<%=i%>" id="proveidorInputTr<%=i%>" value="<%= linia[10] %>">
-                            <input type="hidden" class="tr<%=i%>" id="naturalesaInputTr<%=i%>" value=" <%= linia[0] %>">
-                            <input type="hidden" class="tr<%=i%>" id="tipusInputTr<%=i%>" value="<%= linia[1] %>">
-                            <input type="hidden" class="tr<%=i%>" id="zonaInputTr<%=i%>" value="<%= linia[7] %>">
-                            <input type="hidden" class="tr<%=i%>" id="plantaInputTr<%=i%>" value="<%= linia[8] %>">
-                            <input type="hidden" class="tr<%=i%>" id="areaInputTr<%=i%>" value="<%= linia[9] %>">
-                            <input type="hidden" id="invoice" name="invoice[invoice]">
-                            <input type="hidden" id="total" name="invoice[total]" value="<%= invoice.total %>">
-                            <input type="hidden" id="timestamp" name="invoice[timestamp]">
-                            <!-- FINAL CAMPS -->
-                        </div>
-    </div>
-    </tr>
-    <% } %>
-
-        </table>
-
-        <table>
-            <td> <button id="relative" class="btn btn-primary form-control">Modificar Comanda</button></td>
-
-            <div class="h5 row numeros">
-                <span class="sumatori-total">Total Comanda: <%= invoice.total %>€ (IVA INCLÒS) </span>
+        </tr>
+        <% let i=0; for (let linia of invoice.invoice) { i++ %>
+          <tr class="trs">
+            <div class="form-group container">
+              <!-- COMENÇAMENT CAMPS -->
+              <input type="hidden" class="tr<%=i%>" id="quantitatInputTr<%=i%>" value="<%= linia[3] %>">
+              <input type="hidden" class="tr<%=i%>" id="articleInputTr<%=i%>" value="<%= linia[2] %>">
+              <input type="hidden" class="tr<%=i%>" id="preuInputTr<%=i%>" value="<%= linia[4] %>">
+              <input type="hidden" class="tr<%=i%>" id="ivaInputTr<%=i%>" value="<%= linia[5] %>">
+              <input type="hidden" class="tr<%=i%>" id="subtotalInputTr<%=i%>"
+                value="<%= (linia[3]*linia[4]*(1+linia[5]/100))%>">
+              <input type="hidden" class="tr<%=i%>" id="unitatInputTr<%=i%>" value="<%= linia[6] %>">
+              <input type="hidden" class="tr<%=i%>" id="proveidorInputTr<%=i%>" value="<%= linia[10] %>">
+              <input type="hidden" class="tr<%=i%>" id="naturalesaInputTr<%=i%>" value=" <%= linia[0] %>">
+              <input type="hidden" class="tr<%=i%>" id="tipusInputTr<%=i%>" value="<%= linia[1] %>">
+              <input type="hidden" class="tr<%=i%>" id="zonaInputTr<%=i%>" value="<%= linia[7] %>">
+              <input type="hidden" class="tr<%=i%>" id="plantaInputTr<%=i%>" value="<%= linia[8] %>">
+              <input type="hidden" class="tr<%=i%>" id="areaInputTr<%=i%>" value="<%= linia[9] %>">
+              <input type="hidden" id="invoice" name="invoice[invoice]">
+              <input type="hidden" id="total" name="invoice[total]" value="<%= invoice.total %>">
+              <input type="hidden" id="timestamp" name="invoice[timestamp]">
+              <!-- FINAL CAMPS -->
             </div>
+  </div>
+  </tr>
+  <% } %>
 
-        </table>
+    </table>
 
-        </form>
+    <table>
+      <td> <button id="relative" class="btn btn-primary form-control">Modificar Comanda</button></td>
 
-        <p class="h5 row numeros">
-            <span class="sumatori-total"></span> <span></span>
-        </p>
-        <p class="row numeros">
-            <a id="afegir" href="#" class="link-primary">Afegir Article</a>
-        </p>
-        </div>
+      <div class="h5 row numeros">
+        <span class="sumatori-total">Total Comanda: <%= invoice.total %>€ (IVA INCLÒS) </span>
+      </div>
 
-        <script>
-            const afegirLinia = document.querySelector("#afegir");
-            const taulaOriginal = document.querySelector("#taulaOriginal");
-            const taulaOriginalLength = taulaOriginal.rows.length - 1;
+    </table>
 
-            taulaOriginal.addEventListener('input', () => {
+    </form>
 
+    <p class="h5 row numeros">
+      <span class="sumatori-total"></span> <span></span>
+    </p>
+    <p class="row numeros">
+      <a id="afegir" href="#" class="link-primary">Afegir Article</a>
+    </p>
+    </div>
 
+    <script type="module">
+      import Autocompleter from '../../utils/Autocompleter.js';
+      const _autocomplete = <%- autocomplete %>
 
+      const afegirLinia = document.querySelector("#afegir");
+      const taulaOriginal = document.querySelector("#taulaOriginal");
+      const taulaOriginalLength = taulaOriginal.rows.length - 1;
 
-                recalcularTaula();
+      taulaOriginal.addEventListener('input', () => {
+        recalcularTaula();
+      })
 
-                
+      function recalcularTaula() {
+        const naturalesaLinia = document.querySelectorAll('.naturalesa');
+        const tipusLinia = document.querySelectorAll('.tipus');
+        const quantitatLinia = document.querySelectorAll('.quantitat');
+        const articleLinia = document.querySelectorAll('.article');
+        const preuLinia = document.querySelectorAll('.preu');
+        const ivaLinia = document.querySelectorAll('.iva');
+        const unitatLinia = document.querySelectorAll('.unitat');
+        const zonaLinia = document.querySelectorAll('.zona');
+        const plantaLinia = document.querySelectorAll('.planta');
+        const areaLinia = document.querySelectorAll('.area');
+        const proveidorLinia = document.querySelectorAll('.proveidor');
+        const resultatLinia = document.querySelectorAll('.resultat')
+        const inputsSubtotals = document.querySelectorAll('.subtotal');
 
-            })
+        let totalInvoice = 0;
+        let albara = [];
 
+        if (inputsSubtotals.length != 0) {
+          let y = 0;
 
-            function recalcularTaula() {
+          for (let inputSubtotal of inputsSubtotals) {
+            resultatLinia[y].value = (new Number(quantitatLinia[y].value * new Number(preuLinia[y].value) * (1 + new Number(ivaLinia[y].value) / 100)).toFixed(2));
+            totalInvoice = (new Number(totalInvoice) + new Number(resultatLinia[y].value)).toFixed(2);
+            const sumatoriTotal = document.querySelector('.sumatori-total');
+            sumatoriTotal.innerText = (`Total comanda: ${totalInvoice}€ (IVA inclòs)`);
 
-                const naturalesaLinia = document.querySelectorAll('.naturalesa');
+            if (naturalesaLinia[y] && tipusLinia[y] && quantitatLinia[y] && articleLinia[y] && preuLinia[y] && ivaLinia[y] && unitatLinia[y] && zonaLinia[y] && plantaLinia[y] && areaLinia[y] && proveidorLinia[y]) {
 
-                const tipusLinia = document.querySelectorAll('.tipus');
-                const quantitatLinia = document.querySelectorAll('.quantitat');
+              const liniaAenviar = [naturalesaLinia[y].value, tipusLinia[y].value, quantitatLinia[y].value, articleLinia[y].value, preuLinia[y].value, ivaLinia[y].value,
+              unitatLinia[y].value, zonaLinia[y].value, plantaLinia[y].value, areaLinia[y].value, proveidorLinia[y].value];
 
-                const articleLinia = document.querySelectorAll('.article');
-                const preuLinia = document.querySelectorAll('.preu');
-                const ivaLinia = document.querySelectorAll('.iva');
+              albara.push(liniaAenviar);
 
-                const unitatLinia = document.querySelectorAll('.unitat');
-                const zonaLinia = document.querySelectorAll('.zona');
-                const plantaLinia = document.querySelectorAll('.planta');
-                const areaLinia = document.querySelectorAll('.area');
+              console.log(albara);
 
-                const proveidorLinia = document.querySelectorAll('.proveidor');
-
-                const resultatLinia = document.querySelectorAll('.resultat')
-                const inputsSubtotals = document.querySelectorAll('.subtotal');
-
-                const autocomplete = <%- autocomplete %>
-
-
-
-
-
-                let totalInvoice = 0;
-
-                let albara = [];
-
-                if (inputsSubtotals.length != 0) {
-
-                    y = 0;
-
-                    for (let inputSubtotal of inputsSubtotals) {
-                        resultatLinia[y].value = (new Number(quantitatLinia[y].value * new Number(preuLinia[y].value) * (1 + new Number(ivaLinia[y].value) / 100)).toFixed(2));
-                        totalInvoice = (new Number(totalInvoice) + new Number(resultatLinia[y].value)).toFixed(2);
-                        const sumatoriTotal = document.querySelector('.sumatori-total');
-                        sumatoriTotal.innerText = (`Total comanda: ${totalInvoice}€ (IVA inclòs)`);
-
-
-
-
-                        var countries = [
-                            { label: 'United Kingdom', value: 'UK' },
-                            { label: 'United States', value: 'US' }
-                        ];
-                        
-                        var input = document.getElementById("country");
-                        
-                        autocomplete({
-                            input: input,
-                            fetch: function(text, update) {
-                                text = text.toLowerCase();
-                                // you can also use AJAX requests instead of preloaded data
-                                var suggestions = countries.filter(n => n.label.toLowerCase().startsWith(text))
-                                update(suggestions);
-                            },
-                            onSelect: function(item) {
-                                input.value = item.label;
-                            }
-                        });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                        if (naturalesaLinia[y] && tipusLinia[y] && quantitatLinia[y] && articleLinia[y] && preuLinia[y] && ivaLinia[y] && unitatLinia[y] && zonaLinia[y] && plantaLinia[y] && areaLinia[y] && proveidorLinia[y]) {
-
-
-
-                            const liniaAenviar = [naturalesaLinia[y].value, tipusLinia[y].value, quantitatLinia[y].value, articleLinia[y].value, preuLinia[y].value, ivaLinia[y].value,
-                            unitatLinia[y].value, zonaLinia[y].value, plantaLinia[y].value, areaLinia[y].value, proveidorLinia[y].value];
-
-                            albara.push(liniaAenviar);
-
-console.log(albara);
-
-
-
-                        }
-
-
-
-                        y++
-
-
-                    }
-
-
-                }
-                else {
-                    totalInvoice = 0;
-                    const sumatoriTotal = document.querySelector('.sumatori-total');
-                    sumatoriTotal.innerText = '';
-                }
 
 
             }
 
-            // CREO LA TAULA ORIGINAL
-            function crearTaulaOriginal() {
-
-                let albara = [];
-                for (r = 1; r <= taulaOriginalLength; r++) {
-
-                    const naturalesaTaulaOriginal = document.querySelector(`#naturalesaInputTr${r}`).value;
-
-                    const tipusTaulaOriginal = document.querySelector(`#tipusInputTr${r}`).value;
-
-                    const quantitatTaulaOriginal = document.querySelector(`#quantitatInputTr${r}`).value;
-                    const articleTaulaOriginal = document.querySelector(`#articleInputTr${r}`).value;
-                    const preuTaulaOriginal = document.querySelector(`#preuInputTr${r}`).value;
-                    const ivaTaulaOriginal = document.querySelector(`#ivaInputTr${r}`).value;
-                    const subtotalTaulaOriginal = document.querySelector(`#subtotalInputTr${r}`).value;
-
-                    const unitatTaulaOriginal = document.querySelector(`#unitatInputTr${r}`).value;
-                    const zonaTaulaOriginal = document.querySelector(`#zonaInputTr${r}`).value;
-                    const plantaTaulaOriginal = document.querySelector(`#plantaInputTr${r}`).value;
-                    const areaTaulaOriginal = document.querySelector(`#areaInputTr${r}`).value;
-
-                    const proveidorTaulaOriginal = document.querySelector(`#proveidorInputTr${r}`).value;
-                    const rowNova = taulaOriginal.insertRow();
-
-                    rowNova.className = "trs";
-
-                    const nouInputNaturalesa = document.createElement("input");
-                    nouInputNaturalesa.className = 'naturalesa';
-                    nouInputNaturalesa.type = 'hidden';
-                    nouInputNaturalesa.value = naturalesaTaulaOriginal;
-                    taulaOriginal.appendChild(nouInputNaturalesa);
-
-                    const nouInputTipus = document.createElement("input");
-                    nouInputTipus.className = 'tipus';
-                    nouInputTipus.type = 'hidden';
-                    nouInputTipus.value = tipusTaulaOriginal;
-                    taulaOriginal.appendChild(nouInputTipus);
-
-                    const nouQuantitatCell = rowNova.insertCell();
-                    const nouInputQuantitat = document.createElement("input");
-                    nouInputQuantitat.className = 'variable petit form-control unitari numeros quantitat';
-                    nouInputQuantitat.type = 'number';
-                    nouInputQuantitat.value = quantitatTaulaOriginal;
-                    nouQuantitatCell.appendChild(nouInputQuantitat);
-
-                    const nouArticleCell = rowNova.insertCell();
-                    const nouInputArticle = document.createElement("input");
-                    nouInputArticle.className = 'form-control mitja esquerra article';
-                    nouInputArticle.type = 'text';
-                    nouInputArticle.value = articleTaulaOriginal;
-                    nouArticleCell.appendChild(nouInputArticle);
-
-                    const nouPreuCell = rowNova.insertCell();
-                    const nouInputPreu = document.createElement("input");
-                    nouInputPreu.className = 'variable form-control petit numeros preu';
-                    nouInputPreu.type = 'number';
-                    nouInputPreu.value = preuTaulaOriginal;
-                    nouPreuCell.appendChild(nouInputPreu);
-
-                    const nouIvaCell = rowNova.insertCell();
-                    const nouInputIva = document.createElement("input");
-                    nouInputIva.className = 'variable form-control numeros unitari iva';
-                    nouInputIva.type = 'number';
-                    nouInputIva.value = ivaTaulaOriginal;
-                    nouIvaCell.appendChild(nouInputIva);
-
-                    const nouSubtotalCell = rowNova.insertCell();
-                    const nouInputSubtotal = document.createElement("input");
-                    nouInputSubtotal.className = `form-control petit_mitja numeros subtotal resultat`;
-                    nouInputSubtotal.type = 'number';
-                    nouInputSubtotal.value = new Number(nouInputQuantitat.value * nouInputPreu.value * (1 + nouInputIva.value / 100));
-                    nouSubtotalCell.appendChild(nouInputSubtotal);
-
-                    const nouUnitatCell = rowNova.insertCell();
-                    const nouInputUnitat = document.createElement("input");
-                    nouInputUnitat.className = 'form-control mitja esquerra unitat';
-                    nouInputUnitat.type = 'text';
-                    nouInputUnitat.value = unitatTaulaOriginal;
-                    nouUnitatCell.appendChild(nouInputUnitat);
-
-                    const nouInputZona = document.createElement("input");
-                    nouInputZona.className = 'zona';
-                    nouInputZona.type = 'hidden';
-                    nouInputZona.value = zonaTaulaOriginal;
-                    taulaOriginal.appendChild(nouInputZona);
-
-                    const nouInputPlanta = document.createElement("input");
-                    nouInputPlanta.className = 'planta';
-                    nouInputPlanta.type = 'hidden';
-                    nouInputPlanta.value = plantaTaulaOriginal;
-                    taulaOriginal.appendChild(nouInputPlanta);
-
-                    const nouInputArea = document.createElement("input");
-                    nouInputArea.className = 'area';
-                    nouInputArea.type = 'hidden';
-                    nouInputArea.value = areaTaulaOriginal;
-                    taulaOriginal.appendChild(nouInputArea);
-
-                    const nouProveidorCell = rowNova.insertCell();
-                    const nouInputProveidor = document.createElement("input");
-                    nouInputProveidor.className = 'form-control mitja esquerra proveidor'
-                    nouInputProveidor.type = 'text';
-                    nouInputProveidor.value = proveidorTaulaOriginal;
-                    nouProveidorCell.appendChild(nouInputProveidor);
-
-                    const tdCell = rowNova.insertCell();
-                    const botoEsborrar = document.createElement("button");
-                    botoEsborrar.className = 'botoEsborrar'
-                    botoEsborrar.innerText = 'X';
-                    tdCell.appendChild(botoEsborrar);
 
 
-                    const liniaAenviar = [nouInputNaturalesa.value, nouInputTipus.value, nouInputQuantitat.value, nouInputArticle.value, nouInputPreu.value,
-                    nouInputIva.value, nouInputUnitat.value, nouInputZona.value, nouInputPlanta.value, nouInputArea.value, nouInputArea.input]
+            y++
 
-                    albara.push(liniaAenviar);
 
-console.log(albara);
+          }
 
-                }
 
+        }
+        else {
+          totalInvoice = 0;
+          const sumatoriTotal = document.querySelector('.sumatori-total');
+          sumatoriTotal.innerText = '';
+        }
+
+
+      }
+
+      // CREO LA TAULA ORIGINAL
+      function crearTaulaOriginal() {
+
+        let albara = [];
+        for (let r = 1; r <= taulaOriginalLength; r++) {
+
+          const naturalesaTaulaOriginal = document.querySelector(`#naturalesaInputTr${r}`).value;
+
+          const tipusTaulaOriginal = document.querySelector(`#tipusInputTr${r}`).value;
+
+          const quantitatTaulaOriginal = document.querySelector(`#quantitatInputTr${r}`).value;
+          const articleTaulaOriginal = document.querySelector(`#articleInputTr${r}`).value;
+          const preuTaulaOriginal = document.querySelector(`#preuInputTr${r}`).value;
+          const ivaTaulaOriginal = document.querySelector(`#ivaInputTr${r}`).value;
+          const subtotalTaulaOriginal = document.querySelector(`#subtotalInputTr${r}`).value;
+
+          const unitatTaulaOriginal = document.querySelector(`#unitatInputTr${r}`).value;
+          const zonaTaulaOriginal = document.querySelector(`#zonaInputTr${r}`).value;
+          const plantaTaulaOriginal = document.querySelector(`#plantaInputTr${r}`).value;
+          const areaTaulaOriginal = document.querySelector(`#areaInputTr${r}`).value;
+
+          const proveidorTaulaOriginal = document.querySelector(`#proveidorInputTr${r}`).value;
+          const rowNova = taulaOriginal.insertRow();
+
+          rowNova.className = "trs";
+
+          const nouInputNaturalesa = document.createElement("input");
+          nouInputNaturalesa.className = 'naturalesa';
+          nouInputNaturalesa.type = 'hidden';
+          nouInputNaturalesa.value = naturalesaTaulaOriginal;
+          taulaOriginal.appendChild(nouInputNaturalesa);
+
+          const nouInputTipus = document.createElement("input");
+          nouInputTipus.className = 'tipus';
+          nouInputTipus.type = 'hidden';
+          nouInputTipus.value = tipusTaulaOriginal;
+          taulaOriginal.appendChild(nouInputTipus);
+
+          const nouQuantitatCell = rowNova.insertCell();
+          const nouInputQuantitat = document.createElement("input");
+          nouInputQuantitat.className = 'variable petit form-control unitari numeros quantitat';
+          nouInputQuantitat.type = 'number';
+          nouInputQuantitat.value = quantitatTaulaOriginal;
+          nouQuantitatCell.appendChild(nouInputQuantitat);
+
+          const nouArticleCell = rowNova.insertCell();
+          const nouInputArticle = document.createElement("input");
+          nouInputArticle.className = 'form-control mitja esquerra article';
+          nouInputArticle.type = 'text';
+          nouInputArticle.value = articleTaulaOriginal;
+          nouArticleCell.appendChild(nouInputArticle);
+
+          const nouPreuCell = rowNova.insertCell();
+          const nouInputPreu = document.createElement("input");
+          nouInputPreu.className = 'variable form-control petit numeros preu';
+          nouInputPreu.type = 'number';
+          nouInputPreu.value = preuTaulaOriginal;
+          nouPreuCell.appendChild(nouInputPreu);
+
+          const nouIvaCell = rowNova.insertCell();
+          const nouInputIva = document.createElement("input");
+          nouInputIva.className = 'variable form-control numeros unitari iva';
+          nouInputIva.type = 'number';
+          nouInputIva.value = ivaTaulaOriginal;
+          nouIvaCell.appendChild(nouInputIva);
+
+          const nouSubtotalCell = rowNova.insertCell();
+          const nouInputSubtotal = document.createElement("input");
+          nouInputSubtotal.className = `form-control petit_mitja numeros subtotal resultat`;
+          nouInputSubtotal.type = 'number';
+          nouInputSubtotal.value = new Number(nouInputQuantitat.value * nouInputPreu.value * (1 + nouInputIva.value / 100));
+          nouSubtotalCell.appendChild(nouInputSubtotal);
+
+          const nouUnitatCell = rowNova.insertCell();
+          const nouInputUnitat = document.createElement("input");
+          nouInputUnitat.className = 'form-control mitja esquerra unitat';
+          nouInputUnitat.type = 'text';
+          nouInputUnitat.value = unitatTaulaOriginal;
+          nouUnitatCell.appendChild(nouInputUnitat);
+
+          const nouInputZona = document.createElement("input");
+          nouInputZona.className = 'zona';
+          nouInputZona.type = 'hidden';
+          nouInputZona.value = zonaTaulaOriginal;
+          taulaOriginal.appendChild(nouInputZona);
+
+          const nouInputPlanta = document.createElement("input");
+          nouInputPlanta.className = 'planta';
+          nouInputPlanta.type = 'hidden';
+          nouInputPlanta.value = plantaTaulaOriginal;
+          taulaOriginal.appendChild(nouInputPlanta);
+
+          const nouInputArea = document.createElement("input");
+          nouInputArea.className = 'area';
+          nouInputArea.type = 'hidden';
+          nouInputArea.value = areaTaulaOriginal;
+          taulaOriginal.appendChild(nouInputArea);
+
+          const nouProveidorCell = rowNova.insertCell();
+          const nouInputProveidor = document.createElement("input");
+          nouInputProveidor.className = 'form-control mitja esquerra proveidor'
+          nouInputProveidor.type = 'text';
+          nouInputProveidor.value = proveidorTaulaOriginal;
+          nouProveidorCell.appendChild(nouInputProveidor);
+
+          const tdCell = rowNova.insertCell();
+          const botoEsborrar = document.createElement("button");
+          botoEsborrar.className = 'botoEsborrar'
+          botoEsborrar.innerText = 'X';
+          tdCell.appendChild(botoEsborrar);
+
+          Autocompleter({
+            autocomplete: _autocomplete,
+            inputEl: nouInputArticle,
+            optionsRoute: '/items/all',
+            onSelect: function (suggestion) {
+              const {nom, naturalesa, tipus} = suggestion
+              this.input.value = nom;
+            },
+            render: function (suggestion, currentInput) {
+              if (suggestion) {
+                const nom = suggestion.nom
+                const div = document.createElement('div')
+                div.setAttribute("id", "autocomplete-article");
+                div.textContent = nom
+                return div
+              }
             }
+          })
 
-            crearTaulaOriginal()
-
-
-            // Afegeixo el listener a la taula i comprovo cada click
-            taulaOriginal.addEventListener('click', () => {
-
-                //event.stopPropagation()
-                clickedEl = event.target;
-                // Comprovo que el click vingui de una row o els elements
-                // que hi han a dins, a la vegada agafo la rowEl
-                const botoEl = clickedEl.closest('.botoEsborrar');
-                const trEl = clickedEl.closest('.trs')
-                // Si no hi ha rowEl vol dir que s'ha clickat en algun lloc
-                // de la taula que no es una row? no se si es possible
-                if (botoEl) {
-
-                    trEl.remove();
-
-                    recalcularTaula();
-
-                }
-
-            })
-
-            // Afegeixo el listener a la taula i comprovo cada click
-            taulaOriginal.addEventListener('input', () => {
-                //event.stopPropagation()
-                clickedEl = event.target;
-                // Comprovo que el click vingui de una row o els elements
-                // que hi han a dins, a la vegada agafo la rowEl
-                const botoEl = clickedEl.closest('.variable');
-                const trEl = clickedEl.closest('.trs')
-                // Si no hi ha rowEl vol dir que s'ha clickat en algun lloc
-                // de la taula que no es una row? no se si es possible
-
-            })
-
-            afegirLinia.addEventListener("click", () => {
-                const row = crearLinia();
-            })
-
-            function crearLinia() {
-                const rowNova = taulaOriginal.insertRow();
-                rowNova.className = "trs";
-                const nouQuantitatCell = rowNova.insertCell();
-                const nouInputQuantitat = document.createElement("input");
-                nouInputQuantitat.className = 'variable petit form-control unitari numeros quantitat';
-                nouInputQuantitat.type = 'number';
-                nouQuantitatCell.appendChild(nouInputQuantitat);
-                const nouArticleCell = rowNova.insertCell();
-                const nouInputArticle = document.createElement("input");
-                nouInputArticle.className = 'form-control mitja esquerra';
-                nouInputArticle.type = 'text';
-                nouArticleCell.appendChild(nouInputArticle);
-                const nouPreuCell = rowNova.insertCell();
-                const nouInputPreu = document.createElement("input");
-                nouInputPreu.className = 'variable form-control petit numeros preu';
-                nouPreuCell.appendChild(nouInputPreu);
-                nouInputPreu.type = 'number';
-                const nouIvaCell = rowNova.insertCell();
-                const nouInputIva = document.createElement("input");
-                nouInputIva.className = 'variable form-control numeros unitari iva';
-                nouInputIva.type = 'number';
-                nouIvaCell.appendChild(nouInputIva);
-                const nouSubtotalCell = rowNova.insertCell();
-                const nouInputSubtotal = document.createElement("input");
-                nouInputSubtotal.className = 'form-control petit_mitja numeros subtotal resultat';
-                nouInputSubtotal.type = 'number';
-                nouSubtotalCell.appendChild(nouInputSubtotal);
-                const nouUnitatCell = rowNova.insertCell();
-                const nouInputUnitat = document.createElement("input");
-                nouInputUnitat.className = 'form-control mitja esquerra';
-                nouInputUnitat.type = 'text';
-                nouUnitatCell.appendChild(nouInputUnitat);
-                const nouProveidorCell = rowNova.insertCell();
-                const nouInputProveidor = document.createElement("input");
-                nouInputProveidor.className = 'form-control mitja esquerra'
-                nouInputProveidor.type = 'text';
-                nouProveidorCell.appendChild(nouInputProveidor);
-                const tdCell = rowNova.insertCell();
-                const botoEsborrar = document.createElement("button");
-                botoEsborrar.className = 'botoEsborrar'
-                botoEsborrar.innerText = 'X';
-                tdCell.appendChild(botoEsborrar);
-
-
-                return rowNova
+          Autocompleter({
+            autocomplete: _autocomplete,
+            inputEl: nouInputUnitat,
+            optionsRoute: '/unitats/all',
+            onSelect: function (suggestion) {
+              const {nom, naturalesa, tipus} = suggestion
+              this.input.value = nom;
+            },
+            render: function (suggestion, currentInput) {
+              if (suggestion) {
+                const nom = suggestion.nom
+                const div = document.createElement('div')
+                div.setAttribute("id", "autocomplete-article");
+                div.textContent = nom
+                return div
+              }
             }
+          })
 
-console.log(taulaOriginalLength)
+          const liniaAenviar = [nouInputNaturalesa.value, nouInputTipus.value, nouInputQuantitat.value, nouInputArticle.value, nouInputPreu.value,
+          nouInputIva.value, nouInputUnitat.value, nouInputZona.value, nouInputPlanta.value, nouInputArea.value, nouInputArea.input]
 
-            
+          albara.push(liniaAenviar);
 
-        </script>
+          console.log(albara);
+
+        }
+
+      }
+
+      crearTaulaOriginal()
+
+
+      // Afegeixo el listener a la taula i comprovo cada click
+      taulaOriginal.addEventListener('click', (event) => {
+
+        //event.stopPropagation()
+        const clickedEl = event.target;
+        // Comprovo que el click vingui de una row o els elements
+        // que hi han a dins, a la vegada agafo la rowEl
+        const botoEl = clickedEl.closest('.botoEsborrar');
+        const trEl = clickedEl.closest('.trs')
+        // Si no hi ha rowEl vol dir que s'ha clickat en algun lloc
+        // de la taula que no es una row? no se si es possible
+        if (botoEl) {
+
+          trEl.remove();
+
+          recalcularTaula();
+
+        }
+
+      })
+
+      // Afegeixo el listener a la taula i comprovo cada click
+      taulaOriginal.addEventListener('input', (event) => {
+        //event.stopPropagation()
+        const clickedEl = event.target;
+        // Comprovo que el click vingui de una row o els elements
+        // que hi han a dins, a la vegada agafo la rowEl
+        const botoEl = clickedEl.closest('.variable');
+        const trEl = clickedEl.closest('.trs')
+        // Si no hi ha rowEl vol dir que s'ha clickat en algun lloc
+        // de la taula que no es una row? no se si es possible
+
+      })
+
+      afegirLinia.addEventListener("click", () => {
+        const row = crearLinia();
+      })
+
+      function crearLinia() {
+        const rowNova = taulaOriginal.insertRow();
+        rowNova.className = "trs";
+        const nouQuantitatCell = rowNova.insertCell();
+        const nouInputQuantitat = document.createElement("input");
+        nouInputQuantitat.className = 'variable petit form-control unitari numeros quantitat';
+        nouInputQuantitat.type = 'number';
+        nouQuantitatCell.appendChild(nouInputQuantitat);
+        const nouArticleCell = rowNova.insertCell();
+        const nouInputArticle = document.createElement("input");
+        nouInputArticle.className = 'form-control mitja esquerra';
+        nouInputArticle.type = 'text';
+        nouArticleCell.appendChild(nouInputArticle);
+        const nouPreuCell = rowNova.insertCell();
+        const nouInputPreu = document.createElement("input");
+        nouInputPreu.className = 'variable form-control petit numeros preu';
+        nouPreuCell.appendChild(nouInputPreu);
+        nouInputPreu.type = 'number';
+        const nouIvaCell = rowNova.insertCell();
+        const nouInputIva = document.createElement("input");
+        nouInputIva.className = 'variable form-control numeros unitari iva';
+        nouInputIva.type = 'number';
+        nouIvaCell.appendChild(nouInputIva);
+        const nouSubtotalCell = rowNova.insertCell();
+        const nouInputSubtotal = document.createElement("input");
+        nouInputSubtotal.className = 'form-control petit_mitja numeros subtotal resultat';
+        nouInputSubtotal.type = 'number';
+        nouSubtotalCell.appendChild(nouInputSubtotal);
+        const nouUnitatCell = rowNova.insertCell();
+        const nouInputUnitat = document.createElement("input");
+        nouInputUnitat.className = 'form-control mitja esquerra';
+        nouInputUnitat.type = 'text';
+        nouUnitatCell.appendChild(nouInputUnitat);
+        const nouProveidorCell = rowNova.insertCell();
+        const nouInputProveidor = document.createElement("input");
+        nouInputProveidor.className = 'form-control mitja esquerra'
+        nouInputProveidor.type = 'text';
+        nouProveidorCell.appendChild(nouInputProveidor);
+        const tdCell = rowNova.insertCell();
+        const botoEsborrar = document.createElement("button");
+        botoEsborrar.className = 'botoEsborrar'
+        botoEsborrar.innerText = 'X';
+        tdCell.appendChild(botoEsborrar);
+
+        Autocompleter({
+          autocomplete: _autocomplete,
+          inputEl: nouInputArticle,
+          optionsRoute: '/items/all',
+          onSelect: function (suggestion) {
+            const {nom, naturalesa, tipus} = suggestion
+            this.input.value = nom;
+          },
+          render: function (suggestion, currentInput) {
+            if (suggestion) {
+              const nom = suggestion.nom
+              const div = document.createElement('div')
+              div.setAttribute("id", "autocomplete-article");
+              div.textContent = nom
+              return div
+            }
+          }
+        })
+
+        Autocompleter({
+          autocomplete: _autocomplete,
+          inputEl: nouInputUnitat,
+          optionsRoute: '/unitats/all',
+          onSelect: function (suggestion) {
+            const {nom, naturalesa, tipus} = suggestion
+            this.input.value = nom;
+          },
+          render: function (suggestion, currentInput) {
+            if (suggestion) {
+              const nom = suggestion.nom
+              const div = document.createElement('div')
+              div.setAttribute("id", "autocomplete-article");
+              div.textContent = nom
+              return div
+            }
+          }
+        })
+
+        return rowNova
+      }
+
+      console.log(taulaOriginalLength)
+
+
+
+    </script>
