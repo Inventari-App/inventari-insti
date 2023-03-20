@@ -194,6 +194,7 @@ app.use('/areas',areaRoutes);
 app.use('/utilitats',utilitatRoutes);
 app.use('/proveidors',proveidorRoutes);
 
+app.use('/utils', express.static(path.join(__dirname, 'utils')))
 
 app.get('/', (req, res) => {
     res.render('home');

@@ -1,68 +1,97 @@
 <% layout('layouts/boilerplate')%>
-<p>
-<b>Responsable: <%= invoice.responsable.username %> </b>
+  <p>
+    <b>Responsable: <%= invoice.responsable.username %> </b>
 
 
-</p>
+  </p>
 
-<table class="table table-condensed table-striped">
-            <form id="proformForm" class="form-inline">
-                
-                    <tr>
-                        <th>Naturalesa</th>
-                        <th>Tipus</th>
-                        <th>Article</th>
-                        <th class="numeros">Quantitat</th>
-                        <th class="numeros">Preu unitari</th>
-                        <th class="numeros">Tipus IVA</th>
-                        <th class="numeros">Subtotal</th>
-                        <th>Unitat de destí</th>
-                        
-                    </tr>
+  <table class="table table-condensed table-striped">
+    <form id="proformForm" class="form-inline">
 
-                <% for (let linia of invoice.invoice) {  %>
-                   
-                    
+      <tr>
+        <th>Naturalesa</th>
+        <th>Tipus</th>
+        <th>Article</th>
+        <th class="numeros">Quantitat</th>
+        <th class="numeros">Preu unitari</th>
+        <th class="numeros">Tipus IVA</th>
+        <th class="numeros">Subtotal</th>
+        <th>Unitat de destí</th>
 
-                <tr>
+      </tr>
+
+      <% for (let linia of invoice.invoice) { %>
 
 
-                <td width="10%"><div class="camps"><%= linia[0] %></div></td>
-                <td width="10%"><div class="camps"><%= linia[1] %></div></td>
-                <td width="20%"><div class="camps"><%= linia[2] %></div></td>
-                <td width="10%"><div class="numeros"><%= linia[3] %>unitat/s</div></td>
-                <td width="10%"><div class="numeros"><%= linia[4] %>€/u</div></td>
-                <td width="10%"><div class="numeros"><%= linia[5] %>%</div></td>
-                <td width="10%"><div class="numeros"><%= (linia[3]*linia[4]*(1+linia[5]/100)).toFixed(2) %>€</div></td>
-                <td width="20%"><div class="camps"><%= linia[6] %></div></td>
-                                     </tr>
-                            <% } %>
-                                                
-            </form>
 
-            
+        <tr>
 
-</table>
 
-            <% if( currentUser && invoice.responsable.equals(currentUser.id)) { %>
-                <div class="card-body">
-                    <a href="/invoices/<%=invoice.id%>/edit" class="card-link btn btn-info" class="card-link">Editar
-                        Comanda</a>
-                    <form class="d-inline" action="/invoices/<%=invoice._id%>?_method=DELETE" method="POST">
-                        <button class="btn btn-danger">Esborrar Comanda</button>
-                    </form>
+          <td width="10%">
+            <div class="camps">
+              <%= linia[0] %>
+            </div>
+          </td>
+          <td width="10%">
+            <div class="camps">
+              <%= linia[1] %>
+            </div>
+          </td>
+          <td width="20%">
+            <div class="camps">
+              <%= linia[2] %>
+            </div>
+          </td>
+          <td width="10%">
+            <div class="numeros">
+              <%= linia[3] %>unitat/s
+            </div>
+          </td>
+          <td width="10%">
+            <div class="numeros">
+              <%= linia[4] %>€/u
+            </div>
+          </td>
+          <td width="10%">
+            <div class="numeros">
+              <%= linia[5] %>%
+            </div>
+          </td>
+          <td width="10%">
+            <div class="numeros">
+              <%= (linia[3]*linia[4]*(1+linia[5]/100)).toFixed(2) %>€
+            </div>
+          </td>
+          <td width="20%">
+            <div class="camps">
+              <%= linia[6] %>
+            </div>
+          </td>
+        </tr>
+        <% } %>
 
-<p class="h5 row numeros">
+    </form>
+
+
+
+  </table>
+
+  <% if( currentUser && invoice.responsable.equals(currentUser.id)) { %>
+    <div class="card-body">
+      <a href="/invoices/<%=invoice.id%>/edit" class="card-link btn btn-info" class="card-link">Editar
+        Comanda</a>
+      <form class="d-inline" action="/invoices/<%=invoice._id%>?_method=DELETE" method="POST">
+        <button class="btn btn-danger">Esborrar Comanda</button>
+      </form>
+
+      <p class="h5 row numeros">
         <span class="sumatori-total">Total Comanda: <%= invoice.total %>€ (IVA inclòs) </span>
-</p>
+      </p>
 
-                </div>
-                <% } %>
-                    <div class="card-footer text-muted">
-                        <a href="/invoices">Tots els invoices</a>
-                    </div>
-        </div>
     </div>
-
-    
-    
+    <% } %>
+      <div class="card-footer text-muted">
+        <a href="/invoices">Tots els invoices</a>
+      </div>
+      </div>
+      </div>
