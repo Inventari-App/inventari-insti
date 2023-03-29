@@ -6,8 +6,9 @@ const autocomplete = require('autocompleter');
 module.exports.index = async (req, res) => {
 
   const invoices = await Invoice
-    .find({})
+    .find()
     .populate('responsable')
+    .sort({ createdAt: -1 })
 
   res.render('invoices/index', { invoices })
 }
@@ -17,15 +18,12 @@ module.exports.renderNewForm = (req, res) => {
 }
 
 module.exports.createInvoice = async (req, res, next) => {
-
-  let invoiceBody = req.body.invoice
-  const invoiceArr = JSON.parse(invoiceBody.invoice)
-  invoiceBody = { ...invoiceBody, invoice: invoiceArr }
-  const invoice = new Invoice(invoiceBody);
-  invoice.responsable = req.user._id;
-  await invoice.save();
+  const { invoiceItems } = req.body
+  const responsable = req.user._id;
+  const invoice = new Invoice({ responsable, invoiceItems })
+  await invoice.save()
   req.flash('success', 'Comanda creada correctament!');
-  res.redirect(`/invoices/${invoice._id}`);
+  res.json(invoice)
 }
 
 module.exports.showInvoice = async (req, res, next) => {
