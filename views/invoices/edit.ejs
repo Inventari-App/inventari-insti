@@ -4,111 +4,115 @@
 <p>
   <b>Responsable: <%= invoice.responsable.username %> </b>
 </p>
-<form
-  action="/invoices/<%=invoice._id%>?_method=PUT"
-  method="POST"
-  id="formulari"
->
-  <div class="table-responsive">
-    <table id="taulaOriginal" class="table table-condensed table-hover">
-      <tr>
-        <th><small>Quantitat</small></th>
-        <th><small>Article</small></th>
-        <th><small>€/Unitat</small></th>
-        <th><small>% IVA</small></th>
-        <th><small>Subtotal €</small></th>
-        <th><small>Unitat de destí</small></th>
-        <th><small>Proveidor</small></th>
-      </tr>
-      <% let i=0; for (let invoiceItem of invoice.invoiceItems) { i++ %>
-      <tr class="trs">
-        <div class="form-group container">
-          <!-- COMENÇAMENT CAMPS -->
-          <th style="display: none;">
-            <input
-              class="variable petit form-control unitari numeros tipus"
-              id="tipusInputTr<%=i%>"
-              value="<%= invoiceItem.tipus %>"
-            />
-          </th>
-          <th style="display: none;">
-            <input
-              class="variable petit form-control unitari numeros naturalesa"
-              id="naturalesaInputTr<%=i%>"
-              value="<%= invoiceItem.naturalesa %>"
-            />
-          </th>
-          <th>
-            <input
-              class="variable petit form-control unitari numeros quantitat"
-              id="quantitatInputTr<%=i%>"
-              value="<%= invoiceItem.quantitat %>"
-            />
-          </th>
-          <th>
-            <input
-              class="form-control mitja esquerra article"
-              id="articleInputTr<%=i%>"
-              value="<%= invoiceItem.article %>"
-            />
-          </th>
-          <th>
-            <input
-              class="variable form-control petit numeros preu"
-              id="preuInputTr<%=i%>"
-              value="<%= invoiceItem.preu %>"
-            />
-          </th>
-          <th>
-            <input
-              class="variable form-control numeros unitari iva"
-              id="ivaInputTr<%=i%>"
-              value="<%= invoiceItem.iva %>"
-            />
-          </th>
-          <th>
-            <input
-              class="form-control petit_mitja numeros subtotal resultat"
-              id="subtotalInputTr<%=i%>"
-              value="<%= invoiceItem.subtotal %>"
-            />
-          </th>
-          <th>
-            <input
-              class="form-control mitja esquerra unitat"
-              id="unitatInputTr<%=i%>"
-              value="<%= invoiceItem.unitat %>"
-            />
-          </th>
-          <th>
-            <input
-              class="form-control mitja esquerra"
-              id="proveidorInputTr<%=i%>"
-              value="<%= invoiceItem.proveidor %>"
-            />
-          </th>
-          <td><button class="botoEsborrar">X</button></td>
-          <!-- FINAL CAMPS -->
-        </div>
-      </tr>
-      <% } %>
-    </table>
-  </div>
-
-  <table>
-    <td>
-      <button id="relative" class="btn btn-primary form-control">
-        Modificar Comanda
-      </button>
-    </td>
-
-    <div class="h5 row numeros">
-      <span class="sumatori-total"
-        >Total Comanda: <%= invoice.total %>€ (IVA INCLÒS)
-      </span>
-    </div>
+<div class="table-responsive">
+  <table id="taulaOriginal" class="table table-condensed table-hover">
+    <tr>
+      <th><small>Quantitat</small></th>
+      <th><small>Article</small></th>
+      <th><small>€/Unitat</small></th>
+      <th><small>% IVA</small></th>
+      <th><small>Subtotal €</small></th>
+      <th><small>Unitat de destí</small></th>
+      <th><small>Proveidor</small></th>
+    </tr>
+    <% let i=0; for (let invoiceItem of invoice.invoiceItems) { i++ %>
+    <tr class="trs">
+      <div class="form-group container">
+        <!-- COMENÇAMENT CAMPS -->
+        <th
+          style="display: none"
+          data-value="<%= invoiceItem.tipus %>"
+          name="tipus"
+        >
+          <input
+            class="variable petit form-control unitari numeros tipus"
+            id="tipusInputTr<%=i%>"
+            value="<%= invoiceItem.tipus %>"
+          />
+        </th>
+        <th
+          style="display: none"
+          data-value="<%= invoiceItem.naturalesa%>"
+          name="naturalesa"
+        >
+          <input
+            class="variable petit form-control unitari numeros naturalesa"
+            id="naturalesaInputTr<%=i%>"
+            value="<%= invoiceItem.naturalesa %>"
+          />
+        </th>
+        <th data-value="<%= invoiceItem.quantitat %>" name="quantitat">
+          <input
+            class="variable petit form-control unitari numeros quantitat"
+            id="quantitatInputTr<%=i%>"
+            value="<%= invoiceItem.quantitat %>"
+          />
+        </th>
+        <th data-value="<%= invoiceItem.article %>" name="article">
+          <input
+            class="form-control mitja esquerra article"
+            id="articleInputTr<%=i%>"
+            value="<%= invoiceItem.article %>"
+          />
+        </th>
+        <th data-value="<%= invoiceItem.preu %>" name="preu">
+          <input
+            class="variable form-control petit numeros preu"
+            id="preuInputTr<%=i%>"
+            value="<%= invoiceItem.preu %>"
+            data-value="<%= invoiceItem.preu %>"
+            name="preu"
+          />
+        </th>
+        <th data-value="<%= invoiceItem.iva %>" name="iva">
+          <input
+            class="variable form-control numeros unitari iva"
+            id="ivaInputTr<%=i%>"
+            value="<%= invoiceItem.iva %>"
+          />
+        </th>
+        <th data-value="<%= invoiceItem.subtotal %>" name="subtotal">
+          <input
+            class="form-control petit_mitja numeros subtotal resultat"
+            id="subtotalInputTr<%=i%>"
+            value="<%= invoiceItem.subtotal %>"
+          />
+        </th>
+        <th data-value="<%= invoiceItem.unitat %>" name="unitat">
+          <input
+            class="form-control mitja esquerra unitat"
+            id="unitatInputTr<%=i%>"
+            value="<%= invoiceItem.unitat %>"
+          />
+        </th>
+        <th data-value="<%= invoiceItem.proveidor %>" name="proveidor">
+          <input
+            class="form-control mitja esquerra"
+            id="proveidorInputTr<%=i%>"
+            value="<%= invoiceItem.proveidor %>"
+          />
+        </th>
+        <td><button class="botoEsborrar">X</button></td>
+        <!-- FINAL CAMPS -->
+      </div>
+    </tr>
+    <% } %>
   </table>
-</form>
+</div>
+
+<table>
+  <td>
+    <button id="modificar-btn" class="btn btn-primary form-control">
+      Modificar Comanda
+    </button>
+  </td>
+
+  <div class="h5 row numeros">
+    <span class="sumatori-total"
+      >Total Comanda: <%= invoice.total %>€ (IVA INCLÒS)
+    </span>
+  </div>
+</table>
 
 <p class="h5 row numeros">
   <span class="sumatori-total"></span>
@@ -124,6 +128,7 @@
   const afegirLiniaEl = document.querySelector("#afegir");
   const taulaOriginalEl = document.querySelector("#taulaOriginal");
   const taulaOriginalRowEls = document.querySelectorAll('tr.trs')
+  const modificarBtnEl = document.querySelector('#modificar-btn')
 
   // Attach autocompleters to created rows
   Array.prototype.forEach.call(taulaOriginalRowEls, rowEl => attachRowAutocompleters(rowEl))
@@ -158,6 +163,22 @@
 
   afegirLiniaEl.addEventListener("click", () => {
     crearLinia()
+  })
+
+  modificarBtnEl.addEventListener("click", () => {
+    const invoiceData = getInvoiceData()
+    console.log(invoiceData)
+    fetch(`/invoices/<%= invoice._id %>`, {
+      method: 'PUT',
+      mode: 'cors',
+      headers: {
+        "Content-Type": 'application/json'
+      },
+      body: JSON.stringify({ invoiceItems: [...invoiceData] })
+    })
+      .then(res => res.json())
+      .then(({ _id }) => window.location.href = `/invoices/${_id}`)
+      .catch(e => console.error(e))
   })
 
   function calculateTotals() {
@@ -202,6 +223,22 @@
     })
     lastRowEl.parentElement.append(newRowEl)
     attachRowAutocompleters(newRowEl)
+  }
+
+  function getInvoiceData() {
+    const rowEls = taulaOriginalEl.querySelectorAll('tr.trs')
+    return Array.prototype.map.call(rowEls, rowEl => {
+      const rowInvoiceValues = Array.prototype.reduce.call(rowEl.cells, (acc, cellEl) => {
+        const inputEl = cellEl.querySelector('input')
+        const name = cellEl.getAttribute('name')
+        if (!name) return acc
+        return {
+          ...acc,
+          [name]: inputEl.value
+        }
+      }, {})
+      return rowInvoiceValues
+    })
   }
 
   function attachRowAutocompleters(rowEl) {

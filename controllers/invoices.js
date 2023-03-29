@@ -50,12 +50,9 @@ module.exports.renderEditForm = async (req, res) => {
 module.exports.updateInvoice = async (req, res) => {
   const { id } = req.params;
 
-  const invoice = await Invoice.findByIdAndUpdate(id, { ...req.body.invoice });
+  const invoice = await Invoice.findByIdAndUpdate(id, { ...req.body });
   req.flash('success', 'Invoice actualitzat correctament!')
-  res.redirect(`/invoices/${invoice._id}`);
-
-
-
+  res.json(invoice)
 }
 
 module.exports.deleteInvoice = async (req, res) => {
