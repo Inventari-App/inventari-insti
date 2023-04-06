@@ -1,7 +1,7 @@
 <% layout('layouts/boilerplate')%>
 <h1>Tots els Invoices</h1>
 <div>
-  <a href="/invoices/new">Afegeix Invoice</a>
+  <a class="btn btn-primary mb-3" href="/invoices/new">Afegeix Invoice</a>
 </div>
 
 <% for (let invoice of invoices){%>
@@ -9,16 +9,15 @@
   <div class="row">
     <div class="col-md-8">
       <div class="card-body">
-        <h5 class="card-title">Comanda núm. <%= invoice.numInvoice %></h5>
+        <h5 class="card-title mb-2">Comanda núm. <%= invoice.numInvoice %></h5>
         <h6>
           De <%= invoice.responsable.username %> per a <%=
           invoice.responsable.username %>
         </h6>
-        <span> </span>
 
         <p class="card-text"><% for (let item of invoice.invoiceItems){ %></p>
         <ul>
-          <li class="card-text"><%=item.article%> <%= item.preu %></li>
+          <li class="card-text mb-1"><%=item.article%> <%= item.preu %></li>
         </ul>
 
         <% } %>
@@ -29,9 +28,7 @@
           >
         </p>
 
-        <a class="btn btn-primary" href="/invoices/<%=invoice.id%>"
-          >Veure
-        </a>
+        <a class="btn btn-primary" href="/invoices/<%=invoice.id%>">Veure </a>
       </div>
     </div>
   </div>

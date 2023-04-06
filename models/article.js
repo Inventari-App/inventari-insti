@@ -1,22 +1,23 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const ArticleSchema = new Schema({
-
-
-    
-    nom: String,
-    preu: Number,
-    unitat: String,
-    imatge: Array,
-    descripcio: String,
-    //albara: Array,
-    //proforma: Array,
-    responsable: {
-        type: Schema.Types.ObjectId,
-        ref: 'User'
-    }
-    /* 
+  article: String,
+  preu: Number,
+  iva: Number,
+  naturalesa: String,
+  proveidor: String,
+  tipus: String,
+  unitat: String,
+  imatge: Array,
+  descripcio: String,
+  //albara: Array,
+  //proforma: Array,
+  responsable: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
+  /* 
     ,
 
 
@@ -28,7 +29,7 @@ const ArticleSchema = new Schema({
         {unitat: String}
     ] */
 
-    /* proforma: String,
+  /* proforma: String,
     comanda: String,
     albara: String,
     factura: String,
@@ -43,7 +44,6 @@ const ArticleSchema = new Schema({
     proveidor: String,
     objectiu: String,
     observacions: String, */
-
 });
 
-module.exports = mongoose.model('Article', ArticleSchema);
+module.exports = mongoose.model("Article", ArticleSchema);

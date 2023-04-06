@@ -35,7 +35,7 @@ module.exports.showInvoice = async (req, res, next) => {
   }
 
   const items = await Item.find()
-  res.render('invoices/show', { invoice, items });
+  res.render('invoices/show', { invoice, invoiceJSON: invoice.toJSON(), items, isOwner: invoice.responsable.equals(req.user._id) });
 }
 
 module.exports.renderEditForm = async (req, res) => {

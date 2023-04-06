@@ -13,12 +13,11 @@ module.exports.createArticle = async (req, res, next) => {
     //console.log(req.body)
     let articleBody = req.body.article
     //const albaraArr = JSON.parse(articleBody.albara)
-    articleBody = { ...articleBody }
     const article = new Article(articleBody);
     article.responsable = req.user._id;
     await article.save();
     req.flash('success', 'Article creat correctament!');
-    res.redirect(`/articles/${article._id}`);
+    // res.redirect(`/articles/${article._id}`);
 }
 
 module.exports.showArticle =  async (req, res, next) => {
