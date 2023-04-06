@@ -15,6 +15,7 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user");
 const helmet = require("helmet");
+const contentSecurityPolicy = require("helmet-csp");
 
 const mongoSanitize = require("express-mongo-sanitize");
 
@@ -102,7 +103,6 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 app.use(flash());
-app.use(helmet());
 
 const scriptSrcUrls = [
   "https://stackpath.bootstrapcdn.com/",
@@ -145,6 +145,7 @@ app.use(
         "https://res.cloudinary.com/YOURACCOUNT/", //SHOULD MATCH YOUR CLOUDINARY ACCOUNT!
         "https://images.unsplash.com/",
         "https://unsplash.com/es/s/fotos/",
+        "fakeimg.pl"
       ],
       fontSrc: ["'self'", ...fontSrcUrls],
     },

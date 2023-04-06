@@ -80,6 +80,7 @@
     "has-symbols": "^1.0.3",
     "has-yarn": "^2.1.0",
     "helmet": "^5.1.0",
+    "helmet-csp": "^3.4.0",
     "heroku": "^7.60.2",
     "http-cache-semantics": "^4.1.0",
     "http-errors": "^2.0.0",
