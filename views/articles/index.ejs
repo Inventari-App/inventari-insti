@@ -4,7 +4,7 @@
   <a href="/articles/new" class="btn btn-primary mb-2">Afegeix Article</a>
 </div>
 
-<table class="table table-striped align-middle">
+<table id="articles-table" class="table table-striped align-middle">
   <thead>
     <tr>
       <th scope="col">Id</th>
@@ -30,5 +30,20 @@
     <% } %>
   </tbody>
 </table>
+
+<script>
+  const dataTable = new simpleDatatables.DataTable("#articles-table", {
+    searchable: true,
+    fixedHeight: true,
+    labels: {
+      placeholder: "Busca...",
+      searchTitle: "Busca a la taula",
+      perPage: "entrades per pagina",
+      noRows: "No s'han trobat articles",
+      info: "Mostrant {start} - {end} d'un total de {rows} articles",
+      noResults: "No s'han trobat articles",
+    }
+  })
+</script>
 
 
