@@ -1,6 +1,6 @@
 <% layout('layouts/boilerplate')%>
 <h1>Tots els Invoices</h1>
-<div>
+<div class="d-grid gap-2 d-md-flex justify-content-md-end">
   <a class="btn btn-primary mb-3" href="/invoices/new">Afegeix Invoice</a>
 </div>
 
@@ -33,7 +33,10 @@
           </span>
         </td>
         <td><%= invoice.total.toFixed(2) %> €</td>
-        <td><%= new Date(invoice.createdAt).toLocaleString() %></td>
+        <td>
+          <span class="truncate">
+            <%= new Date(invoice.createdAt).toLocaleString('es-es', { dateStyle: 'short', timeStyle: 'short' }) %></td>
+          </span>
         <td>
           <a href="/invoices/<%= invoice._id %>" class="btn btn-primary">Veure</a>
         </td>
@@ -42,4 +45,17 @@
   </tbody>
 </table>
 
-
+<script>
+  const dataTable = new simpleDatatables.DataTable("#invoices-table", {
+    searchable: true,
+    fixedHeight: true,
+    labels: {
+      placeholder: "Busca...",
+      searchTitle: "Busca a la taula",
+      perPage: "entrades per pagina",
+      noRows: "No s'han trobat articles",
+      info: "Mostrant {start} - {end} d'un total de {rows} articles",
+      noResults: "No s'han trobat articles",
+    }
+  })
+</script>
