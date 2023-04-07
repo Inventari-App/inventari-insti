@@ -12,6 +12,7 @@
       <th scope="col">Num. Items</th>
       <th scope="col">Items</th>
       <th scope="col">Preu total</th>
+      <th scope="col">Ultima actualització</th>
       <th scope="col"></th>
     </tr>
   </thead>
@@ -32,6 +33,7 @@
           </span>
         </td>
         <td><%= invoice.total.toFixed(2) %> €</td>
+        <td><%= new Date(invoice.createdAt).toLocaleString() %></td>
         <td>
           <a href="/invoices/<%= invoice._id %>" class="btn btn-primary">Veure</a>
         </td>
