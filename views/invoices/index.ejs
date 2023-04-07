@@ -4,33 +4,40 @@
   <a class="btn btn-primary mb-3" href="/invoices/new">Afegeix Invoice</a>
 </div>
 
-<% for (let invoice of invoices){%>
-<div class="card mb-3">
-  <div class="row">
-    <div class="col-md-8">
-      <div class="card-body">
-        <h5 class="card-title mb-2">Comanda núm. <%= invoice.numInvoice %></h5>
-        <h6>
-          De <%= invoice.responsable.username %> per a <%=
-          invoice.responsable.username %>
-        </h6>
+<table id="invoices-table" class="table table-striped align-middle">
+  <thead>
+    <tr>
+      <th scope="col">Num. Comanda</th>
+      <th scope="col">Responsable</th>
+      <th scope="col">Num. Items</th>
+      <th scope="col">Items</th>
+      <th scope="col">Preu total</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% for (let invoice of invoices) { %>
+      <tr>
+        <th scope="row"><%= invoice.numInvoice %></th>
+        <td><%= invoice.responsable.username %></td>
+        <td><%= invoice.invoiceItems.reduce((acc, item) => acc += item.quantitat, 0) %></td>
+        <td>
+          <span class="truncate">
+            <%= 
+              invoice.invoiceItems.reduce((acc, item) => {
+                if (!acc.includes(item.article)) acc.push(item.article)
+                return acc
+              }, []).join(', ')
+            %>
+          </span>
+        </td>
+        <td><%= invoice.total.toFixed(2) %> €</td>
+        <td>
+          <a href="/invoices/<%= invoice._id %>" class="btn btn-primary">Veure</a>
+        </td>
+      </tr>
+    <% } %>
+  </tbody>
+</table>
 
-        <p class="card-text"><% for (let item of invoice.invoiceItems){ %></p>
-        <ul>
-          <li class="card-text mb-1"><%=item.article%> <%= item.preu %></li>
-        </ul>
 
-        <% } %>
-
-        <p class="card-text">
-          <small class="text-muted"
-            >Import total: <%= invoice.total %>€ (IVA inclòs)</small
-          >
-        </p>
-
-        <a class="btn btn-primary" href="/invoices/<%=invoice.id%>">Veure </a>
-      </div>
-    </div>
-  </div>
-</div>
-<% }%>
