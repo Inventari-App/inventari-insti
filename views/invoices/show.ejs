@@ -9,47 +9,51 @@
 
 <table class="table table-condensed table-striped">
   <form id="proformForm" class="form-inline">
-    <tr>
-      <th>Naturalesa</th>
-      <th>Tipus</th>
-      <th>Article</th>
-      <th class="numeros">Quantitat</th>
-      <th class="numeros">Preu unitari</th>
-      <th class="numeros">Tipus IVA</th>
-      <th class="numeros">Subtotal</th>
-      <th>Unitat de destí</th>
-    </tr>
-
-    <% for (const item of invoice.invoiceItems) { %>
+    <thead>
       <tr>
-        <td width="10%">
-          <div class="camps"><%= item.naturalesa %></div>
-        </td>
-        <td width="10%">
-          <div class="camps"><%= item.tipus %></div>
-        </td>
-        <td width="20%">
-          <div class="camps"><%= item.article %></div>
-        </td>
-        <td width="10%">
-          <div class="numeros"><%= item.quantitat %>unitat/s</div>
-        </td>
-        <td width="10%">
-          <div class="numeros"><%= item.preu %>€/u</div>
-        </td>
-        <td width="10%">
-          <div class="numeros"><%= item.iva %>%</div>
-        </td>
-        <td width="10%">
-          <div class="numeros">
-            <%= item.subtotal %>€
-          </div>
-        </td>
-        <td width="20%">
-          <div class="camps"><%= item.unitat %></div>
-        </td>
+        <th>Naturalesa</th>
+        <th>Tipus</th>
+        <th>Article</th>
+        <th class="numeros">Quantitat</th>
+        <th class="numeros">Preu unitari</th>
+        <th class="numeros">Tipus IVA</th>
+        <th class="numeros">Subtotal</th>
+        <th>Unitat de destí</th>
       </tr>
-    <% } %>
+    </thead>
+
+    <tbody>
+      <% for (const item of invoice.invoiceItems) { %>
+        <tr>
+          <td width="10%">
+            <div class="camps"><%= item.naturalesa %></div>
+          </td>
+          <td width="10%">
+            <div class="camps"><%= item.tipus %></div>
+          </td>
+          <td width="20%">
+            <div class="camps"><%= item.article %></div>
+          </td>
+          <td width="10%">
+            <div class="numeros"><%= item.quantitat %>unitat/s</div>
+          </td>
+          <td width="10%">
+            <div class="numeros"><%= item.preu %>€/u</div>
+          </td>
+          <td width="10%">
+            <div class="numeros"><%= item.iva %>%</div>
+          </td>
+          <td width="10%">
+            <div class="numeros">
+              <%= item.subtotal %>€
+            </div>
+          </td>
+          <td width="20%">
+            <div class="camps"><%= item.unitat %></div>
+          </td>
+        </tr>
+      <% } %>
+    </tbody>
   </form>
 </table>
 
