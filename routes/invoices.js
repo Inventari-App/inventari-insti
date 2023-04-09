@@ -16,6 +16,11 @@ router.route('/:id')
 .put(isLoggedIn, isResponsable, validateInvoice, catchAsync(invoices.updateInvoice))
 .delete(isLoggedIn, isResponsable, catchAsync(invoices.deleteInvoice));
 
+router.route('/:id/receive')
+.get(catchAsync(invoices.receive))
+// .put(isLoggedIn, isResponsable, validateInvoice, catchAsync(invoices.updateInvoice))
+// .delete(isLoggedIn, isResponsable, catchAsync(invoices.deleteInvoice));
+
 
 router.get('/:id/edit', isLoggedIn, isResponsable, catchAsync(invoices.renderEditForm));
 

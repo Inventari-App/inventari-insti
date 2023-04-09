@@ -21,6 +21,7 @@ module.exports.createArticle = async (req, res, next) => {
   article.responsable = req.user._id;
   await article.save();
   req.flash("success", "Article creat correctament!");
+  res.sendStatus(200)
   // res.redirect(`/articles/${article._id}`);
 };
 

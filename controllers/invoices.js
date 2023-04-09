@@ -4,7 +4,6 @@ const Item = require('../models/item');
 const autocomplete = require('autocompleter');
 
 module.exports.index = async (req, res) => {
-
   const invoices = await Invoice
     .find()
     .populate('responsable')
@@ -36,6 +35,18 @@ module.exports.showInvoice = async (req, res, next) => {
 
   const items = await Item.find()
   res.render('invoices/show', { invoice, invoiceJSON: invoice.toJSON(), items, isOwner: invoice.responsable.equals(req.user._id) });
+}
+
+module.exports.receive = async (req, res, next) => {
+  const invoice = await Invoice.findById(req.params.id).populate('responsable');
+
+  if (!invoice) {
+    req.flash('error', "No es pot trobar l'invoice!");
+    return res.redirect('/invoices');
+  }
+
+  const items = await Item.find()
+  res.render('invoices/receive', { invoice, invoiceJSON: invoice.toJSON(), items, isOwner: invoice.responsable.equals(req.user._id) });
 }
 
 module.exports.renderEditForm = async (req, res) => {

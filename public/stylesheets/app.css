@@ -73,3 +73,11 @@ input[type="number"]::-webkit-outer-spin-button {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+input[id^='expand-rows-'] {
+  display: none;
+}
+
+input[id^='expand-rows-']:checked ~ label {
+  transform: rotate(180deg);
+}

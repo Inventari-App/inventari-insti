@@ -1,0 +1,189 @@
+<% layout('layouts/boilerplate')%>
+<p>
+  <b>Responsable: <%= invoice.responsable.username %> </b>
+</p>
+
+<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+  <button id="rebre-comanda-btn" type="button" class="btn btn-primary mb-2">Rebre comanda</button>
+</div>
+
+<table class="table table-condensed">
+  <form id="proformForm" class="form-inline">
+    <thead>
+      <tr>
+        <th></th>
+        <th></th>
+        <th>Naturalesa</th>
+        <th>Tipus</th>
+        <th>Article</th>
+        <th>Quantitat</th>
+        <th>Preu unitari</th>
+        <th>Tipus IVA</th>
+        <th>Subtotal</th>
+        <th>Unitat de destí</th>
+        <th>Proveidor</th>
+        <th>Num. Serie</th>
+      </tr>
+    </thead>
+
+    <%
+        let i = 0
+        for (const item of invoice.invoiceItems) {
+    %>
+        <tbody>
+            <tr class="table-secondary">
+                <td width="3%">
+                  <input id="expand-rows-<%= i %>" type="checkbox" data-bs-toggle="collapse" href="#children-rows-<%= i %>">
+                  <label for="expand-rows-<%= i %>" class="bi bi-caret-down-fill"></label>
+                </td>
+                <td width="3%">
+                    <div class="camps">
+                        <input class="checkbox-children-rows" type="checkbox" data-target="#children-rows-<%= i %>">
+                    </div>
+                </td>
+                <td width="10%">
+                    <div class="camps" name="naturalesa"><%= item.naturalesa %></div>
+                </td>
+                <td width="10%">
+                    <div class="camps" name="tipus"><%= item.tipus %></div>
+                </td>
+                <td width="20%">
+                    <div class="camps" name="article"><%= item.article %></div>
+                </td>
+                <td width="10%">
+                    <div class="numeros" name="quantitat"><%= item.quantitat %>unitat/s</div>
+                </td>
+                <td width="10%">
+                    <div class="numeros" name="preu"><%= item.preu %>€/u</div>
+                </td>
+                <td width="10%">
+                    <div class="numeros" name="iva"><%= item.iva %>%</div>
+                </td>
+                <td width="10%">
+                    <div class="numeros" name="subtotal">
+                    <%= item.subtotal %>€
+                    </div>
+                </td>
+                <td width="20%">
+                    <div class="camps" name="unitat"><%= item.unitat %></div>
+                </td>
+                <td width="20%">
+                    <div class="camps" name="proveidor"><%= item.proveidor %></div>
+                </td>
+                <td width="20%"></td>
+            </tr>
+        </tbody>
+        <% if (item.quantitat > 1) { %>
+            <tbody id="children-rows-<%= i %>" class="collapse">
+                <%
+                    const quantitatArr = Array.from(Array(item.quantitat).keys())
+                    for (let i = 0; i < quantitatArr.length; i++) {
+                %>
+                    <tr>
+                        <td width="3%"></td>
+                        <td width="3%">
+                            <div class="camps">
+                                <input type="checkbox">
+                            </div>
+                        </td>
+                        <td width="10%">
+                            <div class="camps value" name="naturalesa" data-value="<%= item.naturalesa %>"><%= item.naturalesa %></div>
+                        </td>
+                        <td width="10%">
+                            <div class="camps value" name="tipus" data-value="<%= item.tipus %>"><%= item.tipus %></div>
+                        </td>
+                        <td width="20%">
+                            <div class="camps value" name="article" data-value="<%= item.article %>"><%= item.article %></div>
+                        </td>
+                        <td width="10%">
+                            <div class="numeros value"><%= item.quantitat %>unitat/s</div>
+                        </td>
+                        <td width="10%">
+                            <div class="numeros value" name="preu" data-value="<%= item.preu %>"><%= item.preu %>€/u</div>
+                        </td>
+                        <td width="10%">
+                            <div class="numeros value" name="iva" data-value="<%= item.iva %>"><%= item.iva %>%</div>
+                        </td>
+                        <td width="10%">
+                            <div class="numeros value">
+                            <%= item.subtotal %>€
+                            </div>
+                        </td>
+                        <td width="20%">
+                            <div class="camps value" name="unitat" data-value="<%= item.unitat %>"><%= item.unitat %></div>
+                        </td>
+                        <td width="20%">
+                            <div class="camps value" name="proveidor" data-value="<%= item.proveidor %>"><%= item.proveidor %></div>
+                        </td>
+                        <td width="20%">
+                            <input type="text">
+                        </td>
+                    </tr>
+                <% } %>
+            </tbody>
+        <%
+            }
+            i++
+        }
+        %>
+  </form>
+</table>
+
+<% if(currentUser && isOwner) { %>
+<div class="card-body">
+  <p class="h5 row numeros">
+    <span class="sumatori-total"
+      >Total Comanda: <%= invoice.total.toFixed(2) %>€ (IVA inclòs)
+    </span>
+  </p>
+</div>
+<% } %>
+<div class="card-footer text-muted">
+  <a href="/invoices/<%= invoice._id %>">Torna a l'invoice</a>
+</div>
+
+<script>
+  // Control all checkboxes selector in parent row
+  const checkboxEls = document.querySelectorAll('.checkbox-children-rows')
+  Array.prototype.forEach.call(checkboxEls, checkboxEl => {
+    const targetId = checkboxEl.dataset.target
+    const childrenRowEls = document.querySelectorAll(`${targetId} input[type="checkbox"]`)
+    checkboxEl.addEventListener('change', () => {
+      const isChecked = checkboxEl.checked
+      Array.prototype.forEach.call(childrenRowEls, childrenRowEl => childrenRowEl.checked = isChecked)
+    })
+  })
+
+  const rebreComandaBtn = document.querySelector('#rebre-comanda-btn')
+  rebreComandaBtn.addEventListener('click', () => {
+    const itemRowEls = document.querySelectorAll('tbody[id^="children-rows-"] tr')
+    const checkedItemRowEls = Array.prototype.filter.call(itemRowEls, itemRowEl => itemRowEl.querySelector('input[type="checkbox"]:checked'))
+    const articles = Array.prototype.map.call(checkedItemRowEls, checkedItemRowEl => {
+      const valueEls = checkedItemRowEl.querySelectorAll('div.value')
+      return Array.prototype.reduce.call(valueEls, (acc, valueEl) => {
+        return {
+          ...acc,
+          [valueEl.getAttribute('name')]: valueEl.dataset.value
+        }
+      }, {})
+    })
+    console.log(articles)
+
+    const createArticles = articles.map(article => createArticle(article))
+
+    Promise.all(createArticles)
+      .then(() => window.location.href = '/articles')
+      .catch(e => console.error(e))
+  })
+    
+  function createArticle(article) {
+    return fetch('/articles', {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        "Content-Type": 'application/json'
+      },
+      body: JSON.stringify({ article })
+    })
+  }
+</script>

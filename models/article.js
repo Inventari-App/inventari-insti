@@ -44,6 +44,6 @@ const ArticleSchema = new Schema({
     proveidor: String,
     objectiu: String,
     observacions: String, */
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model("Article", ArticleSchema);

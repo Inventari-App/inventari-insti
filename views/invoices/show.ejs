@@ -4,7 +4,7 @@
 </p>
 
 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-  <button id="rebre-comanda-btn" type="button" class="btn btn-primary mb-2">Rebre comanda</button>
+  <a type="button" class="btn btn-primary mb-2" href="/invoices/<%= invoice._id %>/receive">Rebre comanda</a>
 </div>
 
 <table class="table table-condensed table-striped">
@@ -83,36 +83,3 @@
 <div class="card-footer text-muted">
   <a href="/invoices">Tots els invoices</a>
 </div>
-
-<script>
-  const invoice = <%- JSON.stringify(invoiceJSON) %>;
-  const rebreComandaBtn = document.querySelector('#rebre-comanda-btn')
-  rebreComandaBtn.addEventListener('click', () => {
-    console.log(invoice)
-    const { invoiceItems } = invoice
-    invoiceItems.forEach(invoiceItem => {
-      const { quantitat } = invoiceItem
-      const createArticles = Array.from(Array(quantitat).keys()).map(() => {
-        // Removing unnecessary props from article
-        delete invoiceItem.quantitat
-        delete invoiceItem.subtotal
-        delete invoiceItem._id
-        createArticle(invoiceItem)
-      })
-      Promise.all(createArticles)
-        .then(() => window.location.href = '/articles')
-        .catch(e => console.error(e))
-    })
-    
-    function createArticle(article) {
-      return fetch('/articles', {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          "Content-Type": 'application/json'
-        },
-        body: JSON.stringify({ article })
-      })
-    }
-  })
-</script>

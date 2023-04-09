@@ -12,7 +12,8 @@
       <th scope="col">Descripcio</th>
       <th scope="col">Unitat</th>
       <th scope="col">Creador</th>
-      <th scope="col"></th>
+      <th scope="col" data-type="date">Ultima modificacio</th>
+      <th scope="col" data-sortable="false"></th>
     </tr>
   </thead>
   <tbody>
@@ -23,6 +24,7 @@
         <td><%= article.descripcio %></td>
         <td><%= article.unitat %></td>
         <td><%= article.responsable.username %></td>
+        <td><%= new Date(article.updatedAt).toLocaleString('es-es', { dateStyle: 'short', timeStyle: 'short' }) %></td>
         <td>
           <a href="/articles/<%= article._id %>" class="btn btn-primary">Veure</a>
         </td>
