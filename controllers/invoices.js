@@ -13,14 +13,8 @@ module.exports.index = async (req, res) => {
 };
 
 module.exports.renderNewForm = async (req, res) => {
-  const items = await Item.find().lean();
-  const unitats = await Unitat.find().lean();
-  const proveidors = await Proveidor.find().lean();
   res.render("invoices/new", {
-    autocomplete,
-    items: JSON.stringify(items),
-    unitats: JSON.stringify(unitats),
-    proveidors: JSON.stringify(proveidors),
+    autocomplete
   });
 };
 

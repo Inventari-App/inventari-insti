@@ -4,7 +4,7 @@
 <p></p>
 <p></p>
 <div class="container">
-  <form autocomplete="off">
+  <form id="add-row-form" autocomplete="off" action="#">
     <table id="add-row-table" class="table table-condensed table-striped">
       <tr>
         <th>Quantitat</th>
@@ -43,6 +43,7 @@
               autocomplete="off"
             />
             <span class="error-message">L'item no existeix</span>
+            <a href= "../items/new" class="create-link" target="parent">Crear Item</a>
           </td>
           <td>
             <input
@@ -78,6 +79,7 @@
               autocomplete="off"
             />
             <span class="error-message">La unitat no existeix</span>
+            <a href= "../unitats/new" class="create-link" target="parent">Crear Unitat</a>
           </td>
           <td>
             <input
@@ -89,6 +91,7 @@
               required
             />
             <span class="error-message">El proveidor no existeix</span>
+            <a href= "../proveidors/new" class="create-link" target="parent">Crear Proveidor</a>
           </td>
           <td>
             <button id="add-row-btn" class="btn btn-primary form-control">
@@ -135,13 +138,10 @@
 </div>
 
 <script>
-  const _items = <%- items %>;
-  const _unitats = <%- unitats %>;
-  const _proveidors = <%- proveidors %>;
-
   const invoiceItemsTable = document.querySelector("#invoice-items");
   const addRowTable = document.querySelector("#add-row-table");
   const addRowBtn = document.querySelector("#add-row-btn");
+  const addRowForm = document.querySelector("#add-row-form");
   const totalEl = document.querySelector(".sumatori-total");
   const sendInvoiceBtn = document.querySelector("#send-invoice");
 
@@ -163,11 +163,12 @@
   });
 
   // Add row to invoice
-  addRowBtn.addEventListener("click", () => {
+  addRowForm.addEventListener("submit", async (e) => {
+    e.preventDefault()
     // check autocompletes input
     // add row to table
     // get add row inputs
-    const autocompleteInputsAreValid = checkAutompleteInputs(addRowTable)
+    const autocompleteInputsAreValid = await checkAutompleteInputs(addRowTable)
     if (!autocompleteInputsAreValid) return
 
     const addRowInputs = addRowTable.querySelectorAll(".add-row-row input");
@@ -196,7 +197,7 @@
     invoiceItemsTable.rows[0].insertAdjacentHTML("afterend", newRowHTML);
 
     // display invoice items table
-    invoiceItemsTable.style.display = "block";
+    invoiceItemsTable.style.display = "table";
 
     calculateTotals();
   });
@@ -280,11 +281,24 @@
     return isValid
   }
 
-  function checkAutompleteInputs (addRowTable) {
-    const itemInputIsValid = checkAutompleteInput(itemInputEl, _items.map(i => i.nom))
-    const unitatInputIsValid = checkAutompleteInput(unitatInputEl, _unitats.map(i => i.nom))
-    const proveidorInputIsValid = checkAutompleteInput(proveidorInputEl, _proveidors.map(i => i.nom))
+  async function checkAutompleteInputs (addRowTable) {
+    const [itemInputs, unitatInputs, proveidorInputs] = await Promise.all([
+      fetchInputs('../items/all'),
+      fetchInputs('../unitats/all'),
+      fetchInputs('../proveidors/all')
+    ])
+    const itemInputIsValid = checkAutompleteInput(itemInputEl, itemInputs)
+    const unitatInputIsValid = checkAutompleteInput(unitatInputEl, unitatInputs)
+    const proveidorInputIsValid = checkAutompleteInput(proveidorInputEl, proveidorInputs)
     return itemInputIsValid && unitatInputIsValid && proveidorInputIsValid
+  }
+
+  function fetchInputs (route) {
+    return fetch(route)
+      .then(res => res.json())
+      .then(data => {
+        return data.map(d => d.nom)
+      })
   }
 </script>
 
@@ -297,14 +311,10 @@
   const _autocomplete = <%- autocomplete %>
   import Autocompleter from '../../utils/Autocompleter.js';
 
-
-  _autocomplete({
-    input: itemsInputEl,
-    fetch: (text, update) => {
-      const _items = <%- items %>;
-      const suggestions = _items.filter(n => n.nom.toLowerCase().startsWith(text.toLowerCase()))
-      update(suggestions)
-    },
+  Autocompleter({
+    autocomplete: _autocomplete,
+    inputEl: itemsInputEl,
+    optionsRoute: '/items/all',
     onSelect: function(suggestion) {
       const {
         nom,
@@ -325,14 +335,10 @@
       }
     }
   })
-
-  _autocomplete({
-    input: unitatsInputEl,
-    fetch: (text, update) => {
-      const _unitats = <%- unitats %>;
-      const suggestions = _unitats.filter(n => n.nom.toLowerCase().startsWith(text.toLowerCase()))
-      update(suggestions)
-    },
+  Autocompleter({
+    autocomplete: _autocomplete,
+    inputEl: unitatsInputEl,
+    optionsRoute: '/unitats/all',
     onSelect: function(suggestion) {
       const {
         nom,
@@ -352,15 +358,35 @@
       }
     }
   })
-
-  unitatsInputEl.addEventListener('click', function link(e) {
-    e.target.removeEventListener(e.type, link);
-    const unitatsDom = document.createElement('div');
-
-    unitatsDom.innerHTML = '<p> <a href= "../unitats/new" class="link-danger" target="parent">Crear Unitat</a>';
-
-    const formulariet = document.querySelector('#crear')
-    formulariet.append(unitatsDom);
-
+  Autocompleter({
+    autocomplete: _autocomplete,
+    inputEl: proveidorsInputEl,
+    optionsRoute: '/proveidors/all',
+    onSelect: function(suggestion) {
+      const {
+        nom,
+      } = suggestion
+      this.input.value = nom;
+    },
+    render: function(suggestion, currentInput) {
+      if (suggestion) {
+        const nom = suggestion.nom
+        const div = document.createElement('div')
+        div.setAttribute("id", "autocomplete-proveidor");
+        div.textContent = nom
+        return div
+      }
+    }
   })
+
+  // unitatsInputEl.addEventListener('click', function link(e) {
+  //   e.target.removeEventListener(e.type, link);
+  //   const unitatsDom = document.createElement('div');
+
+  //   unitatsDom.innerHTML = '<p> <a href= "../unitats/new" class="link-danger" target="parent">Crear Unitat</a>';
+
+  //   const formulariet = document.querySelector('#crear')
+  //   formulariet.append(unitatsDom);
+
+  // })
 </script>

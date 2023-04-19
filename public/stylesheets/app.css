@@ -93,3 +93,8 @@ input[id^='expand-rows-']:checked ~ label {
   padding-left: 4px;
   display: none;
 }
+
+.create-link {
+  font-size: 12px;
+  padding-left: 4px;
+}
