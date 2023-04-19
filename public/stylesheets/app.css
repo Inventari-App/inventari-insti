@@ -18,8 +18,9 @@ input[type="number"]::-webkit-outer-spin-button {
   margin: 0;
 }
 
-#autocomplete-article,
-#autocomplete-unitat {
+#autocomplete-item,
+#autocomplete-unitat,
+#autocomplete-proveidor {
   background: white;
   border: 1px solid;
   padding: 0 4px;
@@ -80,4 +81,15 @@ input[id^='expand-rows-'] {
 
 input[id^='expand-rows-']:checked ~ label {
   transform: rotate(180deg);
+}
+
+.error {
+  border-color: red;
+}
+
+.error-message {
+  color: red;
+  font-size: 12px;
+  padding-left: 4px;
+  display: none;
 }

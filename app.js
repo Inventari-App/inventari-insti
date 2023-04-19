@@ -39,7 +39,9 @@ const MongoDBStore = require("connect-mongo")(session);
 //const dbUrl = process.env.DB_URL;
 
 // per connectar a localhost
-const dbUrl = "mongodb://127.0.0.1:27017/inventari";
+// const dbUrl = "mongodb://127.0.0.1:27017/inventari";
+
+const dbUrl = "mongodb+srv://AlbertRF147:Ruwter7h@cluster0.lvga5.mongodb.net/inventari-insti?retryWrites=true&w=majority"
 
 mongoose.connect(dbUrl, {
   useNewUrlParser: true,

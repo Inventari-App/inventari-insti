@@ -1,13 +1,14 @@
 <% layout('layouts/boilerplate')%>
 
-<h3 id="titol"></h3>
+<h3 id="titol">Crear una comanda</h3>
 <p></p>
 <p></p>
 <div class="container">
-  <table id="add-row-table" class="table table-condensed table-striped">
+  <form autocomplete="off">
+    <table id="add-row-table" class="table table-condensed table-striped">
       <tr>
         <th>Quantitat</th>
-        <th>Article</th>
+        <th>Item</th>
         <th>Preu unitari</th>
         <th>Tipus IVA</th>
         <th>Unitat de destí</th>
@@ -17,8 +18,12 @@
 
       <tr class="add-row-row">
         <div class="form-group">
-          <td style="display: none;"><input type="hidden" id="tipus" name="tipus" /></td>
-          <td style="display: none;"><input type="hidden" id="naturalesa" name="naturalesa" /></td>
+          <td style="display: none">
+            <input type="hidden" id="tipus" name="tipus" />
+          </td>
+          <td style="display: none">
+            <input type="hidden" id="naturalesa" name="naturalesa" />
+          </td>
           <td>
             <input
               type="number"
@@ -30,13 +35,14 @@
           </td>
           <td>
             <input
-              class="camps form-control"
+              class="camps form-control autocomplete"
               type="text"
-              id="article"
-              name="article"
+              id="item"
+              name="item"
               required
-              autocomplete="false"
+              autocomplete="off"
             />
+            <span class="error-message">L'item no existeix</span>
           </td>
           <td>
             <input
@@ -59,31 +65,30 @@
               required
             />
           </td>
-          <td style="display: none;">
-            <input
-              name="subtotal"
-              id="subtotal"
-              required
-            />
+          <td style="display: none">
+            <input name="subtotal" id="subtotal" required />
           </td>
           <td>
             <input
               type="text"
-              class="camps form-control"
+              class="camps form-control autocomplete"
               name="unitat"
               id="unitat"
               required
-              autocomplete="false"
+              autocomplete="off"
             />
+            <span class="error-message">La unitat no existeix</span>
           </td>
           <td>
             <input
               type="text"
-              class="camps form-control"
+              class="camps form-control autocomplete"
               name="proveidor"
               id="proveidor"
+              autocomplete="off"
               required
             />
+            <span class="error-message">El proveidor no existeix</span>
           </td>
           <td>
             <button id="add-row-btn" class="btn btn-primary form-control">
@@ -94,150 +99,212 @@
       </tr>
 
       <div class="row numeros" style="padding-right: 10%" id="crear"></div>
+    </table>
+  </form>
+
+  <p></p>
+  <p></p>
+  <p class="h6">línies de comanda</p>
+
+  <!-- Invoice items -->
+  <table
+    class="table table-condensed table-striped"
+    id="invoice-items"
+    style="display: none"
+  >
+    <tr>
+      <th>Quantitat</th>
+      <th>Item</th>
+      <th>Preu unitari</th>
+      <th>Tipus IVA</th>
+      <th>Subtotal</th>
+      <th>Unitat de destí</th>
+      <th>Proveidor</th>
+    </tr>
   </table>
 
-    <p></p>
-    <p></p>
-    <p class="h6">línies de comanda</p>
-
-    <!-- Invoice items -->
-    <table class="table table-condensed table-striped" id="invoice-items" style="display: none;">
-      <tr>
-        <th>Quantitat</th>
-        <th>Article</th>
-        <th>Preu unitari</th>
-        <th>Tipus IVA</th>
-        <th>Subtotal</th>
-        <th>Unitat de destí</th>
-        <th>Proveidor</th>
-      </tr>
-    </table>
-
-    <table>
-      <div class="h5 row numeros">
-        <span class="sumatori-total">Total Comanda: 0,00€ </span>
-      </div>
-    </table>
-
-    <div class="mb-3">
-      <button id="send-invoice" class="btn btn-success">
-        Finalitza Comanda
-      </button>
+  <table>
+    <div class="h5 row numeros">
+      <span class="sumatori-total">Total Comanda: 0,00€ </span>
     </div>
+  </table>
+
+  <div class="mb-3">
+    <button id="send-invoice" class="btn btn-success">Finalitza Comanda</button>
+  </div>
 </div>
 
 <script>
-  const invoiceItemsTable = document.querySelector("#invoice-items");
-  const addRowTable = document.querySelector('#add-row-table')
-  const addRowBtn = document.querySelector("#add-row-btn");
-  const totalEl = document.querySelector('.sumatori-total')
-  const sendInvoiceBtn = document.querySelector('#send-invoice')
+  const _items = <%- items %>;
+  const _unitats = <%- unitats %>;
+  const _proveidors = <%- proveidors %>;
 
-  addRowTable.addEventListener("input", (e) => {
-    const { target } = e
-    const rowEl = target.closest('tr')
-    const rowTotal = getRowTotal(rowEl)
-    const subtotalInput = addRowTable.querySelector('[name="subtotal"]')
-    subtotalInput.value = rowTotal
+  const invoiceItemsTable = document.querySelector("#invoice-items");
+  const addRowTable = document.querySelector("#add-row-table");
+  const addRowBtn = document.querySelector("#add-row-btn");
+  const totalEl = document.querySelector(".sumatori-total");
+  const sendInvoiceBtn = document.querySelector("#send-invoice");
+
+  const itemInputEl = addRowTable.querySelector('#item')
+  const unitatInputEl = addRowTable.querySelector('#unitat')
+  const proveidorInputEl = addRowTable.querySelector('#proveidor')
+
+  const autocompleteInputs = addRowTable.querySelectorAll(".add-row-row input.autocomplete")
+  Array.prototype.forEach.call(autocompleteInputs, inputEl => {
+    inputEl.addEventListener('change', () => hideError(inputEl))
   })
 
+  addRowTable.addEventListener("input", (e) => {
+    const { target } = e;
+    const rowEl = target.closest("tr");
+    const rowTotal = getRowTotal(rowEl);
+    const subtotalInput = addRowTable.querySelector('[name="subtotal"]');
+    subtotalInput.value = rowTotal;
+  });
+
+  // Add row to invoice
   addRowBtn.addEventListener("click", () => {
+    // check autocompletes input
     // add row to table
     // get add row inputs
-    const addRowInputs = addRowTable.querySelectorAll('.add-row-row input')
+    const autocompleteInputsAreValid = checkAutompleteInputs(addRowTable)
+    if (!autocompleteInputsAreValid) return
+
+    const addRowInputs = addRowTable.querySelectorAll(".add-row-row input");
     const inputValues = Array.prototype.map.call(addRowInputs, (inputEl) => {
       return {
         name: inputEl.name,
         value: inputEl.value,
-        hidden: inputEl.type === 'hidden'
-      }
-    })
+        hidden: inputEl.type === "hidden",
+      };
+    });
     const newRowHTML = `
-      <tr class='invoice-item'>${inputValues.reduce((acc, curr) => (acc += `
+      <tr class='invoice-item'>${inputValues.reduce(
+        (acc, curr) =>
+          (acc += `
         <th
           name='${curr.name}'
           data-value='${curr.value}'
-          style='display: ${curr.hidden ? 'none' : 'table-cell'}'
+          style='display: ${curr.hidden ? "none" : "table-cell"}'
         >
           ${curr.value}
         </th>
-      `), '')}</tr>
-    `
-    invoiceItemsTable.rows[0].insertAdjacentHTML('afterend', newRowHTML)
+      `),
+        ""
+      )}</tr>
+    `;
+    invoiceItemsTable.rows[0].insertAdjacentHTML("afterend", newRowHTML);
 
     // display invoice items table
-    invoiceItemsTable.style.display = 'block'
+    invoiceItemsTable.style.display = "block";
 
-    calculateTotals()
-  })
+    calculateTotals();
+  });
 
-  invoiceItemsTable.addEventListener('click', (e) => {
-    const { target } = e
-    const invoiceItemRow = target.closest('tr.invoice-item')
-    if (!invoiceItemRow) return
-    invoiceItemRow.remove()
-    calculateTotals()
-  })
+  invoiceItemsTable.addEventListener("click", (e) => {
+    const { target } = e;
+    const invoiceItemRow = target.closest("tr.invoice-item");
+    if (!invoiceItemRow) return;
+    invoiceItemRow.remove();
+    calculateTotals();
+  });
 
-  sendInvoiceBtn.addEventListener('click', () => {
-    const invoiceData = getInvoiceData()
-    console.log(invoiceData)
-    fetch('/invoices', {
-      method: 'POST',
-      mode: 'cors',
+  sendInvoiceBtn.addEventListener("click", () => {
+    const invoiceData = getInvoiceData();
+    console.log(invoiceData);
+    fetch("/invoices", {
+      method: "POST",
+      mode: "cors",
       headers: {
-        "Content-Type": 'application/json'
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ invoiceItems: [...invoiceData] })
+      body: JSON.stringify({ invoiceItems: [...invoiceData] }),
     })
-      .then(res => res.json())
-      .then(({ _id }) => window.location.href = _id)
-      .catch(e => console.error(e))
-  })
+      .then((res) => res.json())
+      .then(({ _id }) => (window.location.href = _id))
+      .catch((e) => console.error(e));
+  });
 
   function getRowTotal(rowEl) {
-    const quantityEl = rowEl.querySelector('.quantitat')
-    const priceEl = rowEl.querySelector('.preu')
-    const ivaEl = rowEl.querySelector('.iva')
-    if (!quantityEl || !priceEl) return 0
-    const total = parseFloat(quantityEl.value) * parseFloat(priceEl.value)
-    const iva = ((total) * parseFloat(ivaEl.value) / 100)
-    return total + iva
+    const quantityEl = rowEl.querySelector(".quantitat");
+    const priceEl = rowEl.querySelector(".preu");
+    const ivaEl = rowEl.querySelector(".iva");
+    if (!quantityEl || !priceEl) return 0;
+    const total = parseFloat(quantityEl.value) * parseFloat(priceEl.value);
+    const iva = (total * parseFloat(ivaEl.value)) / 100;
+    return total + iva;
   }
 
   function getInvoiceData() {
-    const rowEls = invoiceItemsTable.querySelectorAll('tr.invoice-item')
-    return Array.prototype.map.call(rowEls, rowEl => {
-      const rowInvoiceValues = Array.prototype.reduce.call(rowEl.cells, (acc, cellEl) => {
-        return {
-          ...acc,
-          [cellEl.getAttribute('name')]: cellEl.dataset.value
-        }
-      }, {})
-      return rowInvoiceValues
-    })
+    const rowEls = invoiceItemsTable.querySelectorAll("tr.invoice-item");
+    return Array.prototype.map.call(rowEls, (rowEl) => {
+      const rowInvoiceValues = Array.prototype.reduce.call(
+        rowEl.cells,
+        (acc, cellEl) => {
+          return {
+            ...acc,
+            [cellEl.getAttribute("name")]: cellEl.dataset.value,
+          };
+        },
+        {}
+      );
+      return rowInvoiceValues;
+    });
   }
 
   function calculateTotals() {
-    const subtotalEls = invoiceItemsTable.querySelectorAll('[name="subtotal"]')
-    const total = Array.prototype.reduce.call(subtotalEls, (acc, curr) => acc += parseFloat(curr.dataset.value), 0)
-    totalEl.innerHTML = `Total Comanda: ${total.toFixed(2)}€`
+    const subtotalEls = invoiceItemsTable.querySelectorAll('[name="subtotal"]');
+    const total = Array.prototype.reduce.call(
+      subtotalEls,
+      (acc, curr) => (acc += parseFloat(curr.dataset.value)),
+      0
+    );
+    totalEl.innerHTML = `Total Comanda: ${total.toFixed(2)}€`;
+  }
+
+  function showError (inputEl) {
+    inputEl.classList.add('error')
+    const messageErrorEl = inputEl.parentElement.querySelector('.error-message')
+    messageErrorEl.style.display = 'block'
+  }
+
+  function hideError (inputEl) {
+    inputEl.classList.remove('error')
+    const messageErrorEl = inputEl.parentElement.querySelector('.error-message')
+    messageErrorEl.style.display = 'none'
+  }
+
+  function checkAutompleteInput (inputEl, validInputs) {
+    const isValid = validInputs.indexOf(inputEl.value) !== -1
+    if (!isValid) showError(inputEl)
+    return isValid
+  }
+
+  function checkAutompleteInputs (addRowTable) {
+    const itemInputIsValid = checkAutompleteInput(itemInputEl, _items.map(i => i.nom))
+    const unitatInputIsValid = checkAutompleteInput(unitatInputEl, _unitats.map(i => i.nom))
+    const proveidorInputIsValid = checkAutompleteInput(proveidorInputEl, _proveidors.map(i => i.nom))
+    return itemInputIsValid && unitatInputIsValid && proveidorInputIsValid
   }
 </script>
 
 <script type="module">
   const tipusInputEl = document.querySelector('#tipus')
   const naturalesaInputEl = document.querySelector('#naturalesa')
-  const itemsInputEl = document.querySelector('#article');
+  const itemsInputEl = document.querySelector('#item');
   const unitatsInputEl = document.querySelector('#unitat');
   const proveidorsInputEl = document.querySelector('#proveidor');
   const _autocomplete = <%- autocomplete %>
   import Autocompleter from '../../utils/Autocompleter.js';
 
-  Autocompleter({
-    autocomplete: _autocomplete,
-    inputEl: itemsInputEl,
-    optionsRoute: '/items/all',
+
+  _autocomplete({
+    input: itemsInputEl,
+    fetch: (text, update) => {
+      const _items = <%- items %>;
+      const suggestions = _items.filter(n => n.nom.toLowerCase().startsWith(text.toLowerCase()))
+      update(suggestions)
+    },
     onSelect: function(suggestion) {
       const {
         nom,
@@ -252,17 +319,20 @@
       if (suggestion) {
         const nom = suggestion.nom
         const div = document.createElement('div')
-        div.setAttribute("id", "autocomplete-article");
+        div.setAttribute("id", "autocomplete-item");
         div.textContent = nom
         return div
       }
     }
   })
 
-  Autocompleter({
-    autocomplete: _autocomplete,
-    inputEl: unitatsInputEl,
-    optionsRoute: '/unitats/all',
+  _autocomplete({
+    input: unitatsInputEl,
+    fetch: (text, update) => {
+      const _unitats = <%- unitats %>;
+      const suggestions = _unitats.filter(n => n.nom.toLowerCase().startsWith(text.toLowerCase()))
+      update(suggestions)
+    },
     onSelect: function(suggestion) {
       const {
         nom,
