@@ -66,11 +66,12 @@
     >Editar Comanda</a
   >
   <form
+    id="delete-invoice"
     class="d-inline"
     action="/invoices/<%=invoice._id%>?_method=DELETE"
     method="POST"
   >
-    <button class="btn btn-danger">Esborrar Comanda</button>
+    <button class="btn btn-danger" type="submit">Esborrar Comanda</button>
   </form>
 
   <p class="h5 row numeros">
@@ -83,3 +84,11 @@
 <div class="card-footer text-muted">
   <a href="/invoices">Tots els invoices</a>
 </div>
+
+<script>
+  const deleteInvoieForm = document.querySelector('#delete-invoice')
+  deleteInvoieForm.addEventListener('submit', e => {
+    const confirmation = confirm("N'estas segur?")
+    if (!confirmation) e.preventDefault()
+  })
+</script>

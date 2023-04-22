@@ -1,6 +1,6 @@
 <% layout('layouts/boilerplate')%>
 
-<h3 id="titol">Crear una comanda</h3>
+<h3 id="titol">Nova Comanda</h3>
 <p></p>
 <p></p>
 <div class="container">
@@ -183,13 +183,13 @@
       <tr class='invoice-item'>${inputValues.reduce(
         (acc, curr) =>
           (acc += `
-        <th
+        <td
           name='${curr.name}'
           data-value='${curr.value}'
           style='display: ${curr.hidden ? "none" : "table-cell"}'
         >
           ${curr.value}
-        </th>
+        </td>
       `),
         ""
       )}</tr>
@@ -200,6 +200,13 @@
     invoiceItemsTable.style.display = "table";
 
     calculateTotals();
+
+    // Keep only iva, unitat and proveidor filled
+    Array.prototype.map.call(addRowInputs, (inputEl) => {
+      const keep = /iva|unitat|proveidor/.test(inputEl.id)
+      if (keep) return
+      inputEl.value = ''
+    })
   });
 
   invoiceItemsTable.addEventListener("click", (e) => {

@@ -81,6 +81,6 @@ module.exports.updateInvoice = async (req, res) => {
 module.exports.deleteInvoice = async (req, res) => {
   const { id } = req.params;
   await Invoice.findByIdAndDelete(id);
-  req.flash("success", "Invoice eliminat correctament!");
+  req.flash("success", "Comanda eliminada correctament!");
   res.redirect("/invoices");
 };
