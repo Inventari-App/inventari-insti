@@ -2,8 +2,7 @@ const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
 const invoices = require('../controllers/invoices');
-const { isLoggedIn, isResponsable, validateInvoice } = require('../middlewareInvoices');
-const Invoice = require('../models/invoice');
+const { isLoggedIn, isResponsableOrAdmin: isResponsable, validateInvoice } = require('../middlewareInvoices');
 
 router.route('/')
 .get(catchAsync(invoices.index))
@@ -16,13 +15,6 @@ router.route('/:id')
 .put(isLoggedIn, isResponsable, validateInvoice, catchAsync(invoices.updateInvoice))
 .delete(isLoggedIn, isResponsable, catchAsync(invoices.deleteInvoice));
 
-router.route('/:id/receive')
-.get(catchAsync(invoices.receive))
-// .put(isLoggedIn, isResponsable, validateInvoice, catchAsync(invoices.updateInvoice))
-// .delete(isLoggedIn, isResponsable, catchAsync(invoices.deleteInvoice));
-
-
 router.get('/:id/edit', isLoggedIn, isResponsable, catchAsync(invoices.renderEditForm));
-
 
 module.exports = router;

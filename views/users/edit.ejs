@@ -1,23 +1,56 @@
 <% layout('layouts/boilerplate')%>
 
-    <h1>Editar User</h1>
-    <form action="/users/<%=user._id%>?_method=PUT" method="POST"  class="validated-form">
-        <div class="mb-3">
-            <label for="username">Responsable</label>
-            <input class="form-control" type="text" id="username" name="user[username]" value="<%=user.username %>" required>
-        </div>
-        <div class="mb-3">
-            <label for="email">Email</label>
-            <input class="form-control" type="email" id="email" name="user[email]" value="<%= user.email%>" required>
-        </div>
-        <div class="mb-3">
-            <label for="password">Password</label>
-            <input class="form-control" type="text" id="password" name="user[password]" value="<%= user.password%>" required>
-            
-        </div>
-<div class="mb-3">
-        <button class="btn btn-warning">Actualitzar User</button>
-    </div>
-    </form>
-    <a href="/users/<%= user._id%>">Tornar a l'User</a>
+<h1>Editar User</h1>
+<form
+  action="/users/<%=user._id%>?_method=PUT"
+  method="POST"
+  class="validated-form"
+>
+  <div class="mb-3">
+    <label for="username">Responsable</label>
+    <input
+      class="form-control"
+      type="text"
+      id="username"
+      name="user[username]"
+      value="<%=user.username %>"
+      required
+      disabled
+    />
+  </div>
+  <div class="mb-3">
+    <label for="email">Email</label>
+    <input
+      class="form-control"
+      type="email"
+      id="email"
+      name="user[email]"
+      value="<%= user.email%>"
+      required
+      disabled
+    />
+  </div>
+  <div class="mb-3">
+    <label for="admin">Is Admin</label>
+    <input
+      class=""
+      type="checkbox"
+      id="admin-checkbox"
+      <%= user.isAdmin && 'checked' %>
+    />
+  </div>
+  <input type="text" id="admin" name="user[isAdmin]" hidden>
+  <div class="mb-3">
+    <button class="btn btn-warning" type="submit">Actualitzar User</button>
+  </div>
+</form>
+<a href="/users/<%= user._id%>">Tornar a l'User</a>
 
+<script>
+  const adminCheckboxEl = document.querySelector('#admin-checkbox')
+  const adminEl = document.querySelector('#admin')
+  adminCheckboxEl.addEventListener('change', (e) => {
+    const { currentTarget } = e
+    adminEl.value = currentTarget.checked
+  })
+</script>

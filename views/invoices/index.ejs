@@ -17,7 +17,10 @@
     </tr>
   </thead>
   <tbody>
-    <% for (let invoice of invoices) { %>
+    <%
+      for (let invoice of invoices) {
+        const isRebuda = invoice.status === 'rebuda'
+    %>
       <tr>
         <th scope="row"><%= invoice.numInvoice %></th>
         <td><%= invoice.responsable.username %></td>
@@ -38,7 +41,11 @@
             <%= new Date(invoice.createdAt).toLocaleString('es-es', { dateStyle: 'short', timeStyle: 'short' }) %></td>
           </span>
         <td>
-          <a href="/invoices/<%= invoice._id %>" class="btn btn-primary">Veure</a>
+          <% if (isRebuda) { %>
+            <span class="btn btn-success">Rebuda</span>
+          <% } else { %>
+            <a href="/invoices/<%= invoice._id %>" class="btn btn-primary">Veure</a>
+          <% } %>
         </td>
       </tr>
     <% } %>

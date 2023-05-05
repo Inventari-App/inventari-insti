@@ -3,9 +3,15 @@ const Item = require("../models/item");
 const Unitat = require("../models/unitat");
 const Proveidor = require("../models/proveidor");
 const autocomplete = require("autocompleter");
+const checkComandaIsRebuda = require('../utils/checkComandaIsRebuda');
 
 module.exports.index = async (req, res) => {
-  const invoices = await Invoice.find()
+  const { isAdmin, id: userId } = req.user;
+
+  // Show only user/admin invoices
+  const invoices = await Invoice.find(
+    !isAdmin ? { responsable: { _id: userId } } : {}
+  )
     .populate("responsable")
     .sort({ createdAt: -1 });
 
@@ -14,7 +20,7 @@ module.exports.index = async (req, res) => {
 
 module.exports.renderNewForm = async (req, res) => {
   res.render("invoices/new", {
-    autocomplete
+    autocomplete,
   });
 };
 
@@ -28,7 +34,7 @@ module.exports.createInvoice = async (req, res, next) => {
 };
 
 module.exports.showInvoice = async (req, res, next) => {
-  const invoice = await Invoice.findById(req.params.id).populate("responsable");
+  const invoice = await Invoice.findById(req.params.id).populate("responsable").lean()
 
   if (!invoice) {
     req.flash("error", "No es pot trobar l'invoice!");
@@ -36,50 +42,53 @@ module.exports.showInvoice = async (req, res, next) => {
   }
 
   const items = await Item.find();
-  res.render("invoices/show", {
-    invoice,
-    invoiceJSON: invoice.toJSON(),
-    items,
-    isOwner: invoice.responsable.equals(req.user._id),
-  });
-};
-
-module.exports.receive = async (req, res, next) => {
-  const invoice = await Invoice.findById(req.params.id).populate("responsable");
-
-  if (!invoice) {
-    req.flash("error", "No es pot trobar l'invoice!");
-    return res.redirect("/invoices");
-  }
-
-  const items = await Item.find();
-  res.render("invoices/receive", {
-    invoice,
-    invoiceJSON: invoice.toJSON(),
-    items,
-    isOwner: invoice.responsable.equals(req.user._id),
-  });
+  res.render(
+    invoice.status === "aprovada" ? "invoices/receive" : "invoices/show",
+    {
+      invoice,
+      invoiceJSON: JSON.stringify(invoice),
+      items,
+    }
+  );
 };
 
 module.exports.renderEditForm = async (req, res) => {
   const invoice = await Invoice.findById(req.params.id).populate("responsable");
+
   if (!invoice) {
     req.flash("error", "No es pot trobar l'invoice!");
     return res.redirect("/invoices");
   }
+
   res.render("invoices/edit", { invoice, autocomplete });
 };
 
 module.exports.updateInvoice = async (req, res) => {
-  const { id } = req.params;
+  try {
+    const { id } = req.params;
+    const { redirect } = req.query
+  
+    const invoice = await Invoice.findByIdAndUpdate(id, { ...req.body }, { new: true });
+    const comandaIsRebuda = checkComandaIsRebuda(invoice);
+    
+    req.flash("success", "Comanda actualitzada correctament!");
 
-  const invoice = await Invoice.findByIdAndUpdate(id, { ...req.body });
-  req.flash("success", "Invoice actualitzat correctament!");
-  res.json(invoice);
+    if (redirect) return res.redirect(`/invoices/${id}`)
+  
+    if (comandaIsRebuda) {
+      await Invoice.findByIdAndUpdate(id, { status: "rebuda" })
+      return res.sendCode(201)
+    }
+
+    if (!comandaIsRebuda) return res.sendCode(201)
+  } catch (error) {
+    console.error(error)
+  }
 };
 
 module.exports.deleteInvoice = async (req, res) => {
   const { id } = req.params;
+
   await Invoice.findByIdAndDelete(id);
   req.flash("success", "Comanda eliminada correctament!");
   res.redirect("/invoices");

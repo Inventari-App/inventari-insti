@@ -38,7 +38,7 @@
               class="camps form-control autocomplete"
               type="text"
               id="item"
-              name="item"
+              name="article"
               required
               autocomplete="off"
             />
@@ -138,6 +138,9 @@
 </div>
 
 <script>
+</script>
+
+<script>
   const invoiceItemsTable = document.querySelector("#invoice-items");
   const addRowTable = document.querySelector("#add-row-table");
   const addRowBtn = document.querySelector("#add-row-btn");
@@ -217,7 +220,10 @@
     calculateTotals();
   });
 
-  sendInvoiceBtn.addEventListener("click", () => {
+  sendInvoiceBtn.addEventListener("click", (e) => {
+    const confirmation = confirm("Estas segur que vols crear la comanda?")
+    if (!confirmation) return
+
     const invoiceData = getInvoiceData();
     console.log(invoiceData);
     fetch("/invoices", {
@@ -385,15 +391,4 @@
       }
     }
   })
-
-  // unitatsInputEl.addEventListener('click', function link(e) {
-  //   e.target.removeEventListener(e.type, link);
-  //   const unitatsDom = document.createElement('div');
-
-  //   unitatsDom.innerHTML = '<p> <a href= "../unitats/new" class="link-danger" target="parent">Crear Unitat</a>';
-
-  //   const formulariet = document.querySelector('#crear')
-  //   formulariet.append(unitatsDom);
-
-  // })
 </script>

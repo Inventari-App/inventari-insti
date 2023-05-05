@@ -3,9 +3,11 @@
   <b>Responsable: <%= invoice.responsable.username %> </b>
 </p>
 
-<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-  <a type="button" class="btn btn-primary mb-2" href="/invoices/<%= invoice._id %>/receive">Rebre comanda</a>
-</div>
+<% if (invoice.status === 'aprovada') { %>
+  <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+    <a type="button" class="btn btn-primary mb-2" href="/invoices/<%= invoice._id %>/receive">Rebre comanda</a>
+  </div>
+<% } %>
 
 <table class="table table-condensed table-striped">
   <form id="proformForm" class="form-inline">
@@ -57,8 +59,22 @@
   </form>
 </table>
 
-<% if(currentUser && isOwner) { %>
+<% if((currentUser && currentUser.id === invoice.responsable.id) || currentUser.isAdmin) { %>
 <div class="card-body">
+
+  <!-- Approva comanda -->
+  <% if (currentUser.isAdmin && invoice.status !== 'aprovada') { %>
+  <form
+    id="aprove-invoice"
+    class="d-inline"
+    action="/invoices/<%=invoice._id%>?_method=PUT&redirect=true"
+    method="POST"
+  >
+    <input type="text" hidden="hidden" name="status" value="aprovada">
+    <button class="btn btn-success" type="submit">Aprovar Comanda</button>
+  </form>
+  <% } %>
+
   <a
     href="/invoices/<%=invoice.id%>/edit"
     class="card-link btn btn-info"
