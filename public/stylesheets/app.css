@@ -103,3 +103,7 @@ input[id^='expand-rows-']:checked ~ label {
   opacity: 0.7;
   background-color: rgb(243, 243, 243);
 }
+
+.table>:not(caption) {
+  white-space: nowrap;
+}

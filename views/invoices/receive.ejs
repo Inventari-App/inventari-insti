@@ -1,4 +1,5 @@
 <% layout('layouts/boilerplate')%>
+<h3 id="titol">Rebre comanda</h3>
 <p>
   <b>Responsable: <%= invoice.responsable.username %> </b>
 </p>
@@ -116,7 +117,7 @@
                             <div class="camps value" name="proveidor" data-value="<%= item.proveidor %>"><%= item.proveidor %></div>
                         </td>
                         <td width="20%">
-                            <input type="text" name="numSerie" value="<%= item.rebuts[i].numSerie %>" <%= isRebut && "disabled" %>>
+                            <input class="value" type="text" name="numSerie" value="<%= item.rebuts[i].numSerie %>" <%= isRebut && "disabled" %>>
                         </td>
                     </tr>
                 <% } %>
@@ -161,11 +162,11 @@
     const itemRowEls = document.querySelectorAll('tbody[id^="children-rows-"] tr')
     const checkedItemRowEls = Array.prototype.filter.call(itemRowEls, itemRowEl => itemRowEl.querySelector('input[type="checkbox"]:checked:not(:disabled)'))
     const articles = Array.prototype.map.call(checkedItemRowEls, checkedItemRowEl => {
-      const valueEls = checkedItemRowEl.querySelectorAll('div.value')
+      const valueEls = checkedItemRowEl.querySelectorAll('div.value, input.value')
       return Array.prototype.reduce.call(valueEls, (acc, valueEl) => {
         return {
           ...acc,
-          [valueEl.getAttribute('name')]: valueEl.dataset.value
+          [valueEl.getAttribute('name')]: valueEl.dataset.value || valueEl.value
         }
       }, {})
     })

@@ -77,10 +77,10 @@ module.exports.updateInvoice = async (req, res) => {
   
     if (comandaIsRebuda) {
       await Invoice.findByIdAndUpdate(id, { status: "rebuda" })
-      return res.sendCode(201)
+      return res.status(201).send()
     }
 
-    if (!comandaIsRebuda) return res.sendCode(201)
+    if (!comandaIsRebuda) return res.status(201).send()
   } catch (error) {
     console.error(error)
   }

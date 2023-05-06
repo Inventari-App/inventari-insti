@@ -25,6 +25,10 @@
             <b>IVA: </b>
             <%= article.iva %>€
           </li>
+          <li class="list-group-item text-muted">
+            <b>Num Serie: </b>
+            <%= article.numSerie %> %>
+          </li>
         </ul>
         <% if( currentUser && article.responsable.equals(currentUser.id)) { %>
         <div class="card-body">
