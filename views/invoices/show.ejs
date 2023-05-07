@@ -59,7 +59,7 @@
   </form>
 </table>
 
-<% if((currentUser && currentUser.id === invoice.responsable.id) || currentUser.isAdmin) { %>
+<% if((currentUser && currentUser.id == invoice.responsable._id) || currentUser.isAdmin) { %>
 <div class="card-body">
 
   <!-- Approva comanda -->
@@ -76,7 +76,7 @@
   <% } %>
 
   <a
-    href="/invoices/<%=invoice.id%>/edit"
+    href="/invoices/<%=invoice._id%>/edit"
     class="card-link btn btn-info"
     class="card-link"
     >Editar Comanda</a
@@ -103,7 +103,7 @@
 
 <script>
   const deleteInvoieForm = document.querySelector('#delete-invoice')
-  deleteInvoieForm.addEventListener('submit', e => {
+  deleteInvoieForm && deleteInvoieForm.addEventListener('submit', e => {
     const confirmation = confirm("N'estas segur?")
     if (!confirmation) e.preventDefault()
   })

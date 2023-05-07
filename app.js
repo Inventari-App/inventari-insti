@@ -164,15 +164,15 @@ app.use((req, res, next) => {
 });
 
 app.use("/", userRoutes);
-app.use("/articles", articleRoutes);
-app.use("/invoices", invoiceRoutes);
-app.use("/items", itemRoutes);
-app.use("/unitats", unitatRoutes);
-app.use("/zonas", zonaRoutes);
-app.use("/plantas", plantaRoutes);
-app.use("/areas", areaRoutes);
-app.use("/utilitats", utilitatRoutes);
-app.use("/proveidors", proveidorRoutes);
+app.use("/articles", requireLogin, articleRoutes);
+app.use("/invoices", requireLogin, invoiceRoutes);
+app.use("/items", requireLogin, itemRoutes);
+app.use("/unitats", requireLogin, unitatRoutes);
+app.use("/zonas", requireLogin, zonaRoutes);
+app.use("/plantas", requireLogin, plantaRoutes);
+app.use("/areas", requireLogin, areaRoutes);
+app.use("/utilitats", requireLogin, utilitatRoutes);
+app.use("/proveidors", requireLogin, proveidorRoutes);
 
 app.use("/utils", express.static(path.join(__dirname, "utils")));
 
@@ -194,3 +194,12 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Serving on port ${port}`);
 });
+
+function requireLogin (req, res, next) {
+  if (req.user) {
+    return next()
+  } else {
+    req.flash('error', 'Has d\'estar logat per veure la pagina.')
+    res.redirect('/login')
+  }
+}

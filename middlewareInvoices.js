@@ -29,7 +29,7 @@ module.exports.isResponsableOrAdmin = async (req, res, next) => {
     const { id,  } = req.params;
     const { id: userId, isAdmin } = req.user
     const invoice = await Invoice.findById(id);
-    if (invoice.responsable.id !== userId && !isAdmin) {
+    if (invoice.responsable._id != userId && !isAdmin) {
         req.flash('error', 'No tens permisos per fer això!');
         return res.redirect(`/invoices/${id}`);
     }

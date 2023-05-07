@@ -5,7 +5,7 @@
 </p>
 
 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-  <button id="rebre-comanda-btn" type="button" class="btn btn-primary mb-2">Rebre comanda</button>
+  <button id="rebre-comanda-btn" type="button" class="btn btn-primary mb-2">Rebre articles</button>
 </div>
 
 <table class="table table-condensed">
@@ -171,6 +171,7 @@
       }, {})
     })
     console.log(articles)
+    if (!articles.length) return
 
     const createArticles = articles.map(article => createArticle(article))
 

@@ -177,8 +177,7 @@
       },
       body: JSON.stringify({ invoiceItems: [...invoiceData] })
     })
-      .then(res => res.json())
-      .then(({ _id }) => window.location.href = `/invoices/${_id}`)
+      .then(() => window.location.href = '/invoices/<%= invoice._id %>')
       .catch(e => console.error(e))
   })
 

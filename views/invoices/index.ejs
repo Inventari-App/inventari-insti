@@ -7,9 +7,10 @@
 <table id="invoices-table" class="table table-striped align-middle">
   <thead>
     <tr>
-      <th scope="col">Num. Comanda</th>
+      <th scope="col">Num.</th>
       <th scope="col">Responsable</th>
-      <th scope="col">Num. Items</th>
+      <th scope="col">Items a Rebre</th>
+      <th scope="col">Items Rebuts</th>
       <th scope="col">Items</th>
       <th scope="col">Preu total</th>
       <th scope="col">Ultima actualització</th>
@@ -20,11 +21,13 @@
     <%
       for (let invoice of invoices) {
         const isRebuda = invoice.status === 'rebuda'
+        const isAprovada = invoice.status === 'aprovada'
     %>
       <tr>
         <th scope="row"><%= invoice.numInvoice %></th>
         <td><%= invoice.responsable.username %></td>
-        <td><%= invoice.invoiceItems.reduce((acc, item) => acc += item.quantitat, 0) %></td>
+        <td><%= invoice.invoiceItems.reduce((acc, item) => acc += item.rebuts.filter(({ rebut }) => !rebut).length, 0) %></td>
+        <td><%= invoice.invoiceItems.reduce((acc, item) => acc += item.rebuts.filter(({ rebut }) => rebut).length, 0) %></td>
         <td>
           <span class="truncate">
             <%= 
@@ -43,8 +46,10 @@
         <td>
           <% if (isRebuda) { %>
             <span style="min-width: 100%; cursor: unset;" class="btn btn-success">Rebuda</span>
+          <% } else if (isAprovada) { %>
+            <a href="/invoices/<%= invoice._id %>" style="min-width: 100%" class="btn btn-primary">Aprovada</a>
           <% } else { %>
-            <a href="/invoices/<%= invoice._id %>" style="min-width: 100%" class="btn btn-primary">Veure</a>
+            <a href="/invoices/<%= invoice._id %>" style="min-width: 100%" class="btn btn-info">Pendent</a>
           <% } %>
         </td>
       </tr>
