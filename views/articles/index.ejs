@@ -7,7 +7,6 @@
 <table id="articles-table" class="table table-striped align-middle">
   <thead>
     <tr>
-      <th scope="col">Id</th>
       <th scope="col">Nom</th>
       <th scope="col">Descripcio</th>
       <th scope="col">Unitat</th>
@@ -19,7 +18,6 @@
   <tbody>
     <% for (let article of articles) { %>
       <tr>
-        <th scope="row"><%= article._id %></th>
         <td><%= article.article %></td>
         <td><%= article.descripcio %></td>
         <td><%= article.unitat %></td>
