@@ -17,4 +17,7 @@ router.route('/:id')
 
 router.get('/:id/edit', isLoggedIn, isResponsable, catchAsync(invoices.renderEditForm));
 
+router.route('/:id/status')
+.put(isLoggedIn, isResponsable, validateInvoice, catchAsync(invoices.updateInvoiceStatus))
+
 module.exports = router;

@@ -205,10 +205,17 @@
       })
       return { invoiceItemId, rebuts }
     })
-    return updateComandaStatus({ invoiceItems: invoice.invoiceItems.map((invoiceItem, i) => ({...invoiceItem, rebuts: invoiceItemStatuses[i].rebuts}))})
+    const newInvoiceWithRebuts = invoice.invoiceItems.map((invoiceItem, i) => ({...invoiceItem, rebuts: invoiceItemStatuses[i].rebuts}))
+    return updateComandaRebuts({ invoiceItems: newInvoiceWithRebuts})
+      .then(res => res.json())
+      .then(newInvoice => {
+        const comandaIsRebuda = checkComandaIsRebuda(newInvoice)
+        return comandaIsRebuda && updateComandaStatus()
+      })
+      .then(() => window.location.href = '/invoices')
   }
 
-  function updateComandaStatus(data) {
+  function updateComandaRebuts(data) {
     return fetch('/invoices/<%= invoice._id %>', {
       method: 'PUT',
       mode: 'cors',
@@ -216,6 +223,17 @@
         "Content-Type": 'application/json'
       },
       body: JSON.stringify({ ...data })
+    })
+  }
+
+  function updateComandaStatus() {
+    return fetch('/invoices/<%= invoice._id %>/status?redirect=true', {
+      method: 'PUT',
+      mode: 'cors',
+      headers: {
+        "Content-Type": 'application/json'
+      },
+      body: JSON.stringify({ status: 'rebuda' })
     })
   }
 

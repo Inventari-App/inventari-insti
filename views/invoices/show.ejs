@@ -67,7 +67,7 @@
   <form
     id="aprove-invoice"
     class="d-inline"
-    action="/invoices/<%=invoice._id%>?_method=PUT&redirect=true"
+    action="/invoices/<%=invoice._id%>/status?_method=PUT&redirect=true"
     method="POST"
   >
     <input type="text" hidden="hidden" name="status" value="aprovada">

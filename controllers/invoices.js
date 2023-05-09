@@ -74,6 +74,26 @@ module.exports.renderEditForm = async (req, res) => {
   res.render("invoices/edit", { invoice, autocomplete });
 };
 
+module.exports.updateInvoiceStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body
+
+    const invoice = await Invoice.findByIdAndUpdate(
+      id,
+      { status },
+      { new: true }
+    ).populate("responsable");
+
+    await emailStatusChange(invoice, status);
+
+    res.redirect('/invoices');
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+
 module.exports.updateInvoice = async (req, res) => {
   try {
     const { id } = req.params;
@@ -85,24 +105,16 @@ module.exports.updateInvoice = async (req, res) => {
       { new: true }
     ).populate("responsable");
 
-    const comandaIsRebuda = checkComandaIsRebuda(invoice);
-
     req.flash("success", "Comanda actualitzada correctament!");
 
     if (redirect) return res.redirect(`/invoices/${id}`);
 
-    if (comandaIsRebuda) {
-      await Invoice.findByIdAndUpdate(id, { status: "rebuda" });
-      await emailInvoiceReceived(invoice)
-
-      return res.status(201).send();
-    }
-
-    if (!comandaIsRebuda) return res.status(201).send();
+    return res.status(201).json(invoice.toJSON())
   } catch (error) {
     console.error(error);
   }
 };
+
 
 module.exports.deleteInvoice = async (req, res) => {
   const { id } = req.params;
@@ -112,16 +124,19 @@ module.exports.deleteInvoice = async (req, res) => {
   res.redirect("/invoices");
 };
 
-async function emailInvoiceReceived (invoice) {
+async function emailStatusChange (invoice, status) {
   const admins = await User.find({ isAdmin: true }).exec();
   const adminEmails = admins.length && admins.map(admin => admin.email).join('; ')
   const { message, sendEmail } = useNodemailer({
     to: adminEmails,
     model: "invoice",
-    reason: "received",
+    reason: "status",
   });
   sendEmail({
-    subject: message.subject,
-    text: message.text.replace(/{{user}}/, invoice.responsable.email)
+    subject: message.subject.replace(/{{status}}/, status),
+    text: message.text
+      .replace(/{{user}}/, invoice.responsable.email)
+      .replace(/{{status}}/, status)
+      .replace(/{{url}}/, `http://localhost:3000/invoices/${invoice._id}`)
   })
 }
