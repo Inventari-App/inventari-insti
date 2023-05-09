@@ -43,7 +43,7 @@
               autocomplete="off"
             />
             <span class="error-message">L'item no existeix</span>
-            <a href= "../items/new" class="create-link" target="parent">Crear Item</a>
+            <a href= "../items/new?tab=true" class="create-link" target="parent">Crear Item</a>
           </td>
           <td>
             <input
@@ -79,7 +79,7 @@
               autocomplete="off"
             />
             <span class="error-message">La unitat no existeix</span>
-            <a href= "../unitats/new" class="create-link" target="parent">Crear Unitat</a>
+            <a href= "../unitats/new?tab=true" class="create-link" target="parent">Crear Unitat</a>
           </td>
           <td>
             <input
@@ -91,7 +91,7 @@
               required
             />
             <span class="error-message">El proveidor no existeix</span>
-            <a href= "../proveidors/new" class="create-link" target="parent">Crear Proveidor</a>
+            <a href= "../proveidors/new?tab=true" class="create-link" target="parent">Crear Proveidor</a>
           </td>
           <td>
             <button id="add-row-btn" class="btn btn-primary form-control">
@@ -123,6 +123,7 @@
       <th>Subtotal</th>
       <th>Unitat de destí</th>
       <th>Proveidor</th>
+      <th></th>
     </tr>
   </table>
 
@@ -183,19 +184,24 @@
       };
     });
     const newRowHTML = `
-      <tr class='invoice-item'>${inputValues.reduce(
-        (acc, curr) =>
-          (acc += `
-        <td
-          name='${curr.name}'
-          data-value='${curr.value}'
-          style='display: ${curr.hidden ? "none" : "table-cell"}'
-        >
-          ${curr.value}
+      <tr class='invoice-item'>
+        ${inputValues.reduce((acc, curr) =>
+            (acc += `
+              <td
+                name='${curr.name}'
+                data-value='${curr.value}'
+                style='display: ${curr.hidden ? "none" : "table-cell"}'
+                class="align-middle"
+              >
+                ${curr.value}
+              </td>
+            `),
+            ""
+        )}
+        <td>
+          <button type="button" class="btn btn-danger delete-row-item">X</button>
         </td>
-      `),
-        ""
-      )}</tr>
+      </tr>
     `;
     invoiceItemsTable.rows[0].insertAdjacentHTML("afterend", newRowHTML);
 
@@ -212,8 +218,12 @@
     })
   });
 
+  // const deleteButtonEls = invoiceItemsTable.querySelectorAll('.delete-row-item')
+  // Array.prototype.forEach.call(deleteButtonEls, deleteButtonEl => {})
   invoiceItemsTable.addEventListener("click", (e) => {
     const { target } = e;
+    const isDeleteRowEl = target.classList.contains('delete-row-item')
+    if (!isDeleteRowEl) return
     const invoiceItemRow = target.closest("tr.invoice-item");
     if (!invoiceItemRow) return;
     invoiceItemRow.remove();

@@ -8,6 +8,10 @@ const messages = {
       subject: 'Una comanda ha canviat d\'estat: {{status}}',
       text: 'La comanda de {{user}} ha canviat a {{status}}.\nPots veure-la a {{url}}.'
     },
+    modified: {
+      subject: 'Una comanda s\'ha modificat.',
+      text: ''
+    }
   },
 }
 

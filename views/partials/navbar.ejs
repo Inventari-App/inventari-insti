@@ -36,6 +36,11 @@
         </li>
       </ul>
     </div>
+    <% if(currentUser) { %>
+      <div class="navbar-text mx-4">
+        Hola, <%= currentUser.email %>
+      </div>
+    <% } %>
     <div class="navbar-nav ml-auto">
       <% if(!currentUser) { %>
         <a class="nav-link" href="/login">Connexió</a>

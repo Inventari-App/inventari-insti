@@ -19,7 +19,7 @@ module.exports.createUnitat = async (req, res, next) => {
     unitat.responsable = req.user._id;
     await unitat.save();
     req.flash('success', 'Unitat creada correctament!');
-    res.redirect(`/unitats/${unitat._id}`);
+    res.status(201).json(unitat)
 }
 
 module.exports.showUnitat =  async (req, res, next) => {

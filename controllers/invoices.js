@@ -35,9 +35,10 @@ module.exports.renderNewForm = async (req, res) => {
 
 module.exports.createInvoice = async (req, res, next) => {
   const { invoiceItems } = req.body;
-  const responsable = req.user._id;
-  const invoice = new Invoice({ responsable, invoiceItems });
+  const { _id: responsableId, email } = req.user;
+  const invoice = new Invoice({ responsable: responsableId, invoiceItems });
   await invoice.save();
+  await emailCreated(invoice, email)
   req.flash("success", "Comanda creada correctament!");
   res.json(invoice);
 };
@@ -124,15 +125,41 @@ module.exports.deleteInvoice = async (req, res) => {
   res.redirect("/invoices");
 };
 
-async function emailStatusChange (invoice, status) {
+async function getAdminEmails () {
   const admins = await User.find({ isAdmin: true }).exec();
   const adminEmails = admins.length && admins.map(admin => admin.email).join('; ')
+  return adminEmails
+}
+
+async function emailCreated (invoice, email) {
+  const adminEmails = await getAdminEmails()
+  if (!adminEmails) return console.error('No admin emails?')
+
   const { message, sendEmail } = useNodemailer({
     to: adminEmails,
     model: "invoice",
+    reason: "created",
+  });
+  return sendEmail({
+    subject: message.subject.replace(/{{user}}/, email),
+    text: message.text
+      .replace(/{{url}}/, `http://localhost:3000/invoices/${invoice._id}`)
+  })
+}
+
+async function emailStatusChange (invoice, status) {
+  const adminEmails = getAdminEmails()
+  if (adminEmails) return console.error('No admin emails?')
+
+  const responsableEmail = invoice.responsable.email
+  const { message, sendEmail } = useNodemailer({
+    to: /aprovada|pendent/.test(status)
+      ? responsableEmail
+      : adminEmails,
+    model: "invoice",
     reason: "status",
   });
-  sendEmail({
+  return sendEmail({
     subject: message.subject.replace(/{{status}}/, status),
     text: message.text
       .replace(/{{user}}/, invoice.responsable.email)

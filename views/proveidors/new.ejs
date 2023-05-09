@@ -8,37 +8,36 @@
 
                 <div class="mb-3">
                     <label class="form-label" for="nom">Nom</label>
-                    <input class="form-control" type="text" id="nom" name="proveidor[nom]" required>
+                    <input class="form-control" type="text" id="nom" name="nom" required>
                     <div class="valid-feedback">Sembla correcte!</div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label" for="cif">CIF</label>
-                    <input class="form-control" type="text" id="cif" name="proveidor[cif]" required>
+                    <input class="form-control" type="text" id="cif" name="cif" required>
                     <div class="valid-feedback">Sembla correcte!</div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label" for="adreca">Adreça</label>
-                    <input class="form-control" type="text" id="adreca" name="proveidor[adreca]" required>
+                    <input class="form-control" type="text" id="adreca" name="adreca" required>
                     <div class="valid-feedback">Sembla correcte!</div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label" for="telefon">Telèfon</label>
-                    <input class="form-control" type="text" id="telefon" name="proveidor[telefon]" required>
+                    <input class="form-control" type="text" id="telefon" name="telefon" required>
                     <div class="valid-feedback">Sembla correcte!</div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label" for="email">Email</label>
-                    <input class="form-control" type="email" id="email" name="proveidor[email]" required>
+                    <input class="form-control" type="email" id="email" name="email" required>
                     <div class="valid-feedback">Sembla correcte!</div>
                 </div>
               
             </div>
-                <!--
--->
+
                 <div class="mb-3">
                     <button class="btn btn-success">Afegeix Proveidor</button>
                 </div>
@@ -46,3 +45,43 @@
             <a href="/proveidors">Tots els proveidors</a>
         </div>
     </div>
+
+    <script>
+        const formEl = document.querySelector("form");
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const tab = urlParams.get("tab");
+
+        const inputEls = document.querySelectorAll(
+            'input[type="text"], input[type="email"], input[type="radio"]:checked, select, textarea'
+        );
+
+        formEl.addEventListener("submit", async function (event) {
+            event.preventDefault();
+            const formData = Array.prototype.reduce.call(
+                inputEls,
+                (acc, inputEl) => {
+                    const key = inputEl.name;
+                    const value = inputEl.value;
+                    return { ...acc, [key]: value };
+                },
+                {}
+            );
+            console.log(formData);
+
+            const response = await fetch("/proveidors", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ proveidor: formData }),
+            });
+            const proveidor = await response.json()
+
+            if (tab) {
+                window.close();
+            } else {
+                window.location.href = `/proveidors/${proveidor._id}`
+            }
+        });
+    </script>
