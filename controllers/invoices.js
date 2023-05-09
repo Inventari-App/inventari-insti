@@ -1,9 +1,11 @@
+const User = require("../models/user");
 const Invoice = require("../models/invoice");
 const Item = require("../models/item");
 const Unitat = require("../models/unitat");
 const Proveidor = require("../models/proveidor");
 const autocomplete = require("autocompleter");
-const checkComandaIsRebuda = require('../utils/checkComandaIsRebuda');
+const checkComandaIsRebuda = require("../utils/checkComandaIsRebuda");
+const { useNodemailer } = require("../nodemailer/sendEmail");
 
 module.exports.index = async (req, res) => {
   const { isAdmin, id: userId } = req.user;
@@ -17,16 +19,13 @@ module.exports.index = async (req, res) => {
 
   // Show only user/admin invoices based on filter
   const invoices = await Invoice.find(
-    !isAdmin
-      ? { ...filter, responsable: { _id: userId } }
-      : filter
+    !isAdmin ? { ...filter, responsable: { _id: userId } } : filter
   )
     .populate("responsable")
     .sort({ createdAt: -1 });
 
   res.render("invoices/index", { invoices });
 };
-
 
 module.exports.renderNewForm = async (req, res) => {
   res.render("invoices/new", {
@@ -44,7 +43,9 @@ module.exports.createInvoice = async (req, res, next) => {
 };
 
 module.exports.showInvoice = async (req, res, next) => {
-  const invoice = await Invoice.findById(req.params.id).populate("responsable").lean()
+  const invoice = await Invoice.findById(req.params.id)
+    .populate("responsable")
+    .lean();
 
   if (!invoice) {
     req.flash("error", "No es pot trobar l'invoice!");
@@ -76,23 +77,30 @@ module.exports.renderEditForm = async (req, res) => {
 module.exports.updateInvoice = async (req, res) => {
   try {
     const { id } = req.params;
-    const { redirect } = req.query
-  
-    const invoice = await Invoice.findByIdAndUpdate(id, { ...req.body }, { new: true });
+    const { redirect } = req.query;
+
+    const invoice = await Invoice.findByIdAndUpdate(
+      id,
+      { ...req.body },
+      { new: true }
+    ).populate("responsable");
+
     const comandaIsRebuda = checkComandaIsRebuda(invoice);
-    
+
     req.flash("success", "Comanda actualitzada correctament!");
 
-    if (redirect) return res.redirect(`/invoices/${id}`)
-  
+    if (redirect) return res.redirect(`/invoices/${id}`);
+
     if (comandaIsRebuda) {
-      await Invoice.findByIdAndUpdate(id, { status: "rebuda" })
-      return res.status(201).send()
+      await Invoice.findByIdAndUpdate(id, { status: "rebuda" });
+      await emailInvoiceReceived(invoice)
+
+      return res.status(201).send();
     }
 
-    if (!comandaIsRebuda) return res.status(201).send()
+    if (!comandaIsRebuda) return res.status(201).send();
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
 };
 
@@ -103,3 +111,17 @@ module.exports.deleteInvoice = async (req, res) => {
   req.flash("success", "Comanda eliminada correctament!");
   res.redirect("/invoices");
 };
+
+async function emailInvoiceReceived (invoice) {
+  const admins = await User.find({ isAdmin: true }).exec();
+  const adminEmails = admins.length && admins.map(admin => admin.email).join('; ')
+  const { message, sendEmail } = useNodemailer({
+    to: adminEmails,
+    model: "invoice",
+    reason: "received",
+  });
+  sendEmail({
+    subject: message.subject,
+    text: message.text.replace(/{{user}}/, invoice.responsable.email)
+  })
+}
