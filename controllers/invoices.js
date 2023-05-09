@@ -7,16 +7,26 @@ const checkComandaIsRebuda = require('../utils/checkComandaIsRebuda');
 
 module.exports.index = async (req, res) => {
   const { isAdmin, id: userId } = req.user;
+  const { status } = req.query;
 
-  // Show only user/admin invoices
+  // Filter by invoice status if provided
+  const filter = {};
+  if (status && ["pendent", "aprovada", "rebuda"].includes(status)) {
+    filter.status = status;
+  }
+
+  // Show only user/admin invoices based on filter
   const invoices = await Invoice.find(
-    !isAdmin ? { responsable: { _id: userId } } : {}
+    !isAdmin
+      ? { ...filter, responsable: { _id: userId } }
+      : filter
   )
     .populate("responsable")
     .sort({ createdAt: -1 });
 
   res.render("invoices/index", { invoices });
 };
+
 
 module.exports.renderNewForm = async (req, res) => {
   res.render("invoices/new", {

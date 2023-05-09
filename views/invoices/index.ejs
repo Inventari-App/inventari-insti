@@ -1,7 +1,14 @@
 <% layout('layouts/boilerplate')%>
 <h1>Totes les Comandes</h1>
+
 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
   <a class="btn btn-primary mb-3" href="/invoices/new">Afegeix Comanda</a>
+</div>
+
+<div class="d-grid gap-2 d-md-flex justify-content-md-start">
+  <a class="btn btn-info mb-3" href="/invoices?status=pendent">Pendents</a>
+  <a class="btn btn-primary mb-3" href="/invoices?status=aprovada">Aprovades</a>
+  <a class="btn btn-success mb-3" href="/invoices?status=rebuda">Rebudes</a>
 </div>
 
 <table id="invoices-table" class="table table-striped align-middle">
