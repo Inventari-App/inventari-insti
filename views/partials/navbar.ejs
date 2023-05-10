@@ -18,22 +18,24 @@
           <a class="nav-link" aria-current="location" href="/invoices">Comandes</a>
         </li>
 
-        <li class="nav-item">
-          <a class="nav-link" aria-current="location" href="/items">Items</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" aria-current="location" href="/utilitats">Utilitats</a>
-        </li>
-
-
-        <li class="nav-item">
-          <a class="nav-link" href="/users">Usuaris</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="/proveidors">Proveidors</a>
-        </li>
+        <% if (currentUser.isAdmin) { %>
+          <li class="nav-item">
+            <a class="nav-link" aria-current="location" href="/items">Items</a>
+          </li>
+  
+          <li class="nav-item">
+            <a class="nav-link" aria-current="location" href="/utilitats">Utilitats</a>
+          </li>
+  
+  
+          <li class="nav-item">
+            <a class="nav-link" href="/users">Usuaris</a>
+          </li>
+  
+          <li class="nav-item">
+            <a class="nav-link" href="/proveidors">Proveidors</a>
+          </li>
+        <% } %>
       </ul>
     </div>
     <% if(currentUser) { %>

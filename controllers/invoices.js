@@ -99,6 +99,7 @@ module.exports.updateInvoice = async (req, res) => {
   try {
     const { id } = req.params;
     const { redirect } = req.query;
+    const { isAdmin } = req.user
 
     const invoice = await Invoice.findByIdAndUpdate(
       id,
@@ -108,7 +109,9 @@ module.exports.updateInvoice = async (req, res) => {
 
     req.flash("success", "Comanda actualitzada correctament!");
 
-    if (redirect) return res.redirect(`/invoices/${id}`);
+    if (redirect) return isAdmin
+      ? res.redirect(`/invoices`)
+      : res.redirect(`/invoices/${id}`)
 
     return res.status(201).json(invoice.toJSON())
   } catch (error) {
