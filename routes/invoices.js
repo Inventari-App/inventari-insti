@@ -2,7 +2,10 @@ const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
 const invoices = require('../controllers/invoices');
-const { isLoggedIn, isResponsableOrAdmin: isResponsable, validateInvoice } = require('../middlewareInvoices');
+const { isLoggedIn, isResponsableOrAdmin: isResponsable, validateSchema } = require('../middleware');
+const { invoiceSchema } = require('../schemas');
+
+const validateInvoice = validateSchema(invoiceSchema)
 
 router.route('/')
 .get(catchAsync(invoices.index))

@@ -1,7 +1,7 @@
-const { unitatSchema } = require('./schemas.js');
+const { articleSchema } = require('../schemas.js');
 
-const ExpressError = require('./utils/ExpressError');
-const Unitat = require('./models/unitat');
+const ExpressError = require('../utils/ExpressError');
+const Article = require('../models/article');
 
  
 module.exports.isLoggedIn = (req, res, next) => {
@@ -15,10 +15,11 @@ module.exports.isLoggedIn = (req, res, next) => {
 
 
 
-module.exports.validateUnitat = (req, res, next) => {
-    const { error } = unitatSchema.validate(req.body);
+module.exports.validateArticle = (req, res, next) => {
+    const { error } = articleSchema.validate(req.body);
     if (error) {
         const msg = error.details.map(el => el.message).join(',');
+        console.error(error)
         throw new ExpressError(msg, 400)
     } else {
         next();
@@ -29,10 +30,10 @@ module.exports.validateUnitat = (req, res, next) => {
 
 module.exports.isResponsable = async (req, res, next) => {
     const { id } = req.params;
-    const unitat = await Unitat.findById(id);
-    if (!unitat.responsable.equals(req.user._id)) {
+    const article = await Article.findById(id);
+    if (!article.responsable.equals(req.user._id)) {
         req.flash('error', 'No tens permisos per fer això!');
-        return res.redirect(`/unitats/${id}`);
+        return res.redirect(`/articles/${id}`);
     }
     next();
 }

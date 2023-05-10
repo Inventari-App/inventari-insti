@@ -1,8 +1,8 @@
+const { userSchema } = require('../schemas.js');
 
-const { invoiceSchema } = require('./schemas.js');
-const ExpressError = require('./utils/ExpressError');
+const ExpressError = require('../utils/ExpressError');
+const User = require('./models/user');
 
-const Invoice = require('./models/invoice');
  
 module.exports.isLoggedIn = (req, res, next) => {
     if (!req.isAuthenticated()) {
@@ -14,8 +14,9 @@ module.exports.isLoggedIn = (req, res, next) => {
 }
 
 
-module.exports.validateInvoice = (req, res, next) => {
-    const { error } = invoiceSchema.validate(req.body);
+
+module.exports.validateUser = (req, res, next) => {
+    const { error } = userSchema.validate(req.body);
     if (error) {
         const msg = error.details.map(el => el.message).join(',');
         throw new ExpressError(msg, 400)
@@ -25,7 +26,18 @@ module.exports.validateInvoice = (req, res, next) => {
 
 }
 
-module.exports.isResponsableOrAdmin = async (req, res, next) => {
+
+module.exports.isResponsable = async (req, res, next) => {
+    const { id } = req.params;
+    const user = await User.findById(id);
+    if (!user.responsable.equals(req.user._id)) {
+        req.flash('error', 'No tens permisos per fer això!');
+        return res.redirect(`/users/${id}`);
+    }
+    next();
+}
+
+module.exports.isAdmin = async (req, res, next) => {
     const { id,  } = req.params;
     const { id: userId, isAdmin } = req.user
     const invoice = await Invoice.findById(id);
@@ -35,5 +47,3 @@ module.exports.isResponsableOrAdmin = async (req, res, next) => {
     }
     next();
 }
-
-

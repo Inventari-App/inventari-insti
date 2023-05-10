@@ -1,7 +1,7 @@
-const { utilitatSchema } = require('./schemas.js');
+const { proveidorSchema } = require('../schemas.js');
 
-const ExpressError = require('./utils/ExpressError');
-const Utilitat = require('./models/utilitat');
+const ExpressError = require('../utils/ExpressError');
+const Proveidor = require('../models/proveidor');
 
  
 module.exports.isLoggedIn = (req, res, next) => {
@@ -15,8 +15,8 @@ module.exports.isLoggedIn = (req, res, next) => {
 
 
 
-module.exports.validateUtilitat = (req, res, next) => {
-    const { error } = utilitatSchema.validate(req.body);
+module.exports.validateProveidor = (req, res, next) => {
+    const { error } = proveidorSchema.validate(req.body);
     if (error) {
         const msg = error.details.map(el => el.message).join(',');
         throw new ExpressError(msg, 400)
@@ -29,10 +29,10 @@ module.exports.validateUtilitat = (req, res, next) => {
 
 module.exports.isResponsable = async (req, res, next) => {
     const { id } = req.params;
-    const utilitat = await Utilitat.findById(id);
-    if (!utilitat.responsable.equals(req.user._id)) {
+    const proveidor = await Proveidor.findById(id);
+    if (!proveidor.responsable.equals(req.user._id)) {
         req.flash('error', 'No tens permisos per fer això!');
-        return res.redirect(`/utilitats/${id}`);
+        return res.redirect(`/proveidors/${id}`);
     }
     next();
 }

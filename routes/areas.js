@@ -2,8 +2,10 @@ const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
 const areas = require('../controllers/areas');
-const { isLoggedIn, isResponsable, validateArea } = require('../middlewareAreas');
-const Area = require('../models/area');
+const { isLoggedIn, isResponsable, validateSchema } = require('../middleware');
+const { areaSchema } = require('../schemas');
+
+const validateArea = validateSchema(areaSchema)
 
 router.route('/')
 .get(catchAsync(areas.index))

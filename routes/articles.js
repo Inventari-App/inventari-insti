@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
 const articles = require('../controllers/articles');
-const { isLoggedIn, isResponsable, validateArticle } = require('../middlewareArticles');
+const { isLoggedIn, isResponsable, validateArticle } = require('../middleware');
 const Article = require('../models/article');
 
 router.route('/')

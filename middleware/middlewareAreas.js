@@ -1,7 +1,7 @@
-const { plantaSchema } = require('./schemas.js');
+const { areaSchema } = require('../schemas.js');
 
-const ExpressError = require('./utils/ExpressError');
-const Planta = require('./models/planta');
+const ExpressError = require('../utils/ExpressError.js');
+const Area = require('../models/area.js');
 
  
 module.exports.isLoggedIn = (req, res, next) => {
@@ -15,8 +15,8 @@ module.exports.isLoggedIn = (req, res, next) => {
 
 
 
-module.exports.validatePlanta = (req, res, next) => {
-    const { error } = plantaSchema.validate(req.body);
+module.exports.validateArea = (req, res, next) => {
+    const { error } = areaSchema.validate(req.body);
     if (error) {
         const msg = error.details.map(el => el.message).join(',');
         throw new ExpressError(msg, 400)
@@ -29,10 +29,10 @@ module.exports.validatePlanta = (req, res, next) => {
 
 module.exports.isResponsable = async (req, res, next) => {
     const { id } = req.params;
-    const planta = await Planta.findById(id);
-    if (!planta.responsable.equals(req.user._id)) {
+    const area = await Area.findById(id);
+    if (!area.responsable.equals(req.user._id)) {
         req.flash('error', 'No tens permisos per fer això!');
-        return res.redirect(`/plantas/${id}`);
+        return res.redirect(`/areas/${id}`);
     }
     next();
 }
