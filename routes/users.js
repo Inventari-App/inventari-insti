@@ -9,6 +9,7 @@ const {
   updateUser,
   deleteUser,
 } = require("../controllers/users");
+const { isAdmin, isSameUser, isSameUserOrAdmin } = require("../middleware");
 
 router.get("/register", (req, res) => {
   res.render("users/register");
@@ -35,6 +36,7 @@ router.post(
 
 router.get(
   "/users",
+  isAdmin,
   catchAsync(async (req, res) => {
     const users = await getAllUsers(req);
     res.render("users/index", { users });
@@ -43,6 +45,7 @@ router.get(
 
 router.get(
   "/users/:id",
+  isSameUserOrAdmin,
   catchAsync(async (req, res) => {
     const user = await getUser(req);
     res.render("users/show", { user });
@@ -51,21 +54,30 @@ router.get(
 
 router.get(
   "/users/:id/edit",
+  isSameUserOrAdmin,
   catchAsync(async (req, res) => {
     const user = await getUser(req);
     res.render("users/edit", { user });
   })
 );
 
-router.put("/users/:id", catchAsync(async (req, res) => {
-  const user = await updateUser(req)
-  res.redirect(`/users/${user._id}`);
-}));
+router.put(
+  "/users/:id",
+  isSameUserOrAdmin,
+  catchAsync(async (req, res) => {
+    const user = await updateUser(req);
+    res.redirect(`/users/${user._id}`);
+  })
+);
 
-router.delete("/users/:id", catchAsync(async (req, res) => {
-  await deleteUser()
-  res.redirect("/users");
-}));
+router.delete(
+  "/users/:id",
+  isAdmin,
+  catchAsync(async (req, res) => {
+    await deleteUser();
+    res.redirect("/users");
+  })
+);
 
 router.get("/users");
 

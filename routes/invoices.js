@@ -2,10 +2,12 @@ const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
 const invoices = require('../controllers/invoices');
-const { isLoggedIn, isResponsableOrAdmin: isResponsable, validateSchema } = require('../middleware');
+const { isLoggedIn, isResponsableOrAdmin, validateSchema } = require('../middleware');
 const { invoiceSchema } = require('../schemas');
+const Invoice = require('../models/invoice');
 
 const validateInvoice = validateSchema(invoiceSchema)
+const isInvoiceResponsableOrAdmin = isResponsableOrAdmin(Invoice)
 
 router.route('/')
 .get(catchAsync(invoices.index))
@@ -15,12 +17,12 @@ router.get('/new', isLoggedIn, invoices.renderNewForm);
 
 router.route('/:id')
 .get(catchAsync(invoices.showInvoice))
-.put(isLoggedIn, isResponsable, validateInvoice, catchAsync(invoices.updateInvoice))
-.delete(isLoggedIn, isResponsable, catchAsync(invoices.deleteInvoice));
+.put(isLoggedIn, isInvoiceResponsableOrAdmin, validateInvoice, catchAsync(invoices.updateInvoice))
+.delete(isLoggedIn, isInvoiceResponsableOrAdmin, catchAsync(invoices.deleteInvoice));
 
-router.get('/:id/edit', isLoggedIn, isResponsable, catchAsync(invoices.renderEditForm));
+router.get('/:id/edit', isLoggedIn, isInvoiceResponsableOrAdmin, catchAsync(invoices.renderEditForm));
 
 router.route('/:id/status')
-.put(isLoggedIn, isResponsable, validateInvoice, catchAsync(invoices.updateInvoiceStatus))
+.put(isLoggedIn, isInvoiceResponsableOrAdmin, validateInvoice, catchAsync(invoices.updateInvoiceStatus))
 
 module.exports = router;
