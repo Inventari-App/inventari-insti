@@ -17,7 +17,7 @@ jobs:
           username: ${{secrets.USERNAME}}
 
           script: |
-            if [[ -d "~/inventari-insti" ]]; then rm -rdf ~/inventari-insti fi
+            [ -d "$HOME/inventari-insti" ] && rm -rdf $HOME/inventari-insti
             git clone git@github.com:Inventari-App/inventari-insti.git
             cd inventari-insti
             docker build -t inventari-insti .
