@@ -19,6 +19,7 @@ jobs:
           script:
             git clone git@github.com:Inventari-App/inventari-insti.git
             cd inventari-app
+            docker build -t inventari-app .
             docker stop inventari-app
             docker rm inventari-app
             docker run -d --restart unless-stopped -p 8080:3000 inventari-app
