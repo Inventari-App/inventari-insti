@@ -2,7 +2,7 @@ FROM node:12
 
 WORKDIR /urs/src/app
 
-COPY package*.json ./
+COPY package.json ./
 
 RUN npm install
 # use for prod

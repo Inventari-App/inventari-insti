@@ -17,10 +17,15 @@ jobs:
           username: ${{secrets.USERNAME}}
 
           script: |
-            [ -d "$HOME/inventari-insti" ] && rm -rdf $HOME/inventari-insti
-            git clone git@github.com:Inventari-App/inventari-insti.git
-            cd inventari-insti
-            docker build -t inventari-insti .
+            if [ -d "$HOME/inventari-insti" ]; then
+              cd $HOME/inventari-insti
+              git checkout master
+              git pull
+            else
+              git clone git@github.com:Inventari-App/inventari-insti.git
+              cd $HOME/inventari-insti
+            fi
             docker stop inventari-insti
             docker rm inventari-insti
+            docker build -t inventari-insti .
             docker run -d --restart unless-stopped -p 8080:3000 inventari-insti
