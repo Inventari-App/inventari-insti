@@ -16,7 +16,7 @@ jobs:
           passphrase: ${{secrets.PASSPHRASE}}
           username: ${{secrets.USERNAME}}
 
-          script:
+          script: |
             git clone git@github.com:Inventari-App/inventari-insti.git
             cd inventari-app
             docker build -t inventari-app .
