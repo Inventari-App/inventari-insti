@@ -18,7 +18,7 @@
           <a class="nav-link" aria-current="location" href="/invoices">Comandes</a>
         </li>
 
-        <% if (currentUser.isAdmin) { %>
+        <% if (currentUser && currentUser.isAdmin) { %>
           <li class="nav-item">
             <a class="nav-link" aria-current="location" href="/items">Items</a>
           </li>
@@ -40,7 +40,7 @@
     </div>
     <% if(currentUser) { %>
       <div class="navbar-text mx-4">
-        Hola, <%= currentUser.email %>
+        Hola, <%= currentUser.username %>
       </div>
     <% } %>
     <div class="navbar-nav ml-auto">

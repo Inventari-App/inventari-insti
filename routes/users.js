@@ -73,10 +73,7 @@ router.put(
 router.delete(
   "/users/:id",
   isAdmin,
-  catchAsync(async (req, res) => {
-    await deleteUser();
-    res.redirect("/users");
-  })
+  catchAsync(deleteUser)
 );
 
 router.get("/users");

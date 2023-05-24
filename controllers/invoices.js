@@ -86,7 +86,9 @@ module.exports.updateInvoiceStatus = async (req, res) => {
       { new: true }
     ).populate("responsable");
 
-    await emailStatusChange(invoice, status);
+    status === 'rebuda'
+      ? await emailReceived(invoice)
+      : await emailStatusChange(invoice, status);
 
     res.redirect('/invoices');
   } catch (error) {
@@ -151,8 +153,8 @@ async function emailCreated (invoice, email) {
 }
 
 async function emailStatusChange (invoice, status) {
-  const adminEmails = getAdminEmails()
-  if (adminEmails) return console.error('No admin emails?')
+  const adminEmails = await getAdminEmails()
+  if (!adminEmails) return console.error('No admin emails?')
 
   const responsableEmail = invoice.responsable.email
   const { message, sendEmail } = useNodemailer({
@@ -168,5 +170,23 @@ async function emailStatusChange (invoice, status) {
       .replace(/{{user}}/, invoice.responsable.email)
       .replace(/{{status}}/, status)
       .replace(/{{url}}/, `http://localhost:3000/invoices/${invoice._id}`)
+  })
+}
+
+async function emailReceived (invoice) {
+  const adminEmails = await getAdminEmails()
+  if (!adminEmails) return console.error('No admin emails?')
+
+  const responsableEmail = invoice.responsable.email
+  const { message, sendEmail } = useNodemailer({
+    to: adminEmails,
+    model: "invoice",
+    reason: "received",
+  });
+  return sendEmail({
+    subject: message.subject,
+    text: message.text
+      .replace(/{{user}}/, responsableEmail)
+      .replace(/{{url}}/, ' http://localhost:3000/invoices')
   })
 }

@@ -21,8 +21,15 @@ async function updateUser(req, res, next) {
 }
 
 async function deleteUser(req, res, next) {
-  const { id } = req.params;
-  await User.findByIdAndDelete(id);
+  try {
+    const { id } = req.params;
+    await User.findByIdAndDelete(id);
+    req.flash('Usuari esborrat correctament')
+    res.sendStatus(200)
+  } catch (error) {
+    res.flash('L\'usuari no s\'ha pogut esborrar')
+    res.sendStatus(400)
+  }
 }
 
 module.exports = { getAllUsers, getUser, updateUser, deleteUser };

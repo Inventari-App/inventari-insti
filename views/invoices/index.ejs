@@ -32,7 +32,7 @@
     %>
       <tr>
         <th scope="row"><%= invoice.numInvoice %></th>
-        <td><%= invoice.responsable.username %></td>
+        <td><%= invoice.responsable && invoice.responsable.username %></td>
         <td><%= invoice.invoiceItems.reduce((acc, item) => acc += item.rebuts.filter(({ rebut }) => !rebut).length, 0) %></td>
         <td><%= invoice.invoiceItems.reduce((acc, item) => acc += item.rebuts.filter(({ rebut }) => rebut).length, 0) %></td>
         <td>
