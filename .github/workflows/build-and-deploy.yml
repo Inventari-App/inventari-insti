@@ -25,7 +25,8 @@ jobs:
               git clone git@github.com:Inventari-App/inventari-insti.git
               cd $HOME/inventari-insti
             fi
-            docker stop inventari-insti
-            docker rm inventari-insti
-            docker build -t inventari-insti .
-            docker run -d --restart unless-stopped -p 8080:3000 inventari-insti
+            pm2 kill
+            nvm use 12
+            npm install
+            pm2 start $HOME/inventari-insti/app.js
+            
