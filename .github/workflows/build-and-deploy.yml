@@ -13,6 +13,7 @@ jobs:
         with:
           host: ${{secrets.HOST}}
           key: ${{secrets.SSHKEY}}
+          passphrase: ${{secrets.PASSPHRASE}}
           username: ${{secrets.USERNAME}}
 
           script: |
