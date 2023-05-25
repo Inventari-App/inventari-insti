@@ -122,7 +122,7 @@
     if (!quantityEl || !priceEl) return 0;
     const total = parseFloat(quantityEl.value) * parseFloat(priceEl.value);
     const iva = (total * parseFloat(ivaEl.value)) / 100;
-    return total + iva;
+    return (total + iva).toFixed(2);
   }
 
   function getInvoiceData() {

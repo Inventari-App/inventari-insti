@@ -14,7 +14,7 @@ const messages = {
     },
     modified: {
       subject: 'Una comanda s\'ha modificat.',
-      text: ''
+      text: 'Una comanda de {{user}} ha estat modificada.\nLa pots veure a {{url}}.'
     }
   },
 }

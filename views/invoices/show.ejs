@@ -61,7 +61,6 @@
 
 <%
   const isAdmin = currentUser && currentUser.isAdmin
-  const isResponsable = currentUser && currentUser.id == invoice.responsable.id
   if(isAdmin || isResponsable) {
 %>
   <div class="card-body">

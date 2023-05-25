@@ -1,10 +1,7 @@
 const User = require("../models/user");
 const Invoice = require("../models/invoice");
 const Item = require("../models/item");
-const Unitat = require("../models/unitat");
-const Proveidor = require("../models/proveidor");
 const autocomplete = require("autocompleter");
-const checkComandaIsRebuda = require("../utils/checkComandaIsRebuda");
 const { useNodemailer } = require("../nodemailer/sendEmail");
 
 module.exports.index = async (req, res) => {
@@ -60,6 +57,7 @@ module.exports.showInvoice = async (req, res, next) => {
       invoice,
       invoiceJSON: JSON.stringify(invoice),
       items,
+      isResponsable: invoice.responsable._id.equals(req.user.id)
     }
   );
 };
@@ -109,6 +107,8 @@ module.exports.updateInvoice = async (req, res) => {
       { new: true }
     ).populate("responsable");
 
+    await emailModified({ invoice, user: req.user })
+
     req.flash("success", "Comanda actualitzada correctament!");
 
     if (redirect) return isAdmin
@@ -148,6 +148,34 @@ async function emailCreated (invoice, email) {
   return sendEmail({
     subject: message.subject.replace(/{{user}}/, email),
     text: message.text
+      .replace(/{{url}}/, `http://localhost:3000/invoices/${invoice._id}`)
+  })
+}
+
+async function emailModified ({ invoice, user }) {
+  const adminEmails = await getAdminEmails()
+  if (!adminEmails) return console.error('No admin emails?')
+
+  const responsableEmail = invoice.responsable.email
+
+  // 1. User === responsable => email admin
+  // 2. User !== responsable => email responsable
+  // 3. User === responsable && isAdmin => email admin??
+
+  const responsableIsEditing = user.email === responsableEmail
+  // const adminIsEditing = user.isAdmin
+
+  const { message, sendEmail } = useNodemailer({
+    to: responsableIsEditing
+      ? adminEmails
+      : responsableEmail,
+    model: "invoice",
+    reason: "modified",
+  });
+  return sendEmail({
+    subject: message.subject,
+    text: message.text
+      .replace(/{{user}}/, invoice.responsable.email)
       .replace(/{{url}}/, `http://localhost:3000/invoices/${invoice._id}`)
   })
 }
