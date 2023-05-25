@@ -9,8 +9,8 @@ const ArticleSchema = new Schema({
   proveidor: String,
   tipus: String,
   unitat: String,
-  imatge: Array,
   descripcio: String,
+  numSerie: { type: String, default: '' },
   //albara: Array,
   //proforma: Array,
   responsable: {

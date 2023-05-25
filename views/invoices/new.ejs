@@ -3,139 +3,10 @@
 <h3 id="titol">Nova Comanda</h3>
 <p></p>
 <p></p>
-<div class="container">
-  <form id="add-row-form" autocomplete="off" action="#">
-    <table id="add-row-table" class="table table-condensed table-striped">
-      <tr>
-        <th>Quantitat</th>
-        <th>Item</th>
-        <th>Preu unitari</th>
-        <th>Tipus IVA</th>
-        <th>Unitat de destí</th>
-        <th>Proveidor</th>
-        <th></th>
-      </tr>
+<%- include('../partials/invoiceForm.ejs', { invoiceItems: [] }) %>
 
-      <tr class="add-row-row">
-        <div class="form-group">
-          <td style="display: none">
-            <input type="hidden" id="tipus" name="tipus" />
-          </td>
-          <td style="display: none">
-            <input type="hidden" id="naturalesa" name="naturalesa" />
-          </td>
-          <td>
-            <input
-              type="number"
-              class="numeros form-control quantitat"
-              name="quantitat"
-              id="quantitat"
-              required
-            />
-          </td>
-          <td>
-            <input
-              class="camps form-control autocomplete"
-              type="text"
-              id="item"
-              name="item"
-              required
-              autocomplete="off"
-            />
-            <span class="error-message">L'item no existeix</span>
-            <a href= "../items/new" class="create-link" target="parent">Crear Item</a>
-          </td>
-          <td>
-            <input
-              type="number"
-              class="numeros form-control preu"
-              step="0.01"
-              name="preu"
-              id="preu"
-              required
-            />
-          </td>
-          <td>
-            <input
-              type="number"
-              class="numeros form-control iva"
-              step="0.01"
-              name="iva"
-              id="iva"
-              placeholder="%"
-              required
-            />
-          </td>
-          <td style="display: none">
-            <input name="subtotal" id="subtotal" required />
-          </td>
-          <td>
-            <input
-              type="text"
-              class="camps form-control autocomplete"
-              name="unitat"
-              id="unitat"
-              required
-              autocomplete="off"
-            />
-            <span class="error-message">La unitat no existeix</span>
-            <a href= "../unitats/new" class="create-link" target="parent">Crear Unitat</a>
-          </td>
-          <td>
-            <input
-              type="text"
-              class="camps form-control autocomplete"
-              name="proveidor"
-              id="proveidor"
-              autocomplete="off"
-              required
-            />
-            <span class="error-message">El proveidor no existeix</span>
-            <a href= "../proveidors/new" class="create-link" target="parent">Crear Proveidor</a>
-          </td>
-          <td>
-            <button id="add-row-btn" class="btn btn-primary form-control">
-              Afegir
-            </button>
-          </td>
-        </div>
-      </tr>
-
-      <div class="row numeros" style="padding-right: 10%" id="crear"></div>
-    </table>
-  </form>
-
-  <p></p>
-  <p></p>
-  <p class="h6">línies de comanda</p>
-
-  <!-- Invoice items -->
-  <table
-    class="table table-condensed table-striped"
-    id="invoice-items"
-    style="display: none"
-  >
-    <tr>
-      <th>Quantitat</th>
-      <th>Item</th>
-      <th>Preu unitari</th>
-      <th>Tipus IVA</th>
-      <th>Subtotal</th>
-      <th>Unitat de destí</th>
-      <th>Proveidor</th>
-    </tr>
-  </table>
-
-  <table>
-    <div class="h5 row numeros">
-      <span class="sumatori-total">Total Comanda: 0,00€ </span>
-    </div>
-  </table>
-
-  <div class="mb-3">
-    <button id="send-invoice" class="btn btn-success">Finalitza Comanda</button>
-  </div>
-</div>
+<script>
+</script>
 
 <script>
   const invoiceItemsTable = document.querySelector("#invoice-items");
@@ -180,19 +51,24 @@
       };
     });
     const newRowHTML = `
-      <tr class='invoice-item'>${inputValues.reduce(
-        (acc, curr) =>
-          (acc += `
-        <td
-          name='${curr.name}'
-          data-value='${curr.value}'
-          style='display: ${curr.hidden ? "none" : "table-cell"}'
-        >
-          ${curr.value}
+      <tr class='invoice-item'>
+        ${inputValues.reduce((acc, curr) =>
+            (acc += `
+              <td
+                name='${curr.name}'
+                data-value='${curr.value}'
+                style='display: ${curr.hidden ? "none" : "table-cell"}'
+                class="align-middle"
+              >
+                ${curr.value}
+              </td>
+            `),
+            ""
+        )}
+        <td>
+          <button type="button" class="btn btn-danger delete-row-item">X</button>
         </td>
-      `),
-        ""
-      )}</tr>
+      </tr>
     `;
     invoiceItemsTable.rows[0].insertAdjacentHTML("afterend", newRowHTML);
 
@@ -209,15 +85,22 @@
     })
   });
 
+  // const deleteButtonEls = invoiceItemsTable.querySelectorAll('.delete-row-item')
+  // Array.prototype.forEach.call(deleteButtonEls, deleteButtonEl => {})
   invoiceItemsTable.addEventListener("click", (e) => {
     const { target } = e;
+    const isDeleteRowEl = target.classList.contains('delete-row-item')
+    if (!isDeleteRowEl) return
     const invoiceItemRow = target.closest("tr.invoice-item");
     if (!invoiceItemRow) return;
     invoiceItemRow.remove();
     calculateTotals();
   });
 
-  sendInvoiceBtn.addEventListener("click", () => {
+  sendInvoiceBtn.addEventListener("click", (e) => {
+    const confirmation = confirm("Estas segur que vols crear la comanda?")
+    if (!confirmation) return
+
     const invoiceData = getInvoiceData();
     console.log(invoiceData);
     fetch("/invoices", {
@@ -385,15 +268,4 @@
       }
     }
   })
-
-  // unitatsInputEl.addEventListener('click', function link(e) {
-  //   e.target.removeEventListener(e.type, link);
-  //   const unitatsDom = document.createElement('div');
-
-  //   unitatsDom.innerHTML = '<p> <a href= "../unitats/new" class="link-danger" target="parent">Crear Unitat</a>';
-
-  //   const formulariet = document.querySelector('#crear')
-  //   formulariet.append(unitatsDom);
-
-  // })
 </script>

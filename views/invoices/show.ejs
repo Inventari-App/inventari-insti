@@ -3,9 +3,11 @@
   <b>Responsable: <%= invoice.responsable.username %> </b>
 </p>
 
-<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-  <a type="button" class="btn btn-primary mb-2" href="/invoices/<%= invoice._id %>/receive">Rebre comanda</a>
-</div>
+<% if (invoice.status === 'aprovada') { %>
+  <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+    <a type="button" class="btn btn-primary mb-2" href="/invoices/<%= invoice._id %>/receive">Rebre comanda</a>
+  </div>
+<% } %>
 
 <table class="table table-condensed table-striped">
   <form id="proformForm" class="form-inline">
@@ -57,29 +59,47 @@
   </form>
 </table>
 
-<% if(currentUser && isOwner) { %>
-<div class="card-body">
-  <a
-    href="/invoices/<%=invoice.id%>/edit"
-    class="card-link btn btn-info"
-    class="card-link"
-    >Editar Comanda</a
-  >
-  <form
-    id="delete-invoice"
-    class="d-inline"
-    action="/invoices/<%=invoice._id%>?_method=DELETE"
-    method="POST"
-  >
-    <button class="btn btn-danger" type="submit">Esborrar Comanda</button>
-  </form>
+<%
+  const isAdmin = currentUser && currentUser.isAdmin
+  const isResponsable = currentUser && currentUser.id == invoice.responsable.id
+  if(isAdmin || isResponsable) {
+%>
+  <div class="card-body">
 
-  <p class="h5 row numeros">
-    <span class="sumatori-total"
-      >Total Comanda: <%= invoice.total.toFixed(2) %>€ (IVA inclòs)
-    </span>
-  </p>
-</div>
+    <!-- Approva comanda -->
+    <% if (isAdmin && invoice.status !== 'aprovada') { %>
+    <form
+      id="aprove-invoice"
+      class="d-inline"
+      action="/invoices/<%=invoice._id%>/status?_method=PUT&redirect=true"
+      method="POST"
+    >
+      <input type="text" hidden="hidden" name="status" value="aprovada">
+      <button class="btn btn-success" type="submit">Aprovar Comanda</button>
+    </form>
+    <% } %>
+
+    <a
+      href="/invoices/<%=invoice._id%>/edit"
+      class="card-link btn btn-info"
+      class="card-link"
+      >Editar Comanda</a
+    >
+    <form
+      id="delete-invoice"
+      class="d-inline"
+      action="/invoices/<%=invoice._id%>?_method=DELETE"
+      method="POST"
+    >
+      <button class="btn btn-danger" type="submit">Esborrar Comanda</button>
+    </form>
+
+    <p class="h5 row numeros">
+      <span class="sumatori-total"
+        >Total Comanda: <%= invoice.total.toFixed(2) %>€ (IVA inclòs)
+      </span>
+    </p>
+  </div>
 <% } %>
 <div class="card-footer text-muted">
   <a href="/invoices">Tots els invoices</a>
@@ -87,7 +107,7 @@
 
 <script>
   const deleteInvoieForm = document.querySelector('#delete-invoice')
-  deleteInvoieForm.addEventListener('submit', e => {
+  deleteInvoieForm && deleteInvoieForm.addEventListener('submit', e => {
     const confirmation = confirm("N'estas segur?")
     if (!confirmation) e.preventDefault()
   })

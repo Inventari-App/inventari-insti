@@ -1,297 +1,271 @@
 <% layout('layouts/boilerplate')%>
 
-<h3>Editar Comanda núm. <%= invoice.numInvoice %></h3>
-<p>
-  <b>Responsable: <%= invoice.responsable.username %> </b>
-</p>
-<div class="table-responsive">
-  <table id="taulaOriginal" class="table table-condensed table-hover">
-    <tr>
-      <th><small>Quantitat</small></th>
-      <th><small>Article</small></th>
-      <th><small>€/Unitat</small></th>
-      <th><small>% IVA</small></th>
-      <th><small>Subtotal €</small></th>
-      <th><small>Unitat de destí</small></th>
-      <th><small>Proveidor</small></th>
-    </tr>
-    <% let i=0; for (let invoiceItem of invoice.invoiceItems) { i++ %>
-    <tr class="trs">
-      <div class="form-group container">
-        <!-- COMENÇAMENT CAMPS -->
-        <th
-          style="display: none"
-          data-value="<%= invoiceItem.tipus %>"
-          name="tipus"
-        >
-          <input
-            class="variable petit form-control unitari numeros tipus"
-            id="tipusInputTr<%=i%>"
-            value="<%= invoiceItem.tipus %>"
-          />
-        </th>
-        <th
-          style="display: none"
-          data-value="<%= invoiceItem.naturalesa%>"
-          name="naturalesa"
-        >
-          <input
-            class="variable petit form-control unitari numeros naturalesa"
-            id="naturalesaInputTr<%=i%>"
-            value="<%= invoiceItem.naturalesa %>"
-          />
-        </th>
-        <th data-value="<%= invoiceItem.quantitat %>" name="quantitat">
-          <input
-            class="variable petit form-control unitari numeros quantitat"
-            id="quantitatInputTr<%=i%>"
-            value="<%= invoiceItem.quantitat %>"
-          />
-        </th>
-        <th data-value="<%= invoiceItem.article %>" name="article">
-          <input
-            class="form-control mitja esquerra article"
-            id="articleInputTr<%=i%>"
-            value="<%= invoiceItem.article %>"
-          />
-        </th>
-        <th data-value="<%= invoiceItem.preu %>" name="preu">
-          <input
-            class="variable form-control petit numeros preu"
-            id="preuInputTr<%=i%>"
-            value="<%= invoiceItem.preu %>"
-            data-value="<%= invoiceItem.preu %>"
-            name="preu"
-          />
-        </th>
-        <th data-value="<%= invoiceItem.iva %>" name="iva">
-          <input
-            class="variable form-control numeros unitari iva"
-            id="ivaInputTr<%=i%>"
-            value="<%= invoiceItem.iva %>"
-          />
-        </th>
-        <th data-value="<%= invoiceItem.subtotal %>" name="subtotal">
-          <input
-            class="form-control petit_mitja numeros subtotal resultat"
-            id="subtotalInputTr<%=i%>"
-            value="<%= invoiceItem.subtotal %>"
-          />
-        </th>
-        <th data-value="<%= invoiceItem.unitat %>" name="unitat">
-          <input
-            class="form-control mitja esquerra unitat"
-            id="unitatInputTr<%=i%>"
-            value="<%= invoiceItem.unitat %>"
-          />
-        </th>
-        <th data-value="<%= invoiceItem.proveidor %>" name="proveidor">
-          <input
-            class="form-control mitja esquerra"
-            id="proveidorInputTr<%=i%>"
-            value="<%= invoiceItem.proveidor %>"
-          />
-        </th>
-        <td><button class="botoEsborrar">X</button></td>
-        <!-- FINAL CAMPS -->
-      </div>
-    </tr>
-    <% } %>
-  </table>
-</div>
+<h3 id="titol">Edit Comanda</h3>
+<p></p>
+<p></p>
+<%- include('../partials/invoiceForm.ejs', { invoiceItems: invoice.invoiceItems }) %>
 
-<table>
-  <td>
-    <button id="modificar-btn" class="btn btn-primary form-control">
-      Modificar Comanda
-    </button>
-  </td>
+<script>
+</script>
 
-  <div class="h5 row numeros">
-    <span class="sumatori-total"
-      >Total Comanda: <%= invoice.total.toFixed(2) %>€ (IVA INCLÒS)
-    </span>
-  </div>
-</table>
+<script>
+  const invoiceItemsTable = document.querySelector("#invoice-items");
+  const addRowTable = document.querySelector("#add-row-table");
+  const addRowBtn = document.querySelector("#add-row-btn");
+  const addRowForm = document.querySelector("#add-row-form");
+  const totalEl = document.querySelector(".sumatori-total");
+  const sendInvoiceBtn = document.querySelector("#send-invoice");
 
-<p class="h5 row numeros">
-  <span class="sumatori-total"></span>
-</p>
-<p class="row numeros">
-  <a id="afegir" href="#" class="link-primary">Afegir Article</a>
-  <a id="afegir" href="/invoices/<%= invoice._id %>" class="link-primary">Torna a la comanda</a>
-</p>
+  const itemInputEl = addRowTable.querySelector('#item')
+  const unitatInputEl = addRowTable.querySelector('#unitat')
+  const proveidorInputEl = addRowTable.querySelector('#proveidor')
 
-<script type="module">
-  import Autocompleter from '../../utils/Autocompleter.js';
-  const _autocomplete = <%- autocomplete %>
-
-  const afegirLiniaEl = document.querySelector("#afegir");
-  const taulaOriginalEl = document.querySelector("#taulaOriginal");
-  const taulaOriginalRowEls = document.querySelectorAll('tr.trs')
-  const modificarBtnEl = document.querySelector('#modificar-btn')
-
-  // Attach autocompleters to created rows
-  Array.prototype.forEach.call(taulaOriginalRowEls, rowEl => attachRowAutocompleters(rowEl))
-
-  taulaOriginalEl.addEventListener('input', (e) => {
-    // Calculate row subtotal
-    const { target } = e
-    const rowEl = target.closest('tr')
-    const rowTotal = getRowTotal(rowEl)
-    const subtotalEl = rowEl.querySelector('.subtotal')
-    subtotalEl.value = rowTotal.toFixed(2) || 0
-
-    // Calculate table total
-    calculateTotals()
+  const autocompleteInputs = addRowTable.querySelectorAll(".add-row-row input.autocomplete")
+  Array.prototype.forEach.call(autocompleteInputs, inputEl => {
+    inputEl.addEventListener('change', () => hideError(inputEl))
   })
 
-  // Afegeixo el listener a la taula i comprovo cada click
-  taulaOriginalEl.addEventListener('click', (event) => {
-    //event.stopPropagation()
-    const clickedEl = event.target;
-    // Comprovo que el click vingui de una row o els elements
-    // que hi han a dins, a la vegada agafo la rowEl
-    const botoEl = clickedEl.closest('.botoEsborrar');
-    const trEl = clickedEl.closest('.trs')
-    // Si no hi ha rowEl vol dir que s'ha clickat en algun lloc
-    // de la taula que no es una row? no se si es possible
-    if (botoEl) {
-      trEl.remove();
-      calculateTotals();
-    }
-  })
+  addRowTable.addEventListener("input", (e) => {
+    const { target } = e;
+    const rowEl = target.closest("tr");
+    const rowTotal = getRowTotal(rowEl);
+    const subtotalInput = addRowTable.querySelector('[name="subtotal"]');
+    subtotalInput.value = rowTotal;
+  });
 
-  afegirLiniaEl.addEventListener("click", () => {
-    crearLinia()
-  })
+  // Add row to invoice
+  addRowForm.addEventListener("submit", async (e) => {
+    e.preventDefault()
+    // check autocompletes input
+    // add row to table
+    // get add row inputs
+    const autocompleteInputsAreValid = await checkAutompleteInputs(addRowTable)
+    if (!autocompleteInputsAreValid) return
 
-  modificarBtnEl.addEventListener("click", () => {
-    const invoiceData = getInvoiceData()
-    console.log(invoiceData)
-    fetch(`/invoices/<%= invoice._id %>`, {
-      method: 'PUT',
-      mode: 'cors',
-      headers: {
-        "Content-Type": 'application/json'
-      },
-      body: JSON.stringify({ invoiceItems: [...invoiceData] })
+    const addRowInputs = addRowTable.querySelectorAll(".add-row-row input");
+    const inputValues = Array.prototype.map.call(addRowInputs, (inputEl) => {
+      return {
+        name: inputEl.name,
+        value: inputEl.value,
+        hidden: inputEl.type === "hidden",
+      };
+    });
+    const newRowHTML = `
+      <tr class='invoice-item'>
+        ${inputValues.reduce((acc, curr) =>
+            (acc += `
+              <td
+                name='${curr.name}'
+                data-value='${curr.value}'
+                style='display: ${curr.hidden ? "none" : "table-cell"}'
+                class="align-middle"
+              >
+                ${curr.value}
+              </td>
+            `),
+            ""
+        )}
+        <td>
+          <button type="button" class="btn btn-danger delete-row-item">X</button>
+        </td>
+      </tr>
+    `;
+    invoiceItemsTable.rows[0].insertAdjacentHTML("afterend", newRowHTML);
+
+    // display invoice items table
+    invoiceItemsTable.style.display = "table";
+
+    calculateTotals();
+
+    // Keep only iva, unitat and proveidor filled
+    Array.prototype.map.call(addRowInputs, (inputEl) => {
+      const keep = /iva|unitat|proveidor/.test(inputEl.id)
+      if (keep) return
+      inputEl.value = ''
     })
-      .then(res => res.json())
-      .then(({ _id }) => window.location.href = `/invoices/${_id}`)
-      .catch(e => console.error(e))
-  })
+  });
 
-  function calculateTotals() {
-    const tableTotals = getTableTotals(taulaOriginalEl);
-    const totalsEl = document.querySelector('.sumatori-total')
-    totalsEl.innerText = tableTotals
-      ? `Total comanda: ${tableTotals.toFixed(2)}€ (IVA inclòs)`
-      : ''
-  }
+  // const deleteButtonEls = invoiceItemsTable.querySelectorAll('.delete-row-item')
+  // Array.prototype.forEach.call(deleteButtonEls, deleteButtonEl => {})
+  invoiceItemsTable.addEventListener("click", (e) => {
+    const { target } = e;
+    const isDeleteRowEl = target.classList.contains('delete-row-item')
+    if (!isDeleteRowEl) return
+    const invoiceItemRow = target.closest("tr.invoice-item");
+    if (!invoiceItemRow) return;
+    invoiceItemRow.remove();
+    calculateTotals();
+  });
 
-  function getTableTotals(taulaEl) {
-    const inputsSubtotals = document.querySelectorAll('.subtotal');
-    if (!inputsSubtotals || inputsSubtotals.length === 0) return
+  sendInvoiceBtn.addEventListener("click", (e) => {
+    const confirmation = confirm("Estas segur que vols crear la comanda?")
+    if (!confirmation) return
 
-    return Array.prototype.reduce.call(taulaEl.rows, (acc, rowEl) => {
-      const rowTotal = getRowTotal(rowEl)
-      return acc += rowTotal
-    }, 0)
-  }
+    const invoiceData = getInvoiceData();
+    console.log(invoiceData);
+    fetch("/invoices", {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ invoiceItems: [...invoiceData] }),
+    })
+      .then((res) => res.json())
+      .then(({ _id }) => (window.location.href = _id))
+      .catch((e) => console.error(e));
+  });
 
   function getRowTotal(rowEl) {
-    const quantityEl = rowEl.querySelector('.quantitat')
-    const priceEl = rowEl.querySelector('.preu')
-    const ivaEl = rowEl.querySelector('.iva')
-    const quantity = quantityEl && quantityEl.value || 0
-    const price = priceEl && priceEl.value || 0
-    const iva = ivaEl && ivaEl.value || 0
-    if (!quantity || !price) return 0
-    const total = parseFloat(quantity) * parseFloat(price)
-    const ivaTotal = ((total) * parseFloat(iva) / 100)
-    return total + ivaTotal
-  }
-
-  function crearLinia() {
-    const rowEls = taulaOriginalEl.rows
-    const lastRowEl = rowEls[rowEls.length - 1]
-    const newRowEl = lastRowEl.cloneNode(true)
-    Array.prototype.forEach.call(newRowEl.querySelectorAll('input'), inputEl => {
-      inputEl.setAttribute('value', '')
-      inputEl.value = ''
-      inputEl.innerText = ''
-    })
-    lastRowEl.parentElement.append(newRowEl)
-    attachRowAutocompleters(newRowEl)
+    const quantityEl = rowEl.querySelector(".quantitat");
+    const priceEl = rowEl.querySelector(".preu");
+    const ivaEl = rowEl.querySelector(".iva");
+    if (!quantityEl || !priceEl) return 0;
+    const total = parseFloat(quantityEl.value) * parseFloat(priceEl.value);
+    const iva = (total * parseFloat(ivaEl.value)) / 100;
+    return total + iva;
   }
 
   function getInvoiceData() {
-    const rowEls = taulaOriginalEl.querySelectorAll('tr.trs')
-    return Array.prototype.map.call(rowEls, rowEl => {
-      const rowInvoiceValues = Array.prototype.reduce.call(rowEl.cells, (acc, cellEl) => {
-        const inputEl = cellEl.querySelector('input')
-        const name = cellEl.getAttribute('name')
-        if (!name) return acc
-        return {
-          ...acc,
-          [name]: inputEl.value
-        }
-      }, {})
-      return rowInvoiceValues
-    })
+    const rowEls = invoiceItemsTable.querySelectorAll("tr.invoice-item");
+    return Array.prototype.map.call(rowEls, (rowEl) => {
+      const rowInvoiceValues = Array.prototype.reduce.call(
+        rowEl.cells,
+        (acc, cellEl) => {
+          return {
+            ...acc,
+            [cellEl.getAttribute("name")]: cellEl.dataset.value,
+          };
+        },
+        {}
+      );
+      return rowInvoiceValues;
+    });
   }
 
-  function attachRowAutocompleters(rowEl) {
-    const articleInputEl = rowEl.querySelector('.article')
-    const unitatInputEl = rowEl.querySelector('.unitat')
-
-    Autocompleter({
-      autocomplete: _autocomplete,
-      inputEl: articleInputEl,
-      optionsRoute: '/items/all',
-      onSelect: function(suggestion) {
-        const {
-          nom,
-          naturalesa,
-          tipus
-        } = suggestion
-        this.input.value = nom;
-        const tipusInputEl = rowEl.querySelector('input.tipus')
-        const naturalesaInputEl = rowEl.querySelector('input.naturalesa')
-        tipusInputEl.value = tipus
-        naturalesaInputEl.value = naturalesa
-      },
-      render: function(suggestion, currentInput) {
-        if (suggestion) {
-          const nom = suggestion.nom
-          const div = document.createElement('div')
-          div.setAttribute("id", "autocomplete-article");
-          div.textContent = nom
-          return div
-        }
-      }
-    })
-
-    Autocompleter({
-      autocomplete: _autocomplete,
-      inputEl: unitatInputEl,
-      optionsRoute: '/unitats/all',
-      onSelect: function(suggestion) {
-        const {
-          nom
-        } = suggestion
-        this.input.value = nom;
-      },
-      render: function(suggestion, currentInput) {
-        if (suggestion) {
-          const nom = suggestion.nom
-          const div = document.createElement('div')
-          div.setAttribute("id", "autocomplete-article");
-          div.textContent = nom
-          return div
-        }
-      }
-    })
+  function calculateTotals() {
+    const subtotalEls = invoiceItemsTable.querySelectorAll('[name="subtotal"]');
+    const total = Array.prototype.reduce.call(
+      subtotalEls,
+      (acc, curr) => (acc += parseFloat(curr.dataset.value)),
+      0
+    );
+    totalEl.innerHTML = `Total Comanda: ${total.toFixed(2)}€`;
   }
+
+  function showError (inputEl) {
+    inputEl.classList.add('error')
+    const messageErrorEl = inputEl.parentElement.querySelector('.error-message')
+    messageErrorEl.style.display = 'block'
+  }
+
+  function hideError (inputEl) {
+    inputEl.classList.remove('error')
+    const messageErrorEl = inputEl.parentElement.querySelector('.error-message')
+    messageErrorEl.style.display = 'none'
+  }
+
+  function checkAutompleteInput (inputEl, validInputs) {
+    const isValid = validInputs.indexOf(inputEl.value) !== -1
+    if (!isValid) showError(inputEl)
+    return isValid
+  }
+
+  async function checkAutompleteInputs (addRowTable) {
+    const [itemInputs, unitatInputs, proveidorInputs] = await Promise.all([
+      fetchInputs('../../items/all'),
+      fetchInputs('../../unitats/all'),
+      fetchInputs('../../proveidors/all')
+    ])
+    const itemInputIsValid = checkAutompleteInput(itemInputEl, itemInputs)
+    const unitatInputIsValid = checkAutompleteInput(unitatInputEl, unitatInputs)
+    const proveidorInputIsValid = checkAutompleteInput(proveidorInputEl, proveidorInputs)
+    return itemInputIsValid && unitatInputIsValid && proveidorInputIsValid
+  }
+
+  function fetchInputs (route) {
+    return fetch(route)
+      .then(res => res.json())
+      .then(data => {
+        return data.map(d => d.nom)
+      })
+  }
+</script>
+
+<script type="module">
+  const tipusInputEl = document.querySelector('#tipus')
+  const naturalesaInputEl = document.querySelector('#naturalesa')
+  const itemsInputEl = document.querySelector('#item');
+  const unitatsInputEl = document.querySelector('#unitat');
+  const proveidorsInputEl = document.querySelector('#proveidor');
+  const _autocomplete = <%- autocomplete %>
+  import Autocompleter from '../../utils/Autocompleter.js';
+
+  Autocompleter({
+    autocomplete: _autocomplete,
+    inputEl: itemsInputEl,
+    optionsRoute: '/items/all',
+    onSelect: function(suggestion) {
+      const {
+        nom,
+        naturalesa,
+        tipus
+      } = suggestion
+      this.input.value = nom;
+      naturalesaInputEl.value = naturalesa
+      tipusInputEl.value = tipus
+    },
+    render: function(suggestion, currentInput) {
+      if (suggestion) {
+        const nom = suggestion.nom
+        const div = document.createElement('div')
+        div.setAttribute("id", "autocomplete-item");
+        div.textContent = nom
+        return div
+      }
+    }
+  })
+  Autocompleter({
+    autocomplete: _autocomplete,
+    inputEl: unitatsInputEl,
+    optionsRoute: '/unitats/all',
+    onSelect: function(suggestion) {
+      const {
+        nom,
+        zona,
+        planta,
+        area
+      } = suggestion
+      this.input.value = nom;
+    },
+    render: function(suggestion, currentInput) {
+      if (suggestion) {
+        const nom = suggestion.nom
+        const div = document.createElement('div')
+        div.setAttribute("id", "autocomplete-unitat");
+        div.textContent = nom
+        return div
+      }
+    }
+  })
+  Autocompleter({
+    autocomplete: _autocomplete,
+    inputEl: proveidorsInputEl,
+    optionsRoute: '/proveidors/all',
+    onSelect: function(suggestion) {
+      const {
+        nom,
+      } = suggestion
+      this.input.value = nom;
+    },
+    render: function(suggestion, currentInput) {
+      if (suggestion) {
+        const nom = suggestion.nom
+        const div = document.createElement('div')
+        div.setAttribute("id", "autocomplete-proveidor");
+        div.textContent = nom
+        return div
+      }
+    }
+  })
 </script>

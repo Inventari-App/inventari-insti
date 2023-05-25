@@ -1,15 +1,23 @@
 <% layout('layouts/boilerplate')%>
 <h1>Totes les Comandes</h1>
+
 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
   <a class="btn btn-primary mb-3" href="/invoices/new">Afegeix Comanda</a>
+</div>
+
+<div class="d-grid gap-2 d-md-flex justify-content-md-start">
+  <a class="btn btn-info mb-3" href="/invoices?status=pendent">Pendents</a>
+  <a class="btn btn-primary mb-3" href="/invoices?status=aprovada">Aprovades</a>
+  <a class="btn btn-success mb-3" href="/invoices?status=rebuda">Rebudes</a>
 </div>
 
 <table id="invoices-table" class="table table-striped align-middle">
   <thead>
     <tr>
-      <th scope="col">Num. Comanda</th>
+      <th scope="col">Num.</th>
       <th scope="col">Responsable</th>
-      <th scope="col">Num. Items</th>
+      <th scope="col">Items a Rebre</th>
+      <th scope="col">Items Rebuts</th>
       <th scope="col">Items</th>
       <th scope="col">Preu total</th>
       <th scope="col">Ultima actualització</th>
@@ -17,11 +25,16 @@
     </tr>
   </thead>
   <tbody>
-    <% for (let invoice of invoices) { %>
+    <%
+      for (let invoice of invoices) {
+        const isRebuda = invoice.status === 'rebuda'
+        const isAprovada = invoice.status === 'aprovada'
+    %>
       <tr>
         <th scope="row"><%= invoice.numInvoice %></th>
-        <td><%= invoice.responsable.username %></td>
-        <td><%= invoice.invoiceItems.reduce((acc, item) => acc += item.quantitat, 0) %></td>
+        <td><%= invoice.responsable && invoice.responsable.username %></td>
+        <td><%= invoice.invoiceItems.reduce((acc, item) => acc += item.rebuts.filter(({ rebut }) => !rebut).length, 0) %></td>
+        <td><%= invoice.invoiceItems.reduce((acc, item) => acc += item.rebuts.filter(({ rebut }) => rebut).length, 0) %></td>
         <td>
           <span class="truncate">
             <%= 
@@ -38,7 +51,13 @@
             <%= new Date(invoice.createdAt).toLocaleString('es-es', { dateStyle: 'short', timeStyle: 'short' }) %></td>
           </span>
         <td>
-          <a href="/invoices/<%= invoice._id %>" class="btn btn-primary">Veure</a>
+          <% if (isRebuda) { %>
+            <span style="min-width: 100%; cursor: unset;" class="btn btn-success">Rebuda</span>
+          <% } else if (isAprovada) { %>
+            <a href="/invoices/<%= invoice._id %>" style="min-width: 100%" class="btn btn-primary">Aprovada</a>
+          <% } else { %>
+            <a href="/invoices/<%= invoice._id %>" style="min-width: 100%" class="btn btn-info">Pendent</a>
+          <% } %>
         </td>
       </tr>
     <% } %>

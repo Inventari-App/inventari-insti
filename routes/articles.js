@@ -2,8 +2,10 @@ const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
 const articles = require('../controllers/articles');
-const { isLoggedIn, isResponsable, validateArticle } = require('../middlewareArticles');
-const Article = require('../models/article');
+const { isLoggedIn, isResponsable, validateSchema } = require('../middleware');
+const { articleSchema } = require('../schemas');
+
+const validateArticle = validateSchema(articleSchema)
 
 router.route('/')
 .get(catchAsync(articles.index))

@@ -2,8 +2,10 @@ const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
 const zonas = require('../controllers/zonas');
-const { isLoggedIn, isResponsable, validateZona } = require('../middlewareZonas');
-const Zona = require('../models/zona');
+const { isLoggedIn, isResponsable, validateSchema } = require('../middleware');
+const { zonaSchema } = require('../schemas');
+
+const validateZona = validateSchema(zonaSchema)
 
 router.route('/')
 .get(catchAsync(zonas.index))

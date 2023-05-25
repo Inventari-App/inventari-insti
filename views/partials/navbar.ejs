@@ -18,24 +18,31 @@
           <a class="nav-link" aria-current="location" href="/invoices">Comandes</a>
         </li>
 
-        <li class="nav-item">
-          <a class="nav-link" aria-current="location" href="/items">Items</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" aria-current="location" href="/utilitats">Utilitats</a>
-        </li>
-
-
-        <li class="nav-item">
-          <a class="nav-link" href="/users">Usuaris</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="/proveidors">Proveidors</a>
-        </li>
+        <% if (currentUser && currentUser.isAdmin) { %>
+          <li class="nav-item">
+            <a class="nav-link" aria-current="location" href="/items">Items</a>
+          </li>
+  
+          <li class="nav-item">
+            <a class="nav-link" aria-current="location" href="/utilitats">Utilitats</a>
+          </li>
+  
+  
+          <li class="nav-item">
+            <a class="nav-link" href="/users">Usuaris</a>
+          </li>
+  
+          <li class="nav-item">
+            <a class="nav-link" href="/proveidors">Proveidors</a>
+          </li>
+        <% } %>
       </ul>
     </div>
+    <% if(currentUser) { %>
+      <div class="navbar-text mx-4">
+        Hola, <%= currentUser.username %>
+      </div>
+    <% } %>
     <div class="navbar-nav ml-auto">
       <% if(!currentUser) { %>
         <a class="nav-link" href="/login">Connexió</a>

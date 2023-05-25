@@ -1,10 +1,11 @@
 <% layout('layouts/boilerplate')%>
+<h3 id="titol">Rebre comanda</h3>
 <p>
   <b>Responsable: <%= invoice.responsable.username %> </b>
 </p>
 
 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-  <button id="rebre-comanda-btn" type="button" class="btn btn-primary mb-2">Rebre comanda</button>
+  <button id="rebre-comanda-btn" type="button" class="btn btn-primary mb-2">Rebre articles</button>
 </div>
 
 <table class="table table-condensed">
@@ -73,17 +74,17 @@
                 <td width="20%"></td>
             </tr>
         </tbody>
-        <% if (item.quantitat > 1) { %>
-            <tbody id="children-rows-<%= i %>" class="collapse">
+        <% if (item.quantitat >= 1) { %>
+            <tbody id="children-rows-<%= i %>" class="collapse" data-invoice-item-id="<%= item._id %>">
                 <%
-                    const quantitatArr = Array.from(Array(item.quantitat).keys())
-                    for (let i = 0; i < quantitatArr.length; i++) {
+                    for (let i = 0; i < item.rebuts.length; i++) {
+                    const isRebut = item.rebuts[i].rebut
                 %>
-                    <tr>
+                    <tr class="row-item <%= isRebut && "disabled" %>">
                         <td width="3%"></td>
                         <td width="3%">
                             <div class="camps">
-                                <input type="checkbox">
+                                <input type="checkbox" name="rebut" <%= isRebut && "checked disabled" %>>
                             </div>
                         </td>
                         <td width="10%">
@@ -96,7 +97,7 @@
                             <div class="camps value" name="article" data-value="<%= item.article %>"><%= item.article %></div>
                         </td>
                         <td width="10%">
-                            <div class="numeros value">1 unitat/s</div>
+                            <div class="numeros">1 unitat/s</div>
                         </td>
                         <td width="10%">
                             <div class="numeros value" name="preu" data-value="<%= item.preu %>"><%= item.preu %>€/u</div>
@@ -105,7 +106,7 @@
                             <div class="numeros value" name="iva" data-value="<%= item.iva %>"><%= item.iva %>%</div>
                         </td>
                         <td width="10%">
-                            <div class="numeros value">
+                            <div class="numeros">
                             <%= item.subtotal %>€
                             </div>
                         </td>
@@ -116,7 +117,7 @@
                             <div class="camps value" name="proveidor" data-value="<%= item.proveidor %>"><%= item.proveidor %></div>
                         </td>
                         <td width="20%">
-                            <input type="text">
+                            <input class="value" type="text" name="numSerie" value="<%= item.rebuts[i].numSerie %>" <%= isRebut && "disabled" %>>
                         </td>
                     </tr>
                 <% } %>
@@ -129,7 +130,7 @@
   </form>
 </table>
 
-<% if(currentUser && isOwner) { %>
+<% if(currentUser && currentUser.id ===invoice.responsable.id) { %>
 <div class="card-body">
   <p class="h5 row numeros">
     <span class="sumatori-total"
@@ -139,15 +140,17 @@
 </div>
 <% } %>
 <div class="card-footer text-muted">
-  <a href="/invoices/<%= invoice._id %>">Torna a l'invoice</a>
+  <a href="/invoices">Torna als invoices</a>
 </div>
 
 <script>
+  const invoice = <%- invoiceJSON %>;
+
   // Control all checkboxes selector in parent row
   const checkboxEls = document.querySelectorAll('.checkbox-children-rows')
   Array.prototype.forEach.call(checkboxEls, checkboxEl => {
     const targetId = checkboxEl.dataset.target
-    const childrenRowEls = document.querySelectorAll(`${targetId} input[type="checkbox"]`)
+    const childrenRowEls = document.querySelectorAll(`${targetId} input[type="checkbox"]:not(:disabled)`)
     checkboxEl.addEventListener('change', () => {
       const isChecked = checkboxEl.checked
       Array.prototype.forEach.call(childrenRowEls, childrenRowEl => childrenRowEl.checked = isChecked)
@@ -157,22 +160,25 @@
   const rebreComandaBtn = document.querySelector('#rebre-comanda-btn')
   rebreComandaBtn.addEventListener('click', () => {
     const itemRowEls = document.querySelectorAll('tbody[id^="children-rows-"] tr')
-    const checkedItemRowEls = Array.prototype.filter.call(itemRowEls, itemRowEl => itemRowEl.querySelector('input[type="checkbox"]:checked'))
+    const checkedItemRowEls = Array.prototype.filter.call(itemRowEls, itemRowEl => itemRowEl.querySelector('input[type="checkbox"]:checked:not(:disabled)'))
     const articles = Array.prototype.map.call(checkedItemRowEls, checkedItemRowEl => {
-      const valueEls = checkedItemRowEl.querySelectorAll('div.value')
+      const valueEls = checkedItemRowEl.querySelectorAll('div.value, input.value')
       return Array.prototype.reduce.call(valueEls, (acc, valueEl) => {
         return {
           ...acc,
-          [valueEl.getAttribute('name')]: valueEl.dataset.value
+          [valueEl.getAttribute('name')]: valueEl.dataset.value || valueEl.value
         }
       }, {})
     })
     console.log(articles)
+    if (!articles.length) return
 
     const createArticles = articles.map(article => createArticle(article))
 
-    Promise.all(createArticles)
-      .then(() => window.location.href = '/articles')
+    Promise.all([ ...createArticles, updateRebuts() ])
+      .then(() => {
+        window.location.href = '/invoices'
+      })
       .catch(e => console.error(e))
   })
     
@@ -185,5 +191,56 @@
       },
       body: JSON.stringify({ article })
     })
+  }
+
+  function updateRebuts() {
+    const invoiceItemRows = document.querySelectorAll('tbody[data-invoice-item-id]')
+    const invoiceItemStatuses = Array.prototype.map.call(invoiceItemRows, itemRow => {
+      const trEls = itemRow.querySelectorAll('tr')
+      const invoiceItemId = itemRow.dataset.invoiceItemId
+      const rebuts = Array.prototype.map.call(trEls, trEl => {
+        const isRebut = trEl.querySelector('[name=rebut]').checked
+        const numSerie = trEl.querySelector('[name=numSerie]').value
+        return { rebut: isRebut, numSerie }
+      })
+      return { invoiceItemId, rebuts }
+    })
+    const newInvoiceWithRebuts = invoice.invoiceItems.map((invoiceItem, i) => ({...invoiceItem, rebuts: invoiceItemStatuses[i].rebuts}))
+    return updateComandaRebuts({ invoiceItems: newInvoiceWithRebuts})
+      .then(res => res.json())
+      .then(newInvoice => {
+        const comandaIsRebuda = checkComandaIsRebuda(newInvoice)
+        return comandaIsRebuda && updateComandaStatus()
+      })
+      .then(() => window.location.href = '/invoices')
+  }
+
+  function updateComandaRebuts(data) {
+    return fetch('/invoices/<%= invoice._id %>', {
+      method: 'PUT',
+      mode: 'cors',
+      headers: {
+        "Content-Type": 'application/json'
+      },
+      body: JSON.stringify({ ...data })
+    })
+  }
+
+  function updateComandaStatus() {
+    return fetch('/invoices/<%= invoice._id %>/status?redirect=true', {
+      method: 'PUT',
+      mode: 'cors',
+      headers: {
+        "Content-Type": 'application/json'
+      },
+      body: JSON.stringify({ status: 'rebuda' })
+    })
+  }
+
+  function checkComandaIsRebuda (invoice) {
+    const hasNoRebuts = invoice.invoiceItems.some(invoiceItem => {
+      return invoiceItem.rebuts.some(({ rebut }) => !rebut)
+    })
+    return !hasNoRebuts
   }
 </script>

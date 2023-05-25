@@ -2,8 +2,10 @@ const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
 const proveidors = require('../controllers/proveidors');
-const { isLoggedIn, isResponsable, validateProveidor } = require('../middlewareProveidors');
-const Proveidor = require('../models/proveidor');
+const { isLoggedIn, isResponsable, validateSchema } = require('../middleware');
+const { proveidorSchema } = require('../schemas');
+
+const validateProveidor = validateSchema(proveidorSchema)
 
 router.route('/')
 .get(catchAsync(proveidors.index))

@@ -37,6 +37,7 @@ module.exports.articleSchema = Joi.object({
     unitat: Joi.string().required().escapeHTML(),
     imatge: Joi.string().escapeHTML(),
     descripcio: Joi.string().escapeHTML(),
+    numSerie: Joi.string().allow('').escapeHTML()
     //num_serie: Joi.string().required().escapeHTML(),
     //unitats_integrants: Joi.number().required().min(0),
     //estat: Joi.string().required().escapeHTML(),
@@ -61,6 +62,7 @@ module.exports.articleSchema = Joi.object({
 
 module.exports.invoiceSchema = Joi.object({
   invoiceItems: Joi.array(),
+  status: Joi.string().valid('aprovada', 'pendent', 'rebuda', 'rebutjada')
   // invoice: Joi.object({
   //     // totalInvoice: Joi.number(),
   //     //preu: Joi.number().required().min(0),

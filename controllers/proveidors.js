@@ -19,7 +19,7 @@ module.exports.createProveidor = async (req, res, next) => {
     proveidor.responsable = req.user._id;
     await proveidor.save();
     req.flash('success', 'Proveidor creat correctament!');
-    res.redirect(`/proveidors/${proveidor._id}`);
+    res.status(201).json(proveidor);
 }
 
 module.exports.showProveidor =  async (req, res, next) => {

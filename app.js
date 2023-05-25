@@ -1,9 +1,12 @@
-if (process.env.NODE_ENV !== "production") {
+const isProduction = process.env.NODE_ENV === "production"
+
+if (!isProduction) {
   require("dotenv").config();
 }
 
 const express = require("express");
 const path = require("path");
+const url = require('url');
 const mongoose = require("mongoose");
 const ejsMate = require("ejs-mate");
 const session = require("express-session");
@@ -15,7 +18,6 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user");
 const helmet = require("helmet");
-const contentSecurityPolicy = require("helmet-csp");
 
 const mongoSanitize = require("express-mongo-sanitize");
 
@@ -32,14 +34,6 @@ const proveidorRoutes = require("./routes/proveidors");
 const bodyParser = require("body-parser");
 
 const MongoDBStore = require("connect-mongo")(session);
-
-//const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/inventari';
-
-// per connectar a Atlas
-//const dbUrl = process.env.DB_URL;
-
-// per connectar a localhost
-// const dbUrl = "mongodb://127.0.0.1:27017/inventari";
 
 const dbUrl = "mongodb+srv://AlbertRF147:Ruwter7h@cluster0.lvga5.mongodb.net/inventari-insti?retryWrites=true&w=majority"
 
@@ -59,6 +53,25 @@ db.once("open", () => {
 const app = express();
 
 app.engine("ejs", ejsMate);
+
+if (isProduction) {
+  // Force HTTPS
+  app.use((req, res, next) => {
+    if (req.headers['x-forwarded-proto'] !== 'https') {
+      const secureUrl = url.format({
+        protocol: 'https',
+        hostname: req.hostname,
+        port: app.get('port'),
+        pathname: req.url
+      });
+  
+      return res.redirect(secureUrl);
+    }
+  
+    next();
+  });
+}
+
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
@@ -106,55 +119,57 @@ passport.deserializeUser(User.deserializeUser());
 
 app.use(flash());
 
-const scriptSrcUrls = [
-  "https://stackpath.bootstrapcdn.com/",
-  "https://api.tiles.mapbox.com/",
-  "https://api.mapbox.com/",
-  "https://kit.fontawesome.com/",
-  "https://cdnjs.cloudflare.com/",
-  "https://cdn.jsdelivr.net",
-];
-//This is the array that needs added to
-const styleSrcUrls = [
-  "https://stackpath.bootstrapcdn.com/",
-  "https://kit-free.fontawesome.com/",
-  "https://api.mapbox.com/",
-  "https://api.tiles.mapbox.com/",
-  "https://fonts.googleapis.com/",
-  "https://use.fontawesome.com/",
-  "https://cdn.jsdelivr.net",
-];
-const connectSrcUrls = [
-  "https://api.mapbox.com/",
-  "https://a.tiles.mapbox.com/",
-  "https://b.tiles.mapbox.com/",
-  "https://events.mapbox.com/",
-];
-const fontSrcUrls = [
-  "https://cdn.jsdelivr.net"
-];
-app.use(
-  helmet.contentSecurityPolicy({
-    directives: {
-      defaultSrc: [],
-      connectSrc: ["'self'", ...connectSrcUrls],
-      scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
-      styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
-      workerSrc: ["'self'", "blob:"],
-      objectSrc: [],
-      imgSrc: [
-        "'self'",
-        "blob:",
-        "data:",
-        "https://res.cloudinary.com/YOURACCOUNT/", //SHOULD MATCH YOUR CLOUDINARY ACCOUNT!
-        "https://images.unsplash.com/",
-        "https://unsplash.com/es/s/fotos/",
-        "fakeimg.pl"
-      ],
-      fontSrc: ["'self'", ...fontSrcUrls],
-    },
-  })
-);
+if (isProduction) {
+  const scriptSrcUrls = [
+    "https://stackpath.bootstrapcdn.com/",
+    "https://api.tiles.mapbox.com/",
+    "https://api.mapbox.com/",
+    "https://kit.fontawesome.com/",
+    "https://cdnjs.cloudflare.com/",
+    "https://cdn.jsdelivr.net",
+  ];
+  //This is the array that needs added to
+  const styleSrcUrls = [
+    "https://stackpath.bootstrapcdn.com/",
+    "https://kit-free.fontawesome.com/",
+    "https://api.mapbox.com/",
+    "https://api.tiles.mapbox.com/",
+    "https://fonts.googleapis.com/",
+    "https://use.fontawesome.com/",
+    "https://cdn.jsdelivr.net",
+  ];
+  const connectSrcUrls = [
+    "https://api.mapbox.com/",
+    "https://a.tiles.mapbox.com/",
+    "https://b.tiles.mapbox.com/",
+    "https://events.mapbox.com/",
+  ];
+  const fontSrcUrls = [
+    "https://cdn.jsdelivr.net"
+  ];
+  app.use(
+    helmet.contentSecurityPolicy({
+      directives: {
+        defaultSrc: [],
+        connectSrc: ["'self'", ...connectSrcUrls],
+        scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
+        styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
+        workerSrc: ["'self'", "blob:"],
+        objectSrc: [],
+        imgSrc: [
+          "'self'",
+          "blob:",
+          "data:",
+          "https://res.cloudinary.com/YOURACCOUNT/", //SHOULD MATCH YOUR CLOUDINARY ACCOUNT!
+          "https://images.unsplash.com/",
+          "https://unsplash.com/es/s/fotos/",
+          "fakeimg.pl"
+        ],
+        fontSrc: ["'self'", ...fontSrcUrls],
+      },
+    })
+  );
+}
 
 app.use((req, res, next) => {
   res.locals.currentUser = req.user;
@@ -164,15 +179,15 @@ app.use((req, res, next) => {
 });
 
 app.use("/", userRoutes);
-app.use("/articles", articleRoutes);
-app.use("/invoices", invoiceRoutes);
-app.use("/items", itemRoutes);
-app.use("/unitats", unitatRoutes);
-app.use("/zonas", zonaRoutes);
-app.use("/plantas", plantaRoutes);
-app.use("/areas", areaRoutes);
-app.use("/utilitats", utilitatRoutes);
-app.use("/proveidors", proveidorRoutes);
+app.use("/articles", requireLogin, articleRoutes);
+app.use("/invoices", requireLogin, invoiceRoutes);
+app.use("/items", requireLogin, itemRoutes);
+app.use("/unitats", requireLogin, unitatRoutes);
+app.use("/zonas", requireLogin, zonaRoutes);
+app.use("/plantas", requireLogin, plantaRoutes);
+app.use("/areas", requireLogin, areaRoutes);
+app.use("/utilitats", requireLogin, utilitatRoutes);
+app.use("/proveidors", requireLogin, proveidorRoutes);
 
 app.use("/utils", express.static(path.join(__dirname, "utils")));
 
@@ -194,3 +209,12 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Serving on port ${port}`);
 });
+
+function requireLogin (req, res, next) {
+  if (req.user) {
+    return next()
+  } else {
+    req.flash('error', 'Has d\'estar logat per veure la pagina.')
+    res.redirect('/login')
+  }
+}

@@ -18,7 +18,7 @@ module.exports.createItem = async (req, res, next) => {
   item.responsable = req.user._id;
   await item.save();
   req.flash("success", "Item creat correctament!");
-  res.redirect(`/items/${item._id}`);
+  res.status(201).json(item)
 };
 
 module.exports.showItem = async (req, res, next) => {

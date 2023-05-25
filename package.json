@@ -49,7 +49,7 @@
     "depd": "^2.0.0",
     "destroy": "^1.2.0",
     "dot-prop": "^5.3.0",
-    "dotenv": "^16.0.1",
+    "dotenv": "^16.0.3",
     "duplexer3": "^0.1.4",
     "ee-first": "^1.1.1",
     "ejs": "^3.1.7",
@@ -136,6 +136,7 @@
     "negotiator": "^0.6.3",
     "node": "^17.7.2",
     "node-bin-setup": "^1.1.0",
+    "nodemailer": "^6.9.1",
     "nodemon": "^1.3.3",
     "nopt": "^1.0.10",
     "normalize-path": "^3.0.0",
@@ -215,5 +216,8 @@
   },
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "eslint": "^8.40.0"
+  }
 }

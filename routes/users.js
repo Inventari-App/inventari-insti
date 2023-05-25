@@ -3,6 +3,13 @@ const router = express.Router();
 const passport = require("passport");
 const catchAsync = require("../utils/catchAsync");
 const User = require("../models/user");
+const {
+  getAllUsers,
+  getUser,
+  updateUser,
+  deleteUser,
+} = require("../controllers/users");
+const { isAdmin, isSameUser, isSameUserOrAdmin } = require("../middleware");
 
 router.get("/register", (req, res) => {
   res.render("users/register");
@@ -10,7 +17,7 @@ router.get("/register", (req, res) => {
 
 router.post(
   "/register",
-  catchAsync(async (req, res, next) => {
+  catchAsync(async (req, res) => {
     try {
       const { email, username, password } = req.body;
       const user = new User({ email, username });
@@ -29,44 +36,44 @@ router.post(
 
 router.get(
   "/users",
+  isAdmin,
   catchAsync(async (req, res) => {
-    const users = await User.find({});
+    const users = await getAllUsers(req);
     res.render("users/index", { users });
   })
 );
 
 router.get(
   "/users/:id",
+  isSameUserOrAdmin,
   catchAsync(async (req, res) => {
-    const user = await User.findById(req.params.id);
+    const user = await getUser(req);
     res.render("users/show", { user });
   })
 );
 
 router.get(
   "/users/:id/edit",
+  isSameUserOrAdmin,
   catchAsync(async (req, res) => {
-    const user = await User.findById(req.params.id);
+    const user = await getUser(req);
     res.render("users/edit", { user });
   })
 );
 
 router.put(
   "/users/:id",
+  isSameUserOrAdmin,
   catchAsync(async (req, res) => {
-    const { id } = req.params;
-    const user = await User.findByIdAndUpdate(id, { ...req.body.user });
+    const user = await updateUser(req);
     res.redirect(`/users/${user._id}`);
   })
 );
 
 router.delete(
   "/users/:id",
-  catchAsync(async (req, res) => {
-    const { id } = req.params;
-    await User.findByIdAndDelete(id);
-    res.redirect("/users");
-  })
+  isAdmin,
+  catchAsync(deleteUser)
 );
 
 router.get("/users");

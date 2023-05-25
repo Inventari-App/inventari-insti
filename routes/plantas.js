@@ -2,8 +2,10 @@ const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
 const plantas = require('../controllers/plantas');
-const { isLoggedIn, isResponsable, validatePlanta } = require('../middlewarePlantas');
-const Planta = require('../models/planta');
+const { isLoggedIn, isResponsable, validateSchema } = require('../middleware');
+const { plantaSchema } = require('../schemas');
+
+const validatePlanta = validateSchema(plantaSchema)
 
 router.route('/')
 .get(catchAsync(plantas.index))
