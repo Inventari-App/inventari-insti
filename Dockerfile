@@ -16,5 +16,8 @@ COPY . .
 # Expose the port your app listens on
 EXPOSE 3000
 
+# Change to staging
+CMD ["git", "checkout", "staging"]
+
 # Start the app
 CMD ["npm", "start"]
