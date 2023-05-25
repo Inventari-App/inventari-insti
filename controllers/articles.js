@@ -14,15 +14,16 @@ module.exports.renderNewForm = (req, res) => {
 };
 
 module.exports.createArticle = async (req, res, next) => {
-  //console.log(req.body)
-  let articleBody = req.body.article;
-  //const albaraArr = JSON.parse(articleBody.albara)
-  const article = new Article(articleBody);
-  article.responsable = req.user._id;
-  await article.save();
-  req.flash("success", "Article creat correctament!");
-  res.sendStatus(200)
-  // res.redirect(`/articles/${article._id}`);
+  try {
+    let articleBody = req.body.article;
+    const article = new Article(articleBody);
+    await article.save();
+    req.flash("success", "Article creat correctament!");
+    res.sendStatus(200)
+  } catch (error) {
+    console.error(error)
+    res.sendStatus(400)
+  }
 };
 
 module.exports.showArticle = async (req, res, next) => {

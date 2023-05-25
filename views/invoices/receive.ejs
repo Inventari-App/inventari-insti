@@ -175,7 +175,8 @@
 
     const createArticles = articles.map(article => createArticle(article))
 
-    Promise.all([ ...createArticles, updateRebuts() ])
+    Promise.all([ ...createArticles ])
+      .then(updateRebuts)
       .then(() => {
         window.location.href = '/invoices'
       })
@@ -189,7 +190,7 @@
       headers: {
         "Content-Type": 'application/json'
       },
-      body: JSON.stringify({ article })
+      body: JSON.stringify({ article: {...article, responsable: invoice.responsable } })
     })
   }
 

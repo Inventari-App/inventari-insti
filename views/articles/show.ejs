@@ -30,7 +30,7 @@
             <%= article.numSerie %> %>
           </li>
         </ul>
-        <% if( currentUser && article.responsable.equals(currentUser.id)) { %>
+        <% if( currentUser && (article.responsable.equals(currentUser.id) || currentUser.isAdmin)) { %>
         <div class="card-body">
           <a
             href="/articles/<%=article.id%>/edit"

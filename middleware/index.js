@@ -1,4 +1,3 @@
-const ExpressError = require("../utils/ExpressError.js");
 const User = require("../models/user.js");
 const Invoice = require("../models/invoice.js");
 
@@ -6,8 +5,8 @@ module.exports.validateSchema = (schema) =>
   (req, res, next) => {
     const { error } = schema.validate(req.body);
     if (error) {
-      const msg = error.details.map((el) => el.message).join(",");
-      throw new ExpressError(msg, 400);
+      console.error(error)
+      res.sendStatus(400)
     } else {
       next();
     }
