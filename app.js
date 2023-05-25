@@ -6,6 +6,7 @@ if (!isProduction) {
 
 const express = require("express");
 const path = require("path");
+const url = require('url');
 const mongoose = require("mongoose");
 const ejsMate = require("ejs-mate");
 const session = require("express-session");
@@ -34,14 +35,6 @@ const bodyParser = require("body-parser");
 
 const MongoDBStore = require("connect-mongo")(session);
 
-//const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/inventari';
-
-// per connectar a Atlas
-//const dbUrl = process.env.DB_URL;
-
-// per connectar a localhost
-// const dbUrl = "mongodb://127.0.0.1:27017/inventari";
-
 const dbUrl = "mongodb+srv://AlbertRF147:Ruwter7h@cluster0.lvga5.mongodb.net/inventari-insti?retryWrites=true&w=majority"
 
 mongoose.connect(dbUrl, {
@@ -60,6 +53,25 @@ db.once("open", () => {
 const app = express();
 
 app.engine("ejs", ejsMate);
+
+if (isProduction) {
+  // Force HTTPS
+  app.use((req, res, next) => {
+    if (req.headers['x-forwarded-proto'] !== 'https') {
+      const secureUrl = url.format({
+        protocol: 'https',
+        hostname: req.hostname,
+        port: app.get('port'),
+        pathname: req.url
+      });
+  
+      return res.redirect(secureUrl);
+    }
+  
+    next();
+  });
+}
+
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
