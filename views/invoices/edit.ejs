@@ -6,9 +6,6 @@
 <%- include('../partials/invoiceForm.ejs', { invoiceItems: invoice.invoiceItems }) %>
 
 <script>
-</script>
-
-<script>
   const invoiceItemsTable = document.querySelector("#invoice-items");
   const addRowTable = document.querySelector("#add-row-table");
   const addRowBtn = document.querySelector("#add-row-btn");
@@ -24,6 +21,9 @@
   Array.prototype.forEach.call(autocompleteInputs, inputEl => {
     inputEl.addEventListener('change', () => hideError(inputEl))
   })
+
+  // Calculate totals for existing items
+  calculateTotals()
 
   addRowTable.addEventListener("input", (e) => {
     const { target } = e;
