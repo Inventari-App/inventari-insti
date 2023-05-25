@@ -70,16 +70,21 @@ module.exports.isResponsableOrAdmin = (Model) =>
     }
     next();
   };
-
-
-module.exports.isAdmin = async (req, res, next) => {
-  const { id: userId, isAdmin } = req.user;
-  const user = await User.findById(userId);
-  if (!user.isAdmin) {
-    req.flash("error", "No tens permisos per fer això!");
+  
+  
+  module.exports.isAdmin = async (req, res, next) => {
+    try {
+      const { id: userId } = req.user;
+      const user = await User.findById(userId);
+      if (!user.isAdmin) {
+        req.flash("error", "No tens permisos per fer això!");
+        return res.redirect(`/invoices`);
+      }
+      next();
+  } catch (error) {
+    req.flash("error", "Hi ha hagut un error.");
     return res.redirect(`/invoices`);
   }
-  next();
 };
 
 module.exports.isInvoiceAprovada = async (req, res, next) => {
