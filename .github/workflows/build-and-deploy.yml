@@ -27,5 +27,5 @@ jobs:
             fi
             docker kill $(docker ps -q) 2>/dev/null
             docker build -t inventari-insti .
-            docker run -d -p 8080:3000 inventari-insti
+            docker run -d -p 80:3000 inventari-insti
             
