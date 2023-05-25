@@ -17,7 +17,7 @@ COPY . .
 EXPOSE 3000
 
 # Change to staging
-CMD ["git", "checkout", "staging"]
+# CMD ["git", "checkout", "staging"]
 
 # Start the app
 CMD ["npm", "start"]
