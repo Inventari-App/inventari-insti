@@ -11,7 +11,7 @@
   const addRowBtn = document.querySelector("#add-row-btn");
   const addRowForm = document.querySelector("#add-row-form");
   const totalEl = document.querySelector(".sumatori-total");
-  const sendInvoiceBtn = document.querySelector("#send-invoice");
+  const modifyInvoiceBtn = document.querySelector("#modify-invoice");
 
   const itemInputEl = addRowTable.querySelector('#item')
   const unitatInputEl = addRowTable.querySelector('#unitat')
@@ -97,22 +97,21 @@
     calculateTotals();
   });
 
-  sendInvoiceBtn.addEventListener("click", (e) => {
-    const confirmation = confirm("Estas segur que vols crear la comanda?")
+  modifyInvoiceBtn.addEventListener("click", (e) => {
+    const confirmation = confirm("Estas segur que vols modificar la comanda?")
     if (!confirmation) return
 
     const invoiceData = getInvoiceData();
     console.log(invoiceData);
-    fetch("/invoices", {
-      method: "POST",
+    fetch("/invoices/<%= invoice.id %>", {
+      method: "PUT",
       mode: "cors",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ invoiceItems: [...invoiceData] }),
     })
-      .then((res) => res.json())
-      .then(({ _id }) => (window.location.href = _id))
+      .then(() => (window.location.href = '/invoices/<%= invoice.id %>'))
       .catch((e) => console.error(e));
   });
 

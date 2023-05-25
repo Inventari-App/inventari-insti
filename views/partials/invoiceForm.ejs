@@ -160,7 +160,7 @@
 
   <% if (typeof invoice === 'undefined' || invoice.status === 'pendent') { %>
     <div class="mb-3">
-      <button id="send-invoice" class="btn <%= typeof invoice === 'undefined' ? 'btn-success' : 'btn-info' %>">
+      <button id="<%= typeof invoice === 'undefined' ? 'send' : 'modify' %>-invoice" class="btn <%= typeof invoice === 'undefined' ? 'btn-success' : 'btn-info' %>">
         <%= typeof invoice === 'undefined' ? 'Finalitza Comanda' : 'Modifica Comanda' %>
       </button>
     </div>
