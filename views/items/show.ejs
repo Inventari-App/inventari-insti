@@ -16,7 +16,7 @@
                     </div>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item text-muted"><b>Responsable: </b>
-                            <%= item.responsable.username %> %>
+                            <%= item.responsable?.username || " - " %> %>
                         </li>
                         <li class="list-group-item text-muted"><b>Zona: </b>
                             <%= item.zona %>
@@ -37,11 +37,11 @@
                             <%= item.preu %>€
                         </li>
                     </ul>
-                    <% if( currentUser && item.responsable.equals(currentUser.id)) { %>
+                    <% if( currentUser && isOwner) { %>
                     <div class="card-body">
                         <a href="/items/<%=item.id%>/edit" class="card-link btn btn-info" class="card-link">Editar
                             Item</a>
-                        <form class="d-inline" action="/items/<%=item._id%>?_method=DELETE" method="POST">
+                        <form class="d-inline" action="/items/<%=item.id%>?_method=DELETE" method="POST">
                             <button class="btn btn-danger">Esborrar Item</button>
                         </form>
                     </div>

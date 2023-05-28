@@ -1,0 +1,36 @@
+<% layout('layouts/boilerplate')%>
+
+<h1><%= title %></h1>
+
+<div class="row">
+    <div class="col-lg-6 mx-auto">
+        <div class="d-flex justify-content-end">
+          <a href="<%= path %>/new">
+            <div type="button" class="btn btn-primary">Afegeix <%= itemName %></div>
+          </a>
+        </div>
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col"><%= itemName %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% for (let item of items){%>
+            <tr>
+              <td>
+                <%= item[keyToName] %>
+              </td>
+              <td>
+                <a href="/<%= path %>/<%= item._id %>" class="d-flex justify-content-end">
+                    <button type="button" class="btn btn-primary">Veure</button>
+                </a>
+              </td>
+            </tr>
+            <% }%>
+          </tbody>
+        </table>
+
+    </div>
+</div>
