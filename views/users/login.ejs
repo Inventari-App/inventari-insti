@@ -1,18 +1,21 @@
 <% layout('layouts/boilerplate')%>
 
-<div class="container d-flex justify-content-center align-items-center mt-5">
+<style>
+  body {
+    background-image: url("https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80");
+    background-size: contain;
+    backdrop-filter: saturate(0.5);
+  }
+</style>
+
+<div class="container mt-5">
   <div class="row">
     <div class="col-md-6 offset-md-3 col-xl-4 offset-xl-4">
       <div class="card shadow">
-        <img
-          src="https://images.unsplash.com/photo-1462212210333-335063b676bc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1332&q=80"
-          alt=""
-          class="card-img-top"
-        />
         <div class="card-body">
           <h5 class="card-title">Login</h5>
           <form action="/login" method="POST" class="validated-form">
-            <div class="mb-3">
+            <div class="my-4">
               <label class="form-label" for="username">Responsable</label>
               <input
                 class="form-control"
@@ -24,7 +27,7 @@
               />
               <div class="valid-feedback">Sembla correcte !</div>
 
-              <div class="mb-3">
+              <div class="my-4">
                 <label class="form-label" for="password">Contrassenya</label>
                 <input
                   class="form-control"

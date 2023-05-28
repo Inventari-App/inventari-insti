@@ -22,13 +22,15 @@ module.exports.createItem = async (req, res, next) => {
 };
 
 module.exports.showItem = async (req, res, next) => {
+  const { user } = req
   const item = await Item.findById(req.params.id).populate("responsable");
+  const responsable = item.responsable
 
   if (!item) {
     req.flash("error", "No es pot trobar l'item!");
     return res.redirect("/items");
   }
-  res.render("items/show", { item });
+  res.render("items/show", { item, isOwner: responsable && responsable._id.equals(user.id) });
 };
 
 module.exports.getItems = async (req, res, next) => {

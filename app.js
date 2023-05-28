@@ -192,7 +192,8 @@ app.use("/proveidors", requireLogin, proveidorRoutes);
 app.use("/utils", express.static(path.join(__dirname, "utils")));
 
 app.get("/", (req, res) => {
-  res.render("home");
+  if (req.user) return res.redirect("/invoices");
+  return res.redirect('/login')
 });
 
 app.all("*", (req, res, next) => {
