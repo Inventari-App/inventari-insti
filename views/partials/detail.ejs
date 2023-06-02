@@ -1,0 +1,49 @@
+<% layout('layouts/boilerplate')%>
+
+<div class="row">
+  <div class="col-6 offset-3">
+    <div class="card mb-3">
+      <div class="card-header">
+        <h5 class="card-title m-0 text-capitalize p-3"><%= item.nom || item.article %></h5>
+      </div>
+      <div class="card-body">
+        <div class="p-3">
+          <p class="card-text text-capitalize"><%= item.descripcio %></p>
+          <ul class="list-group list-group-flush">
+            <% console.log(item) %>
+            <% Object.keys(features).forEach((key) => { %>
+              <li class="list-group-item text-muted">
+                <b class="text-capitalize"><%= key %>: </b>
+                <span class="span text-capitalize">
+                  <%= features[key] || "-" %>
+                </span>
+              </li>
+            <% }) %>
+          </ul>
+        </div>
+      </div>
+      <div class="card-footer text-muted d-flex justify-content-between align-items-center">
+        <div class="left">
+          <% if( isAdmin || (currentUser && isOwner)) { %>
+          <a
+            href="/<%= type %>s/<%=item.id%>/edit"
+            class="card-link btn btn-info"
+            class="card-link"
+            >Editar <span class="text-capitalize"><%= type %></span>
+          </a>
+          <% } %>
+          <form
+            class="d-inline"
+            action="/<%= type %>s/<%=item.id%>?_method=DELETE"
+            method="POST"
+          >
+            <button class="btn btn-danger">Esborrar <span class="text-capitalize"><%= type %></span></button>
+          </form>
+        </div>
+        <div class="right">
+          <a href="/<%= type %>s">Tots els <%= type %>s</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

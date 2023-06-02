@@ -1,61 +1,17 @@
 <% layout('layouts/boilerplate')%>
 
-<div class="row">
-  <div class="col-6 offset-3">
-    <div class="card">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title"><%= article.article %></h5>
-          <p class="card-text"><%= article.descripcio %></p>
-        </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item text-muted">
-            <b>Responsable: </b>
-            <%= article.responsable.username %> %>
-          </li>
-          <li class="list-group-item text-muted">
-            <b>Unitat: </b>
-            <%= article.unitat %>
-          </li>
-          <li class="list-group-item text-muted">
-            <b>Preu de cost: </b>
-            <%= article.preu %>€
-          </li>
-          <li class="list-group-item text-muted">
-            <b>IVA: </b>
-            <%= article.iva %>€
-          </li>
-          <li class="list-group-item text-muted">
-            <b>Num Serie: </b>
-            <%= article.numSerie %> %>
-          </li>
-        </ul>
-        <% if( currentUser && (article.responsable.equals(currentUser.id) ||
-        currentUser.isAdmin)) { %>
-        <div class="card-body">
-          <a
-            href="/articles/<%=article.id%>/edit"
-            class="card-link btn btn-info"
-            class="card-link"
-            >Editar Article</a
-          >
-          <form
-            class="d-inline"
-            action="/articles/<%=article._id%>?_method=DELETE"
-            method="POST"
-            id="deleteForm"
-          >
-            <button class="btn btn-danger">Esborrar Article</button>
-          </form>
-        </div>
-        <% } %>
-        <div class="card-footer text-muted">
-          <a href="/articles">Tots els articles</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+<%- include('../partials/detail', {
+    type: 'article',
+    item: article,
+    features:
+    {
+        responsable: article.responsable.username,
+        unitat: article.unitat,
+        'preu de cost': article.preu,
+        iva: article.iva,
+        'num serie': article.numSerie
+    }
+}) %>
 
 <script>
   document.getElementById('deleteForm').addEventListener('submit', function(event) {

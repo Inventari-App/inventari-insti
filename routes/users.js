@@ -11,6 +11,10 @@ const {
 } = require("../controllers/users");
 const { isAdmin, isSameUser, isSameUserOrAdmin } = require("../middleware");
 
+router.get("/users/new", (req, res) => {
+  res.render("users/new");
+});
+
 router.get("/register", (req, res) => {
   res.render("users/register");
 });

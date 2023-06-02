@@ -33,7 +33,7 @@ module.exports.showArticle = async (req, res, next) => {
     req.flash("error", "No es pot trobar l'article!");
     return res.redirect("/articles");
   }
-  res.render("articles/show", { article });
+  res.render("articles/show", { article, isAdmin: req.user.isAdmin });
 };
 
 module.exports.renderEditForm = async (req, res) => {
