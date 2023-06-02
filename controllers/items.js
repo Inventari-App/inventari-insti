@@ -30,7 +30,7 @@ module.exports.showItem = async (req, res, next) => {
     req.flash("error", "No es pot trobar l'item!");
     return res.redirect("/items");
   }
-  res.render("items/show", { item, isOwner: responsable && responsable._id.equals(user.id) });
+  res.render("items/show", { item, isAdmin: user.isAdmin, isOwner: responsable && responsable._id.equals(user.id) });
 };
 
 module.exports.getItems = async (req, res, next) => {

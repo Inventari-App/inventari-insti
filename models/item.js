@@ -2,20 +2,15 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const ItemSchema = new Schema({
-
-
-    
     nom: String,
     imatge: Array,
     descripcio: String,
     naturalesa: String,
     tipus: String,
-
     responsable: {
         type: Schema.Types.ObjectId,
         ref: 'User'
     }
-    
     /* proforma: String,
     comanda: String,
     albara: String,
@@ -30,7 +25,6 @@ const ItemSchema = new Schema({
     proveidor: String,
     objectiu: String,
     observacions: String, */
-
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model('Item', ItemSchema);
