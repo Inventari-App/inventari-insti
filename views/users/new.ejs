@@ -1,49 +1,20 @@
 <% layout('layouts/boilerplate')%>
 
-<div class="row justify-content-center">
-  <div class="card col-sm-6 p-4">
-    <h3 class="mb-4">Crea un nou usuari</h3>
-    <form action="/users" method="POST" class="validated-form">
-      <div class="mb-3">
-        <label for="user[username]">Nom d'Usuari</label>
-        <input
-          class="form-control mt-2"
-          type="text"
-          id="username"
-          name="user[username]"
-          required
-        />
-      </div>
-      <div class="mb-3">
-        <label for="email">Email</label>
-        <input
-          class="form-control mt-2"
-          type="email"
-          id="email"
-          name="user[email]"
-          required
-        />
-      </div>
-      <div class="mb-3">
-        <label for="password">Password</label>
-        <input
-          class="form-control mt-2"
-          type="password"
-          id="password"
-          name="user[password]"
-          required
-        />
-      </div>
-      <div class="mt-4 d-flex justify-content-end">
-        <a href="/users/new?method=POST">
-          <button class="btn btn-primary">Afegeix Usuari</button>
-        </a>
-      </div>
+    <form action="/users" method="POST"  class="validated-form">
+        <div class="mb-3">
+            <label for="username">Responsable</label>
+            <input class="form-control" type="text" id="username" name="user[username]" required>
+        </div>
+        <div class="mb-3">
+            <label for="email">Email</label>
+            <input class="form-control" type="email" id="email" name="user[email]" required>
+        </div>
+        <div class="mb-3">
+            <label for="password">Password</label>
+            <input class="form-control" type="text" id="password" name="user[password]" required>
+        </div>
+<div class="mb-3">
+        <button>Afegeix Usuari</button>
+    </div>
     </form>
-  </div>
-</div>
-<div class="row justify-content-center">
-  <div class="col-sm-6">
-    <a href="/users" class="d-flex mt-4 d-inline-block">Tots els Usuaris</a>
-  </div>
-</div>
+    <a href="/users">Tots els Usuaris</a>
