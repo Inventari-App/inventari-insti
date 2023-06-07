@@ -75,6 +75,7 @@
     "global-dirs": "^3.0.0",
     "got": "^12.1.0",
     "graceful-fs": "^4.2.10",
+    "greenlock-express": "^4.0.3",
     "has": "^1.0.3",
     "has-flag": "^4.0.0",
     "has-symbols": "^1.0.3",
@@ -212,7 +213,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js -- --staging"
   },
   "author": "",
   "license": "ISC",

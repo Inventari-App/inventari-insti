@@ -211,6 +211,8 @@ app.listen(port, () => {
   console.log(`Serving on port ${port}`);
 });
 
+module.exports = app;
+
 function requireLogin (req, res, next) {
   if (req.user) {
     return next()
