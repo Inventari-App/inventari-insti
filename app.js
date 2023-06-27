@@ -18,7 +18,6 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user");
 const helmet = require("helmet");
-
 const mongoSanitize = require("express-mongo-sanitize");
 
 const userRoutes = require("./routes/users");
@@ -174,6 +173,7 @@ if (isProduction) {
 app.use((req, res, next) => {
   res.locals.currentUser = req.user;
   res.locals.success = req.flash("success");
+  res.locals.info = req.flash("info")
   res.locals.error = req.flash("error");
   next();
 });

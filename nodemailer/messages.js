@@ -1,4 +1,10 @@
 const messages = {
+  user: {
+    verify: {
+      subject: 'Activa el teu usuari.',
+      text: 'Pots activar el teu usuari anant a {{url}} .\nRecorda que tens 10 minuts per fer-ho.'
+    }
+  },
   invoice: {
     created: {
       subject: 'Nova comanda creada per {{user}}.',
