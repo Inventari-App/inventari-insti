@@ -87,7 +87,7 @@ module.exports.updateInvoiceStatus = async (req, res) => {
     ).populate("responsable");
 
     status === 'rebuda'
-      ? await emailReceived(invoice)
+      ? await emailReceived(invoice, req.headers.host)
       : await emailStatusChange(invoice, status, req.headers.host);
 
     res.redirect('/invoices');
@@ -203,7 +203,7 @@ async function emailStatusChange (invoice, status, host) {
   })
 }
 
-async function emailReceived (invoice) {
+async function emailReceived (invoice, host) {
   const adminEmails = await getAdminEmails()
   if (!adminEmails) return console.error('No admin emails?')
 
@@ -217,6 +217,6 @@ async function emailReceived (invoice) {
     subject: message.subject,
     text: message.text
       .replace(/{{user}}/, responsableEmail)
-      .replace(/{{url}}/, ' ${protocol}://${req.headers.host}/invoices')
+      .replace(/{{url}}/, `${protocol}://${host}/invoices`)
   })
 }
