@@ -17,7 +17,7 @@ async function createUser(req, res, next) {
       subject: message.subject,
       text: message.text.replace(
         /{{url}}/,
-        `http://localhost:3000/verify?userId=${user.id}&token=${user.verificationHash}`
+        `http://${req.headers.host}/verify?userId=${user.id}&token=${user.verificationHash}`
       ),
     });
     req.flash("info", "Tens 10 minuts per activar el teu usuari fent click al link que t'hem enviat per correu.")
@@ -52,10 +52,10 @@ async function deleteUser(req, res, next) {
   try {
     const { id } = req.params;
     await User.findByIdAndDelete(id);
-    req.flash("Usuari esborrat correctament");
+    req.flash("success", "Usuari esborrat correctament");
     res.sendStatus(200);
   } catch (error) {
-    req.flash("L'usuari no s'ha pogut esborrar");
+    req.flash("error", "L'usuari no s'ha pogut esborrar");
     res.sendStatus(400);
   }
 }
@@ -97,7 +97,7 @@ async function verifyUser(req, res, next) {
       subject: message.subject,
       text: message.text.replace(
         /{{url}}/,
-        `http://localhost:3000/verify?userId=${user.id}&token=${newHash}`
+        `http://${req.headers.host}/verify?userId=${user.id}&token=${newHash}`
       ),
     });
     req.flash("error", "El token ha expirat - N'hem enviat un de nou.");

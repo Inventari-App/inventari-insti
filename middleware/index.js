@@ -42,8 +42,8 @@ module.exports.isSameUserOrAdmin = async (req, res, next) => {
     }
     next();
   } catch (error) {
-    req.flash('Probablement l\'usuari no existeix')
-    res.redirect('/users')
+    req.flash("error", "Probablement l'usuari no existeix")
+    res.redirect("/users")
   }
 };
 
