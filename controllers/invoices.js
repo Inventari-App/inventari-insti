@@ -148,7 +148,7 @@ async function emailCreated (invoice, email) {
   return sendEmail({
     subject: message.subject.replace(/{{user}}/, email),
     text: message.text
-      .replace(/{{url}}/, `http://localhost:3000/invoices/${invoice._id}`)
+      .replace(/{{url}}/, `http://${req.headers.host}/invoices/${invoice._id}`)
   })
 }
 
@@ -176,7 +176,7 @@ async function emailModified ({ invoice, user }) {
     subject: message.subject,
     text: message.text
       .replace(/{{user}}/, invoice.responsable.email)
-      .replace(/{{url}}/, `http://localhost:3000/invoices/${invoice._id}`)
+      .replace(/{{url}}/, `http://${req.headers.host}/invoices/${invoice._id}`)
   })
 }
 
@@ -197,7 +197,7 @@ async function emailStatusChange (invoice, status) {
     text: message.text
       .replace(/{{user}}/, invoice.responsable.email)
       .replace(/{{status}}/, status)
-      .replace(/{{url}}/, `http://localhost:3000/invoices/${invoice._id}`)
+      .replace(/{{url}}/, `http://${req.headers.host}/invoices/${invoice._id}`)
   })
 }
 
@@ -215,6 +215,6 @@ async function emailReceived (invoice) {
     subject: message.subject,
     text: message.text
       .replace(/{{user}}/, responsableEmail)
-      .replace(/{{url}}/, ' http://localhost:3000/invoices')
+      .replace(/{{url}}/, ' http://${req.headers.host}/invoices')
   })
 }
