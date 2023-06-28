@@ -2,6 +2,8 @@ const User = require("../models/user");
 const { generateHash } = require("random-hash");
 const { getExpirationTs } = require("../utils/helpers");
 const { useNodemailer } = require("../nodemailer/sendEmail");
+const { getProtocol } = require("../utils/helpers");
+const protocol = getProtocol()
 
 async function createUser(req, res, next) {
   try {
@@ -17,7 +19,7 @@ async function createUser(req, res, next) {
       subject: message.subject,
       text: message.text.replace(
         /{{url}}/,
-        `http://${req.headers.host}/verify?userId=${user.id}&token=${user.verificationHash}`
+        `${protocol}://${req.headers.host}/verify?userId=${user.id}&token=${user.verificationHash}`
       ),
     });
     req.flash("info", "Tens 10 minuts per activar el teu usuari fent click al link que t'hem enviat per correu.")
@@ -97,7 +99,7 @@ async function verifyUser(req, res, next) {
       subject: message.subject,
       text: message.text.replace(
         /{{url}}/,
-        `http://${req.headers.host}/verify?userId=${user.id}&token=${newHash}`
+        `${protocol}://${req.headers.host}/verify?userId=${user.id}&token=${newHash}`
       ),
     });
     req.flash("error", "El token ha expirat - N'hem enviat un de nou.");

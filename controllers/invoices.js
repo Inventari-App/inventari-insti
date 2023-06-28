@@ -3,6 +3,8 @@ const Invoice = require("../models/invoice");
 const Item = require("../models/item");
 const autocomplete = require("autocompleter");
 const { useNodemailer } = require("../nodemailer/sendEmail");
+const { getProtocol } = require("../utils/helpers");
+const protocol = getProtocol()
 
 module.exports.index = async (req, res) => {
   const { isAdmin, id: userId } = req.user;
@@ -35,7 +37,7 @@ module.exports.createInvoice = async (req, res, next) => {
   const { _id: responsableId, email } = req.user;
   const invoice = new Invoice({ responsable: responsableId, invoiceItems });
   await invoice.save();
-  await emailCreated(invoice, email)
+  await emailCreated(invoice, email, req.headers.host)
   req.flash("success", "Comanda creada correctament!");
   res.json(invoice);
 };
@@ -86,7 +88,7 @@ module.exports.updateInvoiceStatus = async (req, res) => {
 
     status === 'rebuda'
       ? await emailReceived(invoice)
-      : await emailStatusChange(invoice, status);
+      : await emailStatusChange(invoice, status, req.headers.host);
 
     res.redirect('/invoices');
   } catch (error) {
@@ -107,7 +109,7 @@ module.exports.updateInvoice = async (req, res) => {
       { new: true }
     ).populate("responsable");
 
-    await emailModified({ invoice, user: req.user })
+    await emailModified({ invoice, user: req.user, host: req.headers.host })
 
     req.flash("success", "Comanda actualitzada correctament!");
 
@@ -136,7 +138,7 @@ async function getAdminEmails () {
   return adminEmails
 }
 
-async function emailCreated (invoice, email) {
+async function emailCreated (invoice, email, host) {
   const adminEmails = await getAdminEmails()
   if (!adminEmails) return console.error('No admin emails?')
 
@@ -148,11 +150,11 @@ async function emailCreated (invoice, email) {
   return sendEmail({
     subject: message.subject.replace(/{{user}}/, email),
     text: message.text
-      .replace(/{{url}}/, `http://${req.headers.host}/invoices/${invoice._id}`)
+      .replace(/{{url}}/, `${protocol}://${host}/invoices/${invoice._id}`)
   })
 }
 
-async function emailModified ({ invoice, user }) {
+async function emailModified ({ invoice, user, host }) {
   const adminEmails = await getAdminEmails()
   if (!adminEmails) return console.error('No admin emails?')
 
@@ -176,11 +178,11 @@ async function emailModified ({ invoice, user }) {
     subject: message.subject,
     text: message.text
       .replace(/{{user}}/, invoice.responsable.email)
-      .replace(/{{url}}/, `http://${req.headers.host}/invoices/${invoice._id}`)
+      .replace(/{{url}}/, `${protocol}://${host}/invoices/${invoice._id}`)
   })
 }
 
-async function emailStatusChange (invoice, status) {
+async function emailStatusChange (invoice, status, host) {
   const adminEmails = await getAdminEmails()
   if (!adminEmails) return console.error('No admin emails?')
 
@@ -197,7 +199,7 @@ async function emailStatusChange (invoice, status) {
     text: message.text
       .replace(/{{user}}/, invoice.responsable.email)
       .replace(/{{status}}/, status)
-      .replace(/{{url}}/, `http://${req.headers.host}/invoices/${invoice._id}`)
+      .replace(/{{url}}/, `${protocol}://${host}/invoices/${invoice._id}`)
   })
 }
 
@@ -215,6 +217,6 @@ async function emailReceived (invoice) {
     subject: message.subject,
     text: message.text
       .replace(/{{user}}/, responsableEmail)
-      .replace(/{{url}}/, ' http://${req.headers.host}/invoices')
+      .replace(/{{url}}/, ' ${protocol}://${req.headers.host}/invoices')
   })
 }
