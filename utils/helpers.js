@@ -7,5 +7,5 @@ function getExpirationTs(expiresInMs = 60000) {
 }
 
 function getProtocol() {
-  return process.env.NODE_ENV === 'production' ? 'https' : 'http'
+  return process.env.NODE_ENV === 'prod' ? 'https' : 'http'
 }
