@@ -4,6 +4,7 @@ const catchAsync = require('../utils/catchAsync');
 const unitats = require('../controllers/unitats');
 const { isLoggedIn, isResponsable, validateSchema } = require('../middleware');
 const { unitatSchema } = require('../schemas');
+const unitat = require('../models/unitat');
 
 const validateUnitat = validateSchema(unitatSchema)
 
@@ -18,11 +19,11 @@ router.get('/new', isLoggedIn, unitats.renderNewForm);
 
 router.route('/:id')
 .get(catchAsync(unitats.showUnitat))
-.put(isLoggedIn, isResponsable, validateUnitat, catchAsync(unitats.updateUnitat))
-.delete(isLoggedIn, isResponsable, catchAsync(unitats.deleteUnitat));
+.put(isLoggedIn, isResponsable(unitat), validateUnitat, catchAsync(unitats.updateUnitat))
+.delete(isLoggedIn, isResponsable(unitat), catchAsync(unitats.deleteUnitat));
 
 
-router.get('/:id/edit', isLoggedIn, isResponsable, catchAsync(unitats.renderEditForm));
+router.get('/:id/edit', isLoggedIn, isResponsable(unitat), catchAsync(unitats.renderEditForm));
 
 
 module.exports = router;

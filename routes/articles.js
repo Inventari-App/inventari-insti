@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
 const articles = require('../controllers/articles');
-const { isLoggedIn, isResponsable, validateSchema } = require('../middleware');
+const { isLoggedIn, isResponsableOrAdmin, validateSchema } = require('../middleware');
 const { articleSchema } = require('../schemas');
+const article = require('../models/article');
 
 const validateArticle = validateSchema(articleSchema)
 
@@ -15,11 +16,11 @@ router.get('/new', isLoggedIn, articles.renderNewForm);
 
 router.route('/:id')
 .get(catchAsync(articles.showArticle))
-.put(isLoggedIn, isResponsable, validateArticle, catchAsync(articles.updateArticle))
-.delete(isLoggedIn, isResponsable, catchAsync(articles.deleteArticle));
+.put(isLoggedIn, isResponsableOrAdmin(article), validateArticle, catchAsync(articles.updateArticle))
+.delete(isLoggedIn, isResponsableOrAdmin(article), catchAsync(articles.deleteArticle));
 
 
-router.get('/:id/edit', isLoggedIn, isResponsable, catchAsync(articles.renderEditForm));
+router.get('/:id/edit', isLoggedIn, isResponsableOrAdmin(article), catchAsync(articles.renderEditForm));
 
 
 module.exports = router;

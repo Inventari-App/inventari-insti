@@ -4,6 +4,7 @@ const catchAsync = require('../utils/catchAsync');
 const areas = require('../controllers/areas');
 const { isLoggedIn, isResponsable, validateSchema } = require('../middleware');
 const { areaSchema } = require('../schemas');
+const area = require('../models/area');
 
 const validateArea = validateSchema(areaSchema)
 
@@ -18,11 +19,11 @@ router.get('/new', isLoggedIn, areas.renderNewForm);
 
 router.route('/:id')
 .get(catchAsync(areas.showArea))
-.put(isLoggedIn, isResponsable, validateArea, catchAsync(areas.updateArea))
-.delete(isLoggedIn, isResponsable, catchAsync(areas.deleteArea));
+.put(isLoggedIn, isResponsable(area), validateArea, catchAsync(areas.updateArea))
+.delete(isLoggedIn, isResponsable(area), catchAsync(areas.deleteArea));
 
 
-router.get('/:id/edit', isLoggedIn, isResponsable, catchAsync(areas.renderEditForm));
+router.get('/:id/edit', isLoggedIn, isResponsable(area), catchAsync(areas.renderEditForm));
 
 
 module.exports = router;
