@@ -20,6 +20,7 @@ const User = require("./models/user");
 const helmet = require("helmet");
 const mongoSanitize = require("express-mongo-sanitize");
 
+const appRoutes = require("./routes/app");
 const userRoutes = require("./routes/users");
 const articleRoutes = require("./routes/articles");
 const invoiceRoutes = require("./routes/invoices");
@@ -178,7 +179,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/", userRoutes);
+app.use("/", appRoutes, userRoutes);
 app.use("/articles", requireLogin, articleRoutes);
 app.use("/invoices", requireLogin, invoiceRoutes);
 app.use("/items", requireLogin, itemRoutes);
