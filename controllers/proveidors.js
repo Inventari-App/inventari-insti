@@ -29,6 +29,7 @@ module.exports.showProveidor =  async (req, res, next) => {
         req.flash('error', "No es pot trobar el proveidor!");
         return res.redirect('/proveidors');
     }
+
     res.render('proveidors/show', { proveidor });
 }
 
