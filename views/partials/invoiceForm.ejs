@@ -124,24 +124,24 @@
     <% if (invoiceItems.length) {
       invoiceItems.forEach(item => { %>
         <tr class="invoice-item">
-          <td name="tipus" data-value="<%= item.tipus %>" style="display: none" class="align-middle">
+          <td name="tipus" data-value="<%- item.tipus %>" style="display: none" class="align-middle">
             <%= item.tipus %>
           </td>
-          <td name="naturalesa" data-value="<%= item.naturalesa %>" style="display: none" class="align-middle">
+          <td name="naturalesa" data-value="<%- item.naturalesa %>" style="display: none" class="align-middle">
             <%= item.naturalesa %>
-          <td name="quantitat" data-value="<%= item.quantitat %>" style="display: table-cell" class="align-middle">
+          <td name="quantitat" data-value="<%- item.quantitat %>" style="display: table-cell" class="align-middle">
             <%= item.quantitat %>
-          <td name="article" data-value="<%= item.article %>" style="display: table-cell" class="align-middle">
+          <td name="article" data-value="<%- item.article %>" style="display: table-cell" class="align-middle">
             <%= item.article %>
-          <td name="preu" data-value="<%= item.preu %>" style="display: table-cell" class="align-middle">
+          <td name="preu" data-value="<%- item.preu %>" style="display: table-cell" class="align-middle">
             <%= item.preu %>
-          <td name="iva" data-value="<%= item.iva %>" style="display: table-cell" class="align-middle">
+          <td name="iva" data-value="<%- item.iva %>" style="display: table-cell" class="align-middle">
             <%= item.iva %>
-          <td name="subtotal" data-value="<%= item.subtotal %>" style="display: table-cell" class="align-middle">
+          <td name="subtotal" data-value="<%- item.subtotal %>" style="display: table-cell" class="align-middle">
             <%= item.subtotal %>
-          <td name="unitat" data-value="<%= item.unitat %>" style="display: table-cell" class="align-middle">
+          <td name="unitat" data-value="<%- item.unitat %>" style="display: table-cell" class="align-middle">
             <%= item.unitat %>
-          <td name="proveidor" data-value="<%= item.proveidor %>" style="display: table-cell" class="align-middle">
+          <td name="proveidor" data-value="<%- item.proveidor %>" style="display: table-cell" class="align-middle">
             <%= item.proveidor %>
           </td>
           <td>

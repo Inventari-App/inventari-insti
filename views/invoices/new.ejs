@@ -51,13 +51,13 @@
       };
     });
     const newRowHTML = `
-      <tr class='invoice-item'>
+      <tr class="invoice-item">
         ${inputValues.reduce((acc, curr) =>
             (acc += `
               <td
-                name='${curr.name}'
-                data-value='${curr.value}'
-                style='display: ${curr.hidden ? "none" : "table-cell"}'
+                name="${curr.name}"
+                data-value="${curr.value}"
+                style="display: ${curr.hidden ? "none" : "table-cell"}"
                 class="align-middle"
               >
                 ${curr.value}
