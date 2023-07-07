@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
 const proveidors = require('../controllers/proveidors');
-const { isLoggedIn, isResponsable, validateSchema } = require('../middleware');
+const { isLoggedIn, isResponsableOrAdmin, validateSchema } = require('../middleware');
 const { proveidorSchema } = require('../schemas');
 const proveidor = require('../models/proveidor');
 
@@ -19,11 +19,11 @@ router.get('/new', isLoggedIn, proveidors.renderNewForm);
 
 router.route('/:id')
 .get(catchAsync(proveidors.showProveidor))
-.put(isLoggedIn, isResponsable(proveidor), validateProveidor, catchAsync(proveidors.updateProveidor))
-.delete(isLoggedIn, isResponsable(proveidor), catchAsync(proveidors.deleteProveidor));
+.put(isLoggedIn, isResponsableOrAdmin(proveidor), validateProveidor, catchAsync(proveidors.updateProveidor))
+.delete(isLoggedIn, isResponsableOrAdmin(proveidor), catchAsync(proveidors.deleteProveidor));
 
 
-router.get('/:id/edit', isLoggedIn, isResponsable(proveidor), catchAsync(proveidors.renderEditForm));
+router.get('/:id/edit', isLoggedIn, isResponsableOrAdmin(proveidor), catchAsync(proveidors.renderEditForm));
 
 
 module.exports = router;

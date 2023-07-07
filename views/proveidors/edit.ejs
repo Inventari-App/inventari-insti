@@ -1,42 +1,77 @@
 <% layout('layouts/boilerplate')%>
 
-    <div class="row">
-        <h1 class="text-center">Editar proveidor</h1>
-        <div class="col-6 offset-3">
-            <form action="/proveidors/<%=proveidor._id%>?_method=PUT" method="POST"  class="validated-form">
-                <div class="mb-3">
-                    <label class="form-label" for="nom">Nom</label>
-                    <input class="form-control" type="text" id="nom" readonly name="proveidor[nom]" value="<%=proveidor.nom %>" required>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label" for="nom">CIF</label>
-                    <input class="form-control" type="text" id="cif" readonly name="proveidor[cif]" value="<%=proveidor.cif %>" required>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label" for="nom">Adreça</label>
-                    <input class="form-control" type="text" id="adreca" name="proveidor[adreca]" value="<%=proveidor.adreca %>" required>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label" for="nom">Telèfon</label>
-                    <input class="form-control" type="text" id="telefon" name="proveidor[telefon]" value="<%=proveidor.telefon %>" required>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label" for="nom">Email</label>
-                    <input class="form-control" type="text" id="email" name="proveidor[email]" value="<%=proveidor.email %>" required>
-                </div>
-                
-                <div class="mb-3">
-                    <button class="btn btn-success">Modifica proveidor</button>
-                </div>
-            </form>
-            <a href="/proveidors">Tots els Proveidors</a>
-        </div>
+<h1>Editar Proveidor</h1>
+<div class="row">
+  <div class="col-6 offset-3">
+  <form
+    action="/proveidors/<%=proveidor._id%>?_method=PUT"
+    method="POST"
+    class="validated-form"
+  >
+    <div class="mb-3">
+      <label for="nom">Nom</label>
+      <input
+        class="form-control"
+        type="text"
+        id="nom"
+        name="proveidor[nom]"
+        value="<%=proveidor.nom %>"
+        required
+      />
     </div>
-
-    <script>
-
-    </script>
+    <div class="mb-3">
+      <label for="email">Email</label>
+      <input
+        class="form-control"
+        type="email"
+        id="email"
+        name="proveidor[email]"
+        value="<%= proveidor.email%>"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="cif">CIF</label>
+      <input
+        class="form-control"
+        name="proveidor[cif]"
+        value="<%= proveidor.cif %>"
+        required
+        type="text"
+        id="cif"
+        <%= proveidor.cif %>
+      />
+    </div>
+    <div class="mb-3">
+      <label for="adreca">Adreca</label>
+      <input
+        class="form-control"
+        name="proveidor[adreca]"
+        value="<%= proveidor.adreca %>"
+        required
+        type="text"
+        id="adreca"
+        <%= proveidor.cif %>
+      />
+    </div>
+    <div class="mb-3">
+      <label for="telefon">Telefon</label>
+      <input
+        class="form-control"
+        name="proveidor[telefon]"
+        value="<%= proveidor.telefon %>"
+        required
+        type="text"
+        id="telefon"
+        <%= proveidor.telefon %>
+      />
+    </div>
+    <% if(true) { %>
+      <div class="mb-3">
+        <button class="btn btn-warning" type="submit">Actualitzar Proveidor</button>
+      </div>
+    <% } %>
+  </form>
+  <a href="/proveidors/<%= proveidor._id %>">Tornar al proveidor</a>
+  </div>
+</div>
