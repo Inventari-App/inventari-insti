@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
 const unitats = require('../controllers/unitats');
-const { isLoggedIn, isResponsable, validateSchema } = require('../middleware');
+const { isLoggedIn, isResponsableOrAdmin, validateSchema } = require('../middleware');
 const { unitatSchema } = require('../schemas');
 const unitat = require('../models/unitat');
 
@@ -19,11 +19,11 @@ router.get('/new', isLoggedIn, unitats.renderNewForm);
 
 router.route('/:id')
 .get(catchAsync(unitats.showUnitat))
-.put(isLoggedIn, isResponsable(unitat), validateUnitat, catchAsync(unitats.updateUnitat))
-.delete(isLoggedIn, isResponsable(unitat), catchAsync(unitats.deleteUnitat));
+.put(isLoggedIn, isResponsableOrAdmin(unitat), validateUnitat, catchAsync(unitats.updateUnitat))
+.delete(isLoggedIn, isResponsableOrAdmin(unitat), catchAsync(unitats.deleteUnitat));
 
 
-router.get('/:id/edit', isLoggedIn, isResponsable(unitat), catchAsync(unitats.renderEditForm));
+router.get('/:id/edit', isLoggedIn, isResponsableOrAdmin(unitat), catchAsync(unitats.renderEditForm));
 
 
 module.exports = router;

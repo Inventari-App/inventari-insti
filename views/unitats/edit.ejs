@@ -1,47 +1,62 @@
 <% layout('layouts/boilerplate')%>
 
-    <div class="row">
-        <h1 class="text-center">Editar unitat</h1>
-        <div class="col-6 offset-3">
-            <form action="/unitats/<%=unitat._id%>?_method=PUT" method="POST"  class="validated-form">
-                <div class="mb-3">
-                    <label class="form-label" for="nom">Nom Unitat</label>
-                    <input class="form-control" type="text" id="nom" name="unitat[nom]" value="<%=unitat.nom %>" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" for="unitat">Ubicació</label>
-                    <input class="form-control" type="text" id="unitat" name="unitat[unitat]" required
-                        value="<%= unitat.unitat%>">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" for="imatge">Imatge Url</label>
-                    <input class="form-control" type="text" id="imatge" name="unitat[imatge]"
-                        value="<%= unitat.imatge%>">
-                </div>
+<div class="row">
+  <h1 class="text-center">Editar unitat</h1>
+  <div class="col-6 offset-3">
+    <form
+      action="/unitats/<%=unitat._id%>?_method=PUT"
+      method="POST"
+      class="validated-form"
+    >
+      <div class="mb-3">
+        <label class="form-label" for="nom">Nom Unitat</label>
+        <input
+          class="form-control"
+          type="text"
+          id="nom"
+          name="unitat[nom]"
+          value="<%=unitat.nom %>"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="planta">Planta</label>
+        <input
+          class="form-control"
+          type="text"
+          id="planta"
+          name="unitat[planta]"
+          required
+          value="<%= unitat.planta%>"
+        />
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="area">Area</label>
+        <input
+          class="form-control"
+          type="text"
+          id="area"
+          name="unitat[area]"
+          required
+          value="<%= unitat.area%>"
+        />
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="zona">Zona</label>
+        <input
+          class="form-control"
+          type="text"
+          id="zona"
+          name="unitat[zona]"
+          required
+          value="<%= unitat.zona%>"
+        />
+      </div>
 
-
-
-                <div class="mb-3">
-                    <label class="form-label" for="preu">Preu de cost</label>
-                    <div class="input-group">
-                        <span class="input-group-text" id="preu-label">€</span>
-                        <input type="number" min="0"  step="0.01" class="form-control" name="unitat[preu]" id="preu"
-                            placeholder="0.00" value="<%= unitat.preu%>" aria-label="preu"
-                            aria-describedby="preu-label" required>
-                    </div>
-
-                </div>
-
-
-                <div class="mb-3">
-                    <label class="form-label" for="descripcio">Descripció</label>
-                    <textarea class="form-control" type="text" id="descripcio" required
-                        name="unitat[descripcio]"><%= unitat.descripcio%></textarea>
-                </div>
-                <div class="mb-3">
-                    <button class="btn btn-success">Modifica unitat</button>
-                </div>
-            </form>
-            <a href="/unitats">Totes els Unitats</a>
-        </div>
-    </div>
+      <div class="mb-3">
+        <button class="btn btn-success">Modifica unitat</button>
+      </div>
+    </form>
+    <a href="/unitats">Totes els Unitats</a>
+  </div>
+</div>

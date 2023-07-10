@@ -19,3 +19,14 @@
   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 <% } %>
+
+<script>
+  window.addEventListener('load', () => {
+    const alerts = document.querySelectorAll('.alert')
+    setTimeout(() => {
+      Array.prototype.forEach.call(alerts, (alert) => {
+        alert.classList.remove('show')
+      })
+    }, 5000);
+  })
+</script>

@@ -23,13 +23,15 @@ module.exports.createUnitat = async (req, res, next) => {
 }
 
 module.exports.showUnitat =  async (req, res, next) => {
+    const { user } = req
     const unitat = await Unitat.findById(req.params.id).populate('responsable');
+    const responsable = unitat.responsable
     
     if (!unitat) {
         req.flash('error', "No es pot trobar l'unitat!");
         return res.redirect('/unitats');
     }
-    res.render('unitats/show', { unitat });
+    res.render('unitats/show', { unitat, isAdmin: user.isAdmin, isOwner: responsable && responsable._id.equals(user.id) });
 }
 
 module.exports.getUnitats =  async (req, res, next) => {
