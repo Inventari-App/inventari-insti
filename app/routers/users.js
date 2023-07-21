@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
-const catchAsync = require("../../utils/catchAsync");
-const User = require("../../models/user");
+const catchAsync = require("../utils/catchAsync");
+const User = require("../models/user");
 const {
   getAllUsers,
   getUser,
@@ -10,8 +10,8 @@ const {
   deleteUser,
   createUser,
   verifyUser,
-} = require("../../controllers/users");
-const { isAdmin, isSameUser, isSameUserOrAdmin } = require("../../middleware");
+} = require("../controllers/users");
+const { isAdmin, isSameUserOrAdmin } = require("../middleware");
 
 router.get("/register", (req, res) => {
   res.render("users/register");
@@ -88,7 +88,7 @@ router.post(
         next()
       }
     } catch (error) {
-      req.flash("error", "L\'usuari o el password son incorrectes")
+      req.flash("error", "L'usuari o el password son incorrectes")
       res.redirect("/login")
     }
   },

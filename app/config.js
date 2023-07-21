@@ -4,17 +4,13 @@ const bodyParser = require("body-parser");
 const methodOverride = require("method-override");
 const session = require("express-session");
 const mongoSanitize = require("express-mongo-sanitize");
-const MongoDBStore = require("connect-mongo")(session);
 const { isProduction } = require("./utils/helpers")
-const url = require('url');
 const ejsMate = require("ejs-mate");
-const ExpressError = require("./utils/ExpressError");
 const configHelmet = require("./helmet");
 const configurePassport = require("./passport");
 const enforceHttps = require("./utils/enforceHttps");
 const configureFlash = require("./flash");
-const appRouter = require("./routers/app/appRouter");
-const blogRouter = require("./routers/blog")
+const appRouter = require("./routers/appRouter");
 const { handleRouteError } = require("./middleware");
 
 if (!isProduction) {

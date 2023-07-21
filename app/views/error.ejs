@@ -1,11 +1,23 @@
-    <% layout('layouts/boilerplate')%>
-    <div class="row">
-        <div class="col-6 offset-3">
-            <div class="alert alert-danger" role="alert">
-                <h4 class="alert-heading"><%=err.message%></h4>
-                <% if (process.env.NODE_ENV !== "production") { %>
-                <p><%= err.stack %></p>
-                <% } %>
-            </div>
-        </div>
-    </div>
+<% layout('layouts/boilerplate')%>
+<style>
+  /* Customize the page appearance here */
+  body {
+    background-color: #f8f9fa;
+  }
+
+  .container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+</style>
+
+<div class="container">
+  <div class="text-center">
+    <h1 class="display-1">404</h1>
+    <h2>Error</h2>
+    <p>No s'ha trobat la pagina.</p>
+    <a href="/" class="btn btn-primary">Torna</a>
+  </div>
+</div>

@@ -1,6 +1,5 @@
 const express = require("express")
-const ExpressError = require("../../utils/ExpressError");
-const appRoutes = require("./app");
+const ExpressError = require("../utils/ExpressError");
 const userRoutes = require("./users");
 const articleRoutes = require("./articles");
 const invoiceRoutes = require("./invoices");
@@ -11,7 +10,7 @@ const plantaRoutes = require("./plantas");
 const areaRoutes = require("./areas");
 const utilitatRoutes = require("./utilitats");
 const proveidorRoutes = require("./proveidors");
-const { requireLogin } = require("../../middleware");
+const { requireLogin } = require("../middleware");
 
 function appRouter () {
   const router = express.Router();
@@ -32,7 +31,8 @@ function appRouter () {
   });
 
   router.all("*", (req, res, next) => {
-    next(new ExpressError("Pàgina no trobada", 404));
+    return res.render('error')
+    // next(new ExpressError("Pàgina no trobada", 404));
   });
 
   return router

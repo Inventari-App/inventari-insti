@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const catchAsync = require('../../utils/catchAsync');
-const areas = require('../../controllers/areas');
-const { isLoggedIn, isResponsable, validateSchema } = require('../../middleware');
-const { areaSchema } = require('../../schemas');
-const area = require('../../models/area');
+const catchAsync = require('../utils/catchAsync');
+const areas = require('../controllers/areas');
+const { isLoggedIn, isResponsable, validateSchema } = require('../middleware');
+const { areaSchema } = require('../schemas');
+const area = require('../models/area');
 
 const validateArea = validateSchema(areaSchema)
 
