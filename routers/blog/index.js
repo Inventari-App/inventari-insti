@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const catchAsync = require('../utils/catchAsync');
-const app = require('../controllers/app')
 
 router.route('/')
-.get(catchAsync(app.index))
+.get((req, res, next) => {
+  res.render('blog/index')
+})
 
 // router.route('/')
 // .get(catchAsync(areas.index))

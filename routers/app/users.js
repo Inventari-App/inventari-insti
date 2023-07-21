@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
-const catchAsync = require("../utils/catchAsync");
-const User = require("../models/user");
+const catchAsync = require("../../utils/catchAsync");
+const User = require("../../models/user");
 const {
   getAllUsers,
   getUser,
@@ -10,8 +10,8 @@ const {
   deleteUser,
   createUser,
   verifyUser,
-} = require("../controllers/users");
-const { isAdmin, isSameUser, isSameUserOrAdmin } = require("../middleware");
+} = require("../../controllers/users");
+const { isAdmin, isSameUser, isSameUserOrAdmin } = require("../../middleware");
 
 router.get("/register", (req, res) => {
   res.render("users/register");
@@ -100,7 +100,7 @@ router.post(
   }),
   (req, res) => {
     req.flash("success", "Benvingut/da de nou!");
-    const redirectUrl = req.session.returnTo || "/";
+    const redirectUrl = req.session.returnTo || "/invoices";
     //delete req.session.returnTo;
     res.redirect(redirectUrl);
   }
@@ -112,7 +112,7 @@ router.get("/logout", (req, res, next) => {
       return next(err);
     }
     req.flash("success", "Adéu!");
-    res.redirect("/");
+    res.redirect("/login");
   });
 });
 

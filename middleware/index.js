@@ -70,7 +70,6 @@ module.exports.isResponsableOrAdmin = (Model) =>
     next();
   };
   
-  
   module.exports.isAdmin = async (req, res, next) => {
     try {
       const { id: userId } = req.user;
@@ -96,3 +95,18 @@ module.exports.isInvoiceAprovada = async (req, res, next) => {
   }
   next();
 };
+
+module.exports.requireLogin = async (req, res, next) => {
+  if (req.user) {
+    return next()
+  } else {
+    req.flash('error', 'Has d\'estar logat per veure la pagina.')
+    res.redirect('/login')
+  }
+}
+
+module.exports.handleRouteError = async (err, req, res, next) => {
+  const { statusCode = 500, message = "Alguna cosa ha fallat" } = err;
+  if (!err.message) err.message = "Oh No, Alguna cosa ha fallat!";
+  res.status(statusCode).render("error", { err });
+}

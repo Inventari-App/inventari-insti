@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const catchAsync = require('../utils/catchAsync');
-const proveidors = require('../controllers/proveidors');
-const { isLoggedIn, isResponsableOrAdmin, validateSchema } = require('../middleware');
-const { proveidorSchema } = require('../schemas');
-const proveidor = require('../models/proveidor');
+const catchAsync = require('../../utils/catchAsync');
+const proveidors = require('../../controllers/proveidors');
+const { isLoggedIn, isResponsableOrAdmin, validateSchema } = require('../../middleware');
+const { proveidorSchema } = require('../../schemas');
+const proveidor = require('../../models/proveidor');
 
 const validateProveidor = validateSchema(proveidorSchema)
 

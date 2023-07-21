@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const catchAsync = require('../utils/catchAsync');
-const zonas = require('../controllers/zonas');
-const { isLoggedIn, isResponsable, validateSchema } = require('../middleware');
-const { zonaSchema } = require('../schemas');
-const zona = require('../models/zona');
+const catchAsync = require('../../utils/catchAsync');
+const zonas = require('../../controllers/zonas');
+const { isLoggedIn, isResponsable, validateSchema } = require('../../middleware');
+const { zonaSchema } = require('../../schemas');
+const zona = require('../../models/zona');
 
 const validateZona = validateSchema(zonaSchema)
 

@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const catchAsync = require('../utils/catchAsync');
-const utilitats = require('../controllers/utilitats');
-const { isLoggedIn, isResponsable, validateSchema } = require('../middleware');
-const { unitatSchema } = require('../schemas');
-const utilitat = require('../models/utilitat');
+const catchAsync = require('../../utils/catchAsync');
+const utilitats = require('../../controllers/utilitats');
+const { isLoggedIn, isResponsable, validateSchema } = require('../../middleware');
+const { unitatSchema } = require('../../schemas');
+const utilitat = require('../../models/utilitat');
 
 const validateUtilitat = validateSchema(unitatSchema)
 
