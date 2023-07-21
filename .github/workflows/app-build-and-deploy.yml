@@ -1,0 +1,25 @@
+name: Build and Deploy App
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Build and Deploy App
+        env:
+          DOCKER_BUILD_CONTEXT: ./app
+          DOCKERFILE_PATH: ./app/Dockerfile
+          APP_NAME: app
+          HOST: ${{ secrets.HOST }}
+          SSHKEY: ${{ secrets.SSHKEY }}
+          PASSPHRASE: ${{ secrets.PASSPHRASE }}
+          USERNAME: ${{ secrets.USERNAME }}
+        run: |
+          docker-compose -f ./docker-compose.yml build $APP_NAME
+          docker-compose -f ./docker-compose.yml up -d $APP_NAME
