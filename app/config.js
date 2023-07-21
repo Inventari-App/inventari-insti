@@ -1,5 +1,4 @@
 const express = require("express");
-const subdomain = require('express-subdomain');
 const path = require("path");
 const bodyParser = require("body-parser");
 const methodOverride = require("method-override");
