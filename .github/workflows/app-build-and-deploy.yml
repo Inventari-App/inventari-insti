@@ -11,6 +11,10 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
+      - name: Clone App Repository
+        run: |
+          git clone git@github.com:Inventari-App/app.git ./app
+
       - name: Build and Deploy App
         env:
           DOCKER_BUILD_CONTEXT: ./app
