@@ -5,6 +5,31 @@ const { useNodemailer } = require("../nodemailer/sendEmail");
 const { getProtocol } = require("../utils/helpers");
 const protocol = getProtocol()
 
+async function createCenter(req, res, next) {
+  try {
+    const { center, name, surname, email, password } = req.body;
+    const user = new User({ email, username });
+    await User.register(user, password);
+    const { sendEmail, message } = useNodemailer({
+      to: user.email,
+      model: "user",
+      reason: "verify",
+    });
+    await sendEmail({
+      subject: message.subject,
+      text: message.text.replace(
+        /{{url}}/,
+        `${protocol}://${req.headers.host}/verify?userId=${user.id}&token=${user.verificationHash}`
+      ),
+    });
+    req.flash("info", "Tens 10 minuts per activar el teu usuari fent click al link que t'hem enviat per correu.")
+    res.redirect("/login")
+  } catch (e) {
+    req.flash("error", e.message);
+    res.redirect("register");
+  }
+}
+
 async function createUser(req, res, next) {
   try {
     const { email, username, password } = req.body;
@@ -113,4 +138,4 @@ async function verifyUser(req, res, next) {
   }
 }
 
-module.exports = { getAllUsers, getUser, updateUser, deleteUser, verifyUser, createUser };
+module.exports = { getAllUsers, getUser, updateUser, deleteUser, verifyUser, createUser, createCenter };

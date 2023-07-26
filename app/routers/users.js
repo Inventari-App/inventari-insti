@@ -10,6 +10,7 @@ const {
   deleteUser,
   createUser,
   verifyUser,
+  createCenter,
 } = require("../controllers/users");
 const { isAdmin, isSameUserOrAdmin } = require("../middleware");
 
@@ -20,6 +21,13 @@ router.get("/register", (req, res) => {
 router.get("/verify", catchAsync(async (req, res, next) => {
   await verifyUser(req, res, next)
 }))
+
+router.post(
+  "/register-center",
+  catchAsync(async (req, res, next) => {
+    await createCenter(req, res, next)
+  })
+);
 
 router.post(
   "/register",
