@@ -1,5 +1,9 @@
 version: '3.8'
 
+networks:
+  my_network: # Define the custom network
+    driver: bridge
+
 services:
   app:
     build:
@@ -7,6 +11,9 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
+      - "9229:9229"
+    networks:
+      - my_network # Connect the "app" service to the custom network
     restart: always
 
   landing-page:
@@ -14,5 +21,7 @@ services:
       context: ./landing-page
       dockerfile: Dockerfile
     ports:
-      - "3001:3000" # Use a different host port for the second app
+      - "3001:3000"
+    networks:
+      - my_network # Connect the "landing-page" service to the custom network
     restart: always

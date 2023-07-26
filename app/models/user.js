@@ -10,10 +10,22 @@ const UserSchema = new Schema({
     required: true,
     unique: true,
   },
+  name: {
+    type: String,
+    required: true,
+  },
+  surname: {
+    type: String,
+    required: true,
+  },
   username: {
     type: String,
     required: true,
     unique: true,
+  },
+  centerId: {
+    type: Schema.Types.ObjectId,
+    ref: "Center"
   },
   isAdmin: { type: Boolean, default: false },
   isVerified: { type: Boolean, default: false },

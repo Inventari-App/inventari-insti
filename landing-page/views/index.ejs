@@ -194,13 +194,14 @@
         <h2 class="text-center mb-4">Registra't</h2>
         <div class="row">
           <div class="col-md-6 mx-auto">
-            <form id="registerForm">
+            <form id="registerForm" method="post" action="http://localhost:3000/register-center">
               <div class="mb-3">
                 <label for="center" class="form-label">Nom del Centre</label>
                 <input
                   type="text"
                   class="form-control"
                   id="center"
+                  name="center"
                   placeholder="Introdueix el nom del centre (e.g. IES Sant Joan)"
                   required
                 />
@@ -211,6 +212,7 @@
                   type="text"
                   class="form-control"
                   id="name"
+                  name="name"
                   placeholder="Introdueix el teu nom"
                   required
                 />
@@ -221,6 +223,7 @@
                   type="text"
                   class="form-control"
                   id="surname"
+                  name="surname"
                   placeholder="Introdueix els cognoms"
                   required
                 />
@@ -231,6 +234,7 @@
                   type="email"
                   class="form-control"
                   id="email"
+                  name="email"
                   placeholder="Introdueix el teu correu electrònic"
                   required
                 />
@@ -241,6 +245,7 @@
                   type="password"
                   class="form-control"
                   id="password"
+                  name="password"
                   placeholder="Introdueix la teva contrasenya"
                   required
                 />

@@ -1,3 +1,4 @@
+const Center = require("../models/center")
 const User = require("../models/user");
 const { generateHash } = require("random-hash");
 const { getExpirationTs } = require("../utils/helpers");
@@ -7,8 +8,9 @@ const protocol = getProtocol()
 
 async function createCenter(req, res, next) {
   try {
-    const { center, name, surname, email, password } = req.body;
-    const user = new User({ email, username });
+    const { center: centerName, name, surname, email, password } = req.body;
+    const center = new Center({ name: centerName })
+    const user = new User({ email, username: email, name, surname, centerId: center.id, isAdmin: true });
     await User.register(user, password);
     const { sendEmail, message } = useNodemailer({
       to: user.email,
