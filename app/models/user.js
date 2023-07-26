@@ -21,6 +21,17 @@ const UserSchema = new Schema({
   verificationTs: { type: Number, default: getExpirationTs(60 * 10 * 1000) }, // 10mins
 });
 
+// This logic is to replace username by email for loging in the app
+UserSchema.pre('save', function (next) {
+  // Check if username is not set or is an empty string
+  if (!this.username || this.username.trim() === '') {
+    this.username = this.email; // Copy email to username
+  }
+
+  // Continue with the save operation
+  next();
+});
+
 UserSchema.plugin(passportLocalMongoose);
 
 module.exports = mongoose.model("User", UserSchema);
