@@ -32,8 +32,8 @@ async function createCenter(req, res, next) {
 
 async function createUser(req, res, next) {
   try {
-    const { email, username, password } = req.body;
-    const user = new User({ email, username });
+    const { email, password } = req.body;
+    const user = new User({ email, username: email });
     await User.register(user, password);
     const { sendEmail, message } = useNodemailer({
       to: user.email,
