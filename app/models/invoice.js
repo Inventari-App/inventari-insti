@@ -18,12 +18,15 @@ const InvoiceSchema = new Schema(
         area: String,
         proveidor: String,
         subtotal: Number,
-        rebuts: { type: Array, default: function () {
+        rebuts: {
+          type: Array,
+          default: function () {
             return [...Array(this.quantitat).keys()].map(() => ({
-                numSerie: "",
-                rebut: false,
-            }))
-        }}
+              numSerie: "",
+              rebut: false,
+            }));
+          },
+        },
       },
     ],
     total: {
@@ -35,12 +38,14 @@ const InvoiceSchema = new Schema(
         );
       },
     },
-
     responsable: {
       type: Schema.Types.ObjectId,
       ref: "User",
     },
-
+    center: {
+      type: Schema.Types.ObjectId,
+      ref: "Center"
+    },
     status: { type: String, default: "pendent" }, // pendent, aprovada, rebutjada, rebuda
   },
   { timestamps: true }

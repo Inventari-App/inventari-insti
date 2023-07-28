@@ -1,30 +1,23 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const ItemSchema = new Schema({
+const ItemSchema = new Schema(
+  {
     nom: String,
     imatge: Array,
     descripcio: String,
     naturalesa: String,
     tipus: String,
     responsable: {
-        type: Schema.Types.ObjectId,
-        ref: 'User'
-    }
-    /* proforma: String,
-    comanda: String,
-    albara: String,
-    factura: String,
-    
-    num_serie: String,
-    unitats_integrants: Number,
-    estat: String,
-    data_canvi: Date,
-    num_doc_procedencia: String,
-    data_incorporacio: Date,
-    proveidor: String,
-    objectiu: String,
-    observacions: String, */
-}, { timestamps: true });
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+    center: {
+      type: Schema.Types.ObjectId,
+      ref: "Center",
+    },
+  },
+  { timestamps: true }
+);
 
-module.exports = mongoose.model('Item', ItemSchema);
+module.exports = mongoose.model("Item", ItemSchema);

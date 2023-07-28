@@ -7,6 +7,10 @@ const AreaSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "User",
   },
+  center: {
+    type: Schema.Types.ObjectId,
+    ref: "Center"
+  },
 });
 
 module.exports = mongoose.model("Area", AreaSchema);
