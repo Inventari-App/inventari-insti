@@ -3,7 +3,7 @@ const path = require('path');
 const mainController = require('./controllers/mainController');
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 
 // Set up EJS view engine
 app.set('views', path.join(__dirname, 'views'));

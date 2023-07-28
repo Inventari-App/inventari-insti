@@ -23,7 +23,7 @@ const UserSchema = new Schema({
     required: true,
     unique: true,
   },
-  centerId: {
+  center: {
     type: Schema.Types.ObjectId,
     ref: "Center"
   },

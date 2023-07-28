@@ -9,8 +9,9 @@ const protocol = getProtocol()
 async function createCenter(req, res, next) {
   try {
     const { center: centerName, name, surname, email, password } = req.body;
-    const center = new Center({ name: centerName })
-    const user = new User({ email, username: email, name, surname, centerId: center.id, isAdmin: true });
+    const center = await new Center({ name: centerName }).save()
+    const user = new User({ email, username: email, name, surname, center: center._id, isAdmin: true });
+    center.users.push(user._id)
     await User.register(user, password);
     const { sendEmail, message } = useNodemailer({
       to: user.email,
