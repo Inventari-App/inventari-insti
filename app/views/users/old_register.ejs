@@ -1,0 +1,77 @@
+<% layout('layouts/boilerplate')%>
+
+<style>
+    body {
+      background-image: url("https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80");
+      background-size: contain;
+      backdrop-filter: saturate(0.5);
+    }
+  </style>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3 col-xl-4 offset-xl-4">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Registre</h5>
+                    <form id="loginForm" action="/register" method="POST" class="validated-form" >
+                        <div class="my-4">
+                            <label class="form-label" for="email">Email</label>
+                            <input class="form-control" type="email" id="email" name="email" required>
+                            <div class="valid-feedback">
+                                Sembla correcte !
+                            </div>
+                        </div>
+                        <div class="my-4">
+                            <label class="form-label" for="password">Contrassenya</label>
+                            <input class="form-control" type="password" id="password" name="password" required>
+                            <div class="valid-feedback">
+                                Sembla correcte !
+                            </div>
+                        </div>
+                        <div class="my-4">
+                            <label class="form-label" for="passwordRepeat">Repeteix Contrassenya</label>
+                            <input class="form-control" type="password" id="passwordRepeat" name="passwordRepeat" required>
+                            <div class="valid-feedback">
+                                Sembla correcte !
+                            </div>
+                            <div class="password invalid-feedback">
+                                El password no coincideix
+                            </div>
+                        </div>
+                        <button class="btn btn-success btn-block">Registre</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.addEventListener('load', () => {
+        const formEl = document.querySelector('#loginForm')
+        const passwordResetFeedbackEl = document.querySelector('.password.invalid-feedback')
+        const passwordInputs = document.querySelectorAll('#password, #passwordRepeat')
+        Array.prototype.forEach.call(passwordInputs, passwordInput => {
+            passwordInput.addEventListener('input', () => passwordResetFeedbackEl.classList.remove('d-block'))
+        })
+        formEl.addEventListener('submit', e => {
+            const isPasswordValid = validatePassword(passwordInputs)
+            if (!isPasswordValid) {
+                e.preventDefault()
+                passwordResetFeedbackEl.classList.add('d-block')
+            }
+        })
+    })
+
+    function validatePassword(passwordInputs) {
+        let isValid = true
+        Array.prototype.reduce.call(passwordInputs, (acc, passwordInput) => {
+            const val = passwordInput.value
+            if (!acc) return val
+            if (acc !== val) isValid = false
+            return val
+        }, '')
+        return isValid
+    }
+</script>

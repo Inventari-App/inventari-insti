@@ -13,6 +13,7 @@ const {
   createCenter,
 } = require("../controllers/users");
 const { isAdmin, isSameUserOrAdmin } = require("../middleware");
+const Center = require("../models/center");
 
 router.get("/register", (req, res) => {
   res.render("users/register");
@@ -42,6 +43,17 @@ router.get(
   catchAsync(async (req, res) => {
     const users = await getAllUsers(req);
     res.render("users/index", { users });
+  })
+);
+
+router.get(
+  "/users/new",
+  isAdmin,
+  catchAsync(async (req, res, next) => {
+    const center = await Center.findById(req.user.center)
+    if (!center) return next()
+
+    res.render("users/new", { center });
   })
 );
 

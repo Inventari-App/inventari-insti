@@ -35,8 +35,8 @@ async function createCenter(req, res, next) {
 
 async function createUser(req, res, next) {
   try {
-    const { email, password } = req.body;
-    const user = new User({ email, username: email });
+    const { email, password, centerId } = req.body;
+    const user = new User({ ...req.body, username: email, center: centerId });
     await User.register(user, password);
     const { sendEmail, message } = useNodemailer({
       to: user.email,
@@ -50,11 +50,11 @@ async function createUser(req, res, next) {
         `${protocol}://${req.headers.host}/verify?userId=${user.id}&token=${user.verificationHash}`
       ),
     });
-    req.flash("info", "Tens 10 minuts per activar el teu usuari fent click al link que t'hem enviat per correu.")
-    res.redirect("/login")
+    req.flash("info", "Avisa a l'usuari, hem enviar un correu amb un link de verificacio que necessiten clicar per activar l'usuari.")
+    res.redirect("/users")
   } catch (e) {
     req.flash("error", e.message);
-    res.redirect("register");
+    res.redirect("/users");
   }
 }
 

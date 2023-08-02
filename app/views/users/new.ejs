@@ -1,20 +1,112 @@
 <% layout('layouts/boilerplate')%>
 
-    <form action="/users" method="POST"  class="validated-form">
-        <div class="mb-3">
-            <label for="username">Responsable</label>
-            <input class="form-control" type="text" id="username" name="user[username]" required>
-        </div>
-        <div class="mb-3">
-            <label for="email">Email</label>
-            <input class="form-control" type="email" id="email" name="user[email]" required>
-        </div>
-        <div class="mb-3">
-            <label for="password">Password</label>
-            <input class="form-control" type="text" id="password" name="user[password]" required>
-        </div>
-<div class="mb-3">
-        <button>Afegeix Usuari</button>
+<h1 class="text-center">Crea un nou usuari</h1>
+
+<div class="col-6 offset-3">
+  <form action="/register" method="POST" class="validated-form">
+    <input name="centerId" value="<%= center.id %>" hidden />
+    <div class="mb-3">
+      <label for="centerName" class="form-label">Nom del Centre</label>
+      <input
+        type="text"
+        class="form-control"
+        id="centerName"
+        name="centerName"
+        placeholder="Introdueix el nom del centre (e.g. IES Sant Joan)"
+        required
+        disabled
+        value="<%= center.name %>"
+      />
     </div>
-    </form>
-    <a href="/users">Tots els Usuaris</a>
+    <div class="mb-3">
+      <label for="name" class="form-label">Nom</label>
+      <input
+        type="text"
+        class="form-control"
+        id="name"
+        name="name"
+        placeholder="Introdueix el teu nom"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="surname" class="form-label">Cognoms</label>
+      <input
+        type="text"
+        class="form-control"
+        id="surname"
+        name="surname"
+        placeholder="Introdueix els cognoms"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="email" class="form-label">Correu electrònic</label>
+      <input
+        type="email"
+        class="form-control"
+        id="email"
+        name="email"
+        placeholder="Introdueix el teu correu electrònic"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Contrasenya</label>
+      <input
+        type="password"
+        class="form-control"
+        id="password"
+        name="password"
+        placeholder="Introdueix la teva contrasenya"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="passwordRepeat" class="form-label"
+        >Validacio de Contrasenya</label
+      >
+      <input
+        type="password"
+        class="form-control"
+        id="passwordRepeat"
+        placeholder="Torna a introduir la teva contrasenya"
+        required
+      />
+      <div class="valid-feedback">Sembla correcte !</div>
+      <div class="password invalid-feedback">El password no coincideix</div>
+    </div>
+    <button type="submit" class="btn btn-primary">Registre</button>
+  </form>
+
+  <a href="/users">Tots els Usuaris</a>
+</div>
+
+<script>
+  window.addEventListener('load', () => {
+      const formEl = document.querySelector('#registerForm')
+      const passwordResetFeedbackEl = document.querySelector('.password.invalid-feedback')
+      const passwordInputs = document.querySelectorAll('#password, #passwordRepeat')
+      Array.prototype.forEach.call(passwordInputs, passwordInput => {
+          passwordInput.addEventListener('input', () => passwordResetFeedbackEl.classList.remove('d-block'))
+      })
+      formEl.addEventListener('submit', e => {
+          const isPasswordValid = validatePassword(passwordInputs)
+          if (!isPasswordValid) {
+              e.preventDefault()
+              passwordResetFeedbackEl.classList.add('d-block')
+          }
+      })
+  })
+
+  function validatePassword(passwordInputs) {
+      let isValid = true
+      Array.prototype.reduce.call(passwordInputs, (acc, passwordInput) => {
+          const val = passwordInput.value
+          if (!acc) return val
+          if (acc !== val) isValid = false
+          return val
+      }, '')
+      return isValid
+  }
+</script>
