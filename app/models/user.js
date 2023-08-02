@@ -1,3 +1,5 @@
+const { addCenterFilter } = require("../db/middlewares");
+const contextPlugin = require("mongoose-request-context");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const passportLocalMongoose = require("passport-local-mongoose");
@@ -44,6 +46,14 @@ UserSchema.pre('save', function (next) {
   next();
 });
 
+UserSchema.plugin(contextPlugin, {
+  contextPath: "request:user.center",
+  propertyName: "center",
+  contextObjectType: Schema.Types.ObjectId,
+});
+
 UserSchema.plugin(passportLocalMongoose);
+
+UserSchema.plugin(addCenterFilter)
 
 module.exports = mongoose.model("User", UserSchema);

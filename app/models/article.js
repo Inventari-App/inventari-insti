@@ -1,3 +1,4 @@
+const contextPlugin = require("mongoose-request-context");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
@@ -20,5 +21,11 @@ const ArticleSchema = new Schema({
     ref: "Center"
   },
 }, { timestamps: true });
+
+ArticleSchema.plugin(contextPlugin, {
+  contextPath: "request:user.center",
+  propertyName: "center",
+  contextObjectType: Schema.Types.ObjectId,
+});
 
 module.exports = mongoose.model("Article", ArticleSchema);

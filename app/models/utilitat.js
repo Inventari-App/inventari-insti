@@ -1,3 +1,5 @@
+const { addCenterFilter } = require("../db/middlewares");
+const contextPlugin = require("mongoose-request-context");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
@@ -12,5 +14,13 @@ const UtilitatSchema = new Schema({
     ref: "Center"
   },
 });
+
+UtilitatSchema.plugin(contextPlugin, {
+  contextPath: "request:user.center",
+  propertyName: "center",
+  contextObjectType: Schema.Types.ObjectId,
+});
+
+UtilitatSchema.plugin(addCenterFilter)
 
 module.exports = mongoose.model("Utilitat", UtilitatSchema);

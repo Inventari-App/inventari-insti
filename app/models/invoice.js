@@ -1,5 +1,7 @@
+const contextPlugin = require("mongoose-request-context");
 const { number } = require("joi");
 const mongoose = require("mongoose");
+const { addCenterFilter } = require("../db/middlewares");
 const Schema = mongoose.Schema;
 const AutoIncrement = require("mongoose-sequence")(mongoose);
 const InvoiceSchema = new Schema(
@@ -50,5 +52,15 @@ const InvoiceSchema = new Schema(
   },
   { timestamps: true }
 );
+
 InvoiceSchema.plugin(AutoIncrement, { inc_field: "numInvoice" });
+
+InvoiceSchema.plugin(contextPlugin, {
+  contextPath: "request:user.center",
+  propertyName: "center",
+  contextObjectType: Schema.Types.ObjectId,
+});
+
+InvoiceSchema.plugin(addCenterFilter)
+
 module.exports = mongoose.model("Invoice", InvoiceSchema);

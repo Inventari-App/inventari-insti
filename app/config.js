@@ -12,6 +12,7 @@ const enforceHttps = require("./utils/enforceHttps");
 const configureFlash = require("./flash");
 const appRouter = require("./routers/appRouter");
 const { handleRouteError } = require("./middleware");
+const contextService = require("request-context")
 
 if (!isProduction) {
   require("dotenv").config();
@@ -42,6 +43,13 @@ function configureApp(sessionConfig) {
   configHelmet(app)
   configurePassport(app)
   configureFlash(app)
+
+  // Save user info (centerId) on each db operation
+  app.use(contextService.middleware('request'))
+  app.use((req, res, next) => {
+    contextService.set('request:user', req.user)
+    next()
+  })
 
   app.use(appRouter())
 
