@@ -1,0 +1,59 @@
+<% layout('layouts/boilerplate')%>
+  <div class="row">
+    <h1 class="text-center">Nou Departament</h1>
+    <p></p>
+    <p></p>
+    <div class="col-6 offset-3">
+      <form id="departments" action="/departments" method="POST"  class="validated-form">
+        <div class="mb-3">
+          <label class="form-label" for="name">Nom Departament</label>
+          <input class="form-control" type="text" id="name" name="name" required>
+          <div class="valid-feedback">Sembla correcte!</div>
+        </div>
+        <div class="mb-3">
+          <button class="btn btn-success">Afegeix Departament</button>
+        </div>
+      </form>
+      <a href="/departments">Totes els Departaments</a>
+    </div>
+  </div>
+
+  <script>
+    const formEl = document.querySelector("form");
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const tab = urlParams.get("tab");
+  
+    const inputEls = document.querySelectorAll(
+      'input[type="text"], input[type="radio"]:checked, select, textarea'
+    );
+  
+    formEl.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      const formData = Array.prototype.reduce.call(
+        inputEls,
+        (acc, inputEl) => {
+          const key = inputEl.name;
+          const value = inputEl.value;
+          return { ...acc, [key]: value };
+        },
+        {}
+      );
+      console.log(formData);
+  
+      const response = await fetch("/departments", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ department: formData }),
+      });
+      const department = await response.json()
+  
+      if (tab) {
+          window.close();
+      } else {
+          window.location.href = `/departments/${department._id}`
+      }
+    });
+  </script>  

@@ -25,6 +25,10 @@ const UserSchema = new Schema({
     required: true,
     unique: true,
   },
+  department: {
+    type: Schema.Types.ObjectId,
+    ref: "Department"
+  },
   center: {
     type: Schema.Types.ObjectId,
     ref: "Center"

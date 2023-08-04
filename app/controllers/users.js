@@ -65,7 +65,8 @@ async function getAllUsers(req, res, next) {
 
 async function getUser(req, res, next) {
   const user = await User.findById(req.params.id);
-  return user;
+  const center = await Center.findById(user.center)
+  return { user, center };
 }
 
 async function updateUser(req, res, next) {

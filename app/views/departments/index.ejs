@@ -1,0 +1,9 @@
+<% layout('layouts/boilerplate')%>
+
+<%- include('../partials/simpleTable.ejs', {
+    title: 'Tots els departaments',
+    itemName: 'Department',
+    items: departments,
+    keyToName: 'name',
+    path: 'departments'
+}) %>

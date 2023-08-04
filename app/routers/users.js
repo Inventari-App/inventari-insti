@@ -62,7 +62,7 @@ router.get(
   isSameUserOrAdmin,
   catchAsync(async (req, res) => {
     const user = await getUser(req);
-    res.render("users/show", { user });
+    res.render("users/show", { ...user });
   })
 );
 
@@ -71,7 +71,7 @@ router.get(
   isSameUserOrAdmin,
   catchAsync(async (req, res) => {
     const user = await getUser(req);
-    res.render("users/edit", { user });
+    res.render("users/edit", { ...user });
   })
 );
 

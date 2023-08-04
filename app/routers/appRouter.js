@@ -5,6 +5,7 @@ const articleRoutes = require("./articles");
 const invoiceRoutes = require("./invoices");
 const itemRoutes = require("./items");
 const unitatRoutes = require("./unitats");
+const departmentRoutes = require("./departments");
 const zonaRoutes = require("./zonas");
 const plantaRoutes = require("./plantas");
 const areaRoutes = require("./areas");
@@ -19,6 +20,7 @@ function appRouter () {
   router.use("/invoices", requireLogin, invoiceRoutes);
   router.use("/items", requireLogin, itemRoutes);
   router.use("/unitats", requireLogin, unitatRoutes);
+  router.use("/departments", requireLogin, departmentRoutes);
   router.use("/zonas", requireLogin, zonaRoutes);
   router.use("/plantas", requireLogin, plantaRoutes);
   router.use("/areas", requireLogin, areaRoutes);

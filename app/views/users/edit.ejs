@@ -9,15 +9,16 @@
       class="validated-form"
     >
       <div class="mb-3">
-        <label for="username">Responsable</label>
+        <label for="centerName" class="form-label">Nom del Centre</label>
         <input
-          class="form-control"
           type="text"
-          id="username"
-          name="user[username]"
-          value="<%=user.username %>"
+          class="form-control"
+          id="centerName"
+          name="centerName"
+          placeholder="Introdueix el nom del centre (e.g. IES Sant Joan)"
           required
           disabled
+          value="<%= center.name %>"
         />
       </div>
       <div class="mb-3">
@@ -28,6 +29,42 @@
           id="email"
           name="user[email]"
           value="<%= user.email%>"
+          required
+          disabled
+        />
+      </div>
+      <div class="mb-3">
+        <label for="name">Nom</label>
+        <input
+          class="form-control"
+          type="text"
+          id="name"
+          name="user[name]"
+          value="<%=user.name %>"
+          required
+          disabled
+        />
+      </div>
+      <div class="mb-3">
+        <label for="surname">Cognoms</label>
+        <input
+          class="form-control"
+          type="text"
+          id="surname"
+          name="user[surname]"
+          value="<%=user.surname %>"
+          required
+          disabled
+        />
+      </div>
+      <div class="mb-3">
+        <label for="department">Departament</label>
+        <input
+          class="form-control"
+          type="text"
+          id="department"
+          name="user[department]"
+          value="<%=user.department %>"
           required
           disabled
         />
