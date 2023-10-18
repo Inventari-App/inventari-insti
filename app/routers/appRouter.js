@@ -26,8 +26,8 @@ function appRouter () {
   router.use("/proveidors", requireLogin, proveidorRoutes);
 
   router.get("/", (req, res) => {
-    if (req.user) return res.redirect("/invoices");
-    return res.redirect('/login')
+    if (req.user) return res.redirect(301, "/invoices");
+    return res.redirect(301, '/login')
   });
 
   router.all("*", (req, res, next) => {
