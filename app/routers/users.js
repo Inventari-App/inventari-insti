@@ -80,7 +80,7 @@ router.put(
   isSameUserOrAdmin,
   catchAsync(async (req, res) => {
     const user = await updateUser(req);
-    res.redirect(`/users/${user._id}`);
+    res.redirect(301, `/users/${user._id}`);
   })
 );
 
@@ -103,13 +103,13 @@ router.post(
       const { isVerified } = await User.findByUsername(req.body.username)
       if (!isVerified) {
         req.flash('error', 'Has de verificar el teu correu electronic')
-        res.redirect('/login')
+        res.redirect(301, '/login')
       } else {
         next()
       }
     } catch (error) {
       req.flash("error", "L'usuari o el password son incorrectes")
-      res.redirect("/login")
+      res.redirect(301, "/login")
     }
   },
   passport.authenticate("local", {
@@ -122,7 +122,7 @@ router.post(
     req.flash("success", "Benvingut/da de nou!");
     const redirectUrl = req.session.returnTo || "/invoices";
     //delete req.session.returnTo;
-    res.redirect(redirectUrl);
+    res.redirect(301, redirectUrl);
   }
 );
 
@@ -132,7 +132,7 @@ router.get("/logout", (req, res, next) => {
       return next(err);
     }
     req.flash("success", "Adéu!");
-    res.redirect("/login");
+    res.redirect(301, "/login");
   });
 });
 
