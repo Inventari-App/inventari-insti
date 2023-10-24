@@ -1,6 +1,7 @@
 const session = require("express-session");
 const MongoDBStore = require("connect-mongo")(session);
 const mongoose = require("mongoose");
+const { isProduction } = require("./utils/helpers");
 const dbUrl = "mongodb+srv://AlbertRF147:Ruwter7h@cluster0.lvga5.mongodb.net/inventari-insti?retryWrites=true&w=majority"
 const secret = process.env.SECRET || "hauriadesermillorsecret!";
 const db = mongoose.connection;
@@ -36,7 +37,7 @@ const sessionConfig = {
     httpOnly: true,
     expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
     maxAge: 1000 * 60 * 60 * 24 * 7,
-    secure: true,
+    secure: isProduction,
   },
 };
 
