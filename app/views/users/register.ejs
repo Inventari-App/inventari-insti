@@ -1,23 +1,9 @@
 <% layout('layouts/boilerplate')%>
 
-<style>
-  body {
-    background-image: url("https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80");
-    background-size: contain;
-    backdrop-filter: saturate(0.5);
-  }
-</style>
-
-<div class="container mt-5">
-  <div class="row">
-    <div class="col-6 offset-3">
-      <div class="card shadow">
-        <div class="card-body">
-          Si et vols registrar, avisa al teu administrador, ell pot crear el teu
-          usuari. Tu nomes hauras de validar el teu correu electronic un cop
-          s'hagi creat el teu usuari i ja podras entrar a l'aplicacio.
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+<%- include('../partials/infoPage', {
+  text: `
+    Si et vols registrar, avisa al teu administrador, ell pot crear el teu
+    usuari. Tu nomes hauras de validar el teu correu electronic un cop
+    s'hagi creat el teu usuari i ja podras entrar a l'aplicacio.
+  `
+}) %>

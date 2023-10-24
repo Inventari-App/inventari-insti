@@ -15,8 +15,8 @@
     <div class="col-md-6 offset-md-3 col-xl-4 offset-xl-4">
       <div class="card shadow">
         <div class="card-body">
-          <h5 class="card-title">Login</h5>
-          <form action="/login" method="POST" class="validated-form">
+          <h5 class="card-title">Restableix Contrasenya</h5>
+          <form action="/account-recovery" method="POST" class="validated-form">
             <div class="my-4">
               <label class="form-label" for="username">Email</label>
               <input
@@ -27,25 +27,12 @@
                 autofocus
                 required
               />
-              <div class="valid-feedback">Sembla correcte !</div>
+            </div>
 
-              <div class="my-4">
-                <label class="form-label" for="password">Contrassenya</label>
-                <input
-                  class="form-control"
-                  type="password"
-                  id="password"
-                  name="password"
-                  required
-                />
-                <div class="valid-feedback">Sembla correcte !</div>
-              </div>
+            <button class="btn btn-success btn-block">Restableix</button>
 
-              <button class="btn btn-success btn-block">Connectar</button>
-
-              <div class="my-1">
-                <a href="/account-recovery" class="small float-end">He oblidat la contrasenya</a>
-              </div>
+            <div class="my-1">
+              <a href="/login" class="small float-end">Login</a>
             </div>
           </form>
         </div>
@@ -53,3 +40,4 @@
     </div>
   </div>
 </div>
+

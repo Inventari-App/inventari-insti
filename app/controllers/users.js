@@ -58,6 +58,38 @@ async function createUser(req, res, next) {
   }
 }
 
+async function sendPasswordReset(req, res, next) {
+  const { username: email } = req.body;
+  // Validate the email and find the user in the database
+  const user = await User.findOne({ email });
+
+  if (!user) return {}
+
+  // Generate a reset token and store it in the user's document
+  const resetPasswordHash = generateHash({ length: 8 })
+  user.resetPasswordHash = resetPasswordHash;
+  user.resetPasswordTs = Date.now() + 3600000; // Token valid for 1 hour
+  await user.save();
+
+  // Send an email to the user with the reset token
+  // You can use a library like Nodemailer to send emails
+  const { sendEmail, message } = useNodemailer({
+    to: user.email,
+    model: "user",
+    reason: "reset",
+  });
+
+  await sendEmail({
+      subject: message.subject,
+      text: message.text.replace(
+        /{{url}}/,
+        `${protocol}://${req.headers.host}/reset?userId=${user.id}&token=${resetPasswordHash}`
+      ),
+  });
+
+  res.redirect("/reset-sent")
+}
+
 async function getAllUsers(req, res, next) {
   const users = await User.find({});
   return users;
@@ -138,8 +170,8 @@ async function verifyUser(req, res, next) {
     user.isVerified = true;
     await user.save();
     req.flash("success", "L'usuari ha estat activat correctament");
-    res.redirect("/login");
-  }
-}
+        res.redirect("/login");
+      }
+    }
 
-module.exports = { getAllUsers, getUser, updateUser, deleteUser, verifyUser, createUser, createCenter };
+    module.exports = { getAllUsers, getUser, updateUser, deleteUser, verifyUser, createUser, createCenter, sendPasswordReset };

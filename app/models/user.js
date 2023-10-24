@@ -37,6 +37,8 @@ const UserSchema = new Schema({
   isVerified: { type: Boolean, default: false },
   verificationHash: { type: String, default: generateHash({ length: 8 })},
   verificationTs: { type: Number, default: getExpirationTs(60 * 10 * 1000) }, // 10mins
+  resetPasswordHash: { type: String },
+  resetPasswordTs: { type: Number },
 });
 
 // This logic is to replace username by email for loging in the app

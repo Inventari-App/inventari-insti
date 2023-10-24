@@ -3,6 +3,10 @@ const messages = {
     verify: {
       subject: 'Activa el teu usuari.',
       text: 'Pots activar el teu usuari anant a {{url}} .\nRecorda que tens 10 minuts per fer-ho.'
+    },
+    reset: {
+      subject: 'Restableix la teva contrasenya.',
+      text: 'Pots restablir la teva contrasenya anant a {{url}} .\nRecorda que tens 1 hora per fer-ho.'
     }
   },
   invoice: {

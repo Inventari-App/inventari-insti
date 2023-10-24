@@ -11,6 +11,7 @@ const {
   createUser,
   verifyUser,
   createCenter,
+  sendPasswordReset,
 } = require("../controllers/users");
 const { isAdmin, isSameUserOrAdmin } = require("../middleware");
 const Center = require("../models/center");
@@ -96,6 +97,18 @@ router.get("/login", (req, res) => {
   res.render("users/login");
 });
 
+router.get("/account-recovery", (req, res) => {
+  res.render("users/account-recovery");
+});
+
+router.get("/reset-sent", (req, res) => {
+  res.render("users/reset-sent")
+})
+
+router.get("/reset-error", (req, res) => {
+  res.render("users/reset-error")
+});
+
 router.post(
   "/login",
   async (req, res, next) => {
@@ -125,6 +138,35 @@ router.post(
     res.redirect(301, redirectUrl);
   }
 );
+
+router.post("/account-recovery", catchAsync(sendPasswordReset))
+
+router.get("/reset", async (req, res) => {
+  const { token, userId } = req.query
+  const user = await User.findById(userId);
+  if (!user || user.resetPasswordHash !== token || user.resetPasswordTs < Date.now()) {
+    return res.redirect("/reset-error")
+  }
+  res.render("users/reset", { token, userId })
+})
+
+router.post("/reset", async (req, res) => {
+  const { userId, token, password: newPassword } = req.body;
+  const user = await User.findById(userId);
+
+  if (!user || user.resetPasswordHash !== token || user.resetPasswordTs < Date.now()) {
+    return res.redirect("/reset-error")
+  }
+
+  // Update the user's password and clear the reset token
+  await user.setPassword(newPassword)
+  user.resetPasswordHash = undefined;
+  user.resetPasswordTs = undefined;
+  await user.save()
+
+  req.flash("success", "La contrasenya s'ha restablert amb exit.")
+  res.redirect("/")
+})
 
 router.get("/logout", (req, res, next) => {
   req.logout(function (err) {
