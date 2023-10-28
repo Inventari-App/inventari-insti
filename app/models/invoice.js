@@ -8,7 +8,7 @@ const InvoiceSchema = new Schema(
   {
     invoiceItems: [
       {
-        naturalesa: String,
+        inventariable: Boolean,
         tipus: String,
         article: String,
         quantitat: Number,

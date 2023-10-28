@@ -7,7 +7,7 @@ const ArticleSchema = new Schema({
   article: String,
   preu: Number,
   iva: Number,
-  naturalesa: String,
+  inventariable: Boolean,
   proveidor: String,
   tipus: String,
   unitat: String,

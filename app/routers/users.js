@@ -165,7 +165,7 @@ router.post("/reset", async (req, res) => {
   await user.save()
 
   req.flash("success", "La contrasenya s'ha restablert amb exit.")
-  res.redirect("/")
+  res.redirect("/login")
 })
 
 router.get("/logout", (req, res, next) => {

@@ -193,7 +193,7 @@
 
 <script type="module">
   const tipusInputEl = document.querySelector('#tipus')
-  const naturalesaInputEl = document.querySelector('#naturalesa')
+  const inventariableInputEl = document.querySelector('#inventariable')
   const itemsInputEl = document.querySelector('#item');
   const unitatsInputEl = document.querySelector('#unitat');
   const proveidorsInputEl = document.querySelector('#proveidor');
@@ -207,11 +207,11 @@
     onSelect: function(suggestion) {
       const {
         nom,
-        naturalesa,
+        inventariable,
         tipus
       } = suggestion
       this.input.value = nom;
-      naturalesaInputEl.value = naturalesa
+      inventariableInputEl.value = inventariable
       tipusInputEl.value = tipus
     },
     render: function(suggestion, currentInput) {

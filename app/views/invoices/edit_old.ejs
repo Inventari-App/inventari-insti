@@ -32,13 +32,13 @@
         </th>
         <th
           style="display: none"
-          data-value="<%= invoiceItem.naturalesa%>"
-          name="naturalesa"
+          data-value="<%= invoiceItem.inventariable%>"
+          name="inventariable"
         >
           <input
-            class="variable petit form-control unitari numeros naturalesa"
-            id="naturalesaInputTr<%=i%>"
-            value="<%= invoiceItem.naturalesa %>"
+            class="variable petit form-control unitari numeros inventariable"
+            id="inventariableInputTr<%=i%>"
+            value="<%= invoiceItem.inventariable %>"
           />
         </th>
         <th data-value="<%= invoiceItem.quantitat %>" name="quantitat">
@@ -252,14 +252,14 @@
       onSelect: function(suggestion) {
         const {
           nom,
-          naturalesa,
+          inventariable,
           tipus
         } = suggestion
         this.input.value = nom;
         const tipusInputEl = rowEl.querySelector('input.tipus')
-        const naturalesaInputEl = rowEl.querySelector('input.naturalesa')
+        const inventariableInputEl = rowEl.querySelector('input.inventariable')
         tipusInputEl.value = tipus
-        naturalesaInputEl.value = naturalesa
+        inventariableInputEl.value = inventariable
       },
       render: function(suggestion, currentInput) {
         if (suggestion) {

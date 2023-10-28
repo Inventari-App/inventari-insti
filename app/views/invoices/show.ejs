@@ -13,7 +13,7 @@
   <form id="proformForm" class="form-inline">
     <thead>
       <tr>
-        <th>Naturalesa</th>
+        <th>inventariable</th>
         <th>Tipus</th>
         <th>Article</th>
         <th class="numeros">Quantitat</th>
@@ -28,7 +28,7 @@
       <% for (const item of invoice.invoiceItems) { %>
         <tr>
           <td width="10%">
-            <div class="camps"><%= item.naturalesa %></div>
+            <div class="camps"><%= item.inventariable %></div>
           </td>
           <td width="10%">
             <div class="camps"><%= item.tipus %></div>

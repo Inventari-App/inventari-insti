@@ -8,7 +8,7 @@ const ItemSchema = new Schema(
     nom: String,
     imatge: Array,
     descripcio: String,
-    naturalesa: String,
+    inventariable: Boolean,
     tipus: String,
     responsable: {
       type: Schema.Types.ObjectId,
