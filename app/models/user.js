@@ -35,8 +35,8 @@ const UserSchema = new Schema({
   },
   isAdmin: { type: Boolean, default: false },
   isVerified: { type: Boolean, default: false },
-  verificationHash: { type: String, default: generateHash({ length: 8 })},
-  verificationTs: { type: Number, default: getExpirationTs(60 * 10 * 1000) }, // 10mins
+  verificationHash: { type: String },
+  verificationTs: { type: Number },
   resetPasswordHash: { type: String },
   resetPasswordTs: { type: Number },
 });

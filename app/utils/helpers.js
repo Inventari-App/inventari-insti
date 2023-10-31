@@ -1,4 +1,4 @@
-function getExpirationTs(expiresInMs = 60000) {
+function getExpirationTs(expiresInMs = 10 * 60 * 1000) { // 10 mins
   const nowMs = new Date().getTime()
   const expirationMs = nowMs + expiresInMs
   return expirationMs
