@@ -63,7 +63,11 @@ async function sendPasswordReset(req, res, next) {
   // Validate the email and find the user in the database
   const user = await User.findOne({ email });
 
-  if (!user) return {}
+  if (!user) {
+    req.flash("error", "Aquest usuari no existeix.")
+    res.redirect("/account-recovery")
+    return
+  }
 
   // Generate a reset token and store it in the user's document
   const resetPasswordHash = generateHash({ length: 8 })
