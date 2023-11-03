@@ -52,7 +52,7 @@ module.exports.itemSchema = Joi.object({
     nom: Joi.string().required().escapeHTML(),
     tipus: Joi.string().required().escapeHTML(),
     inventariable: Joi.boolean().required(),
-    descripcio: Joi.string().escapeHTML(),
+    descripcio: Joi.string().empty('').escapeHTML(),
   }).required(),
 });
 
