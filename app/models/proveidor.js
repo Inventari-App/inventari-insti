@@ -16,20 +16,16 @@ const ProveidorSchema = new Schema({
   },
   cif: {
     type: String,
-    required: true,
     unique: true,
   },
   adreca: {
     type: String,
-    required: true,
   },
   telefon: {
     type: String,
-    required: true,
   },
   email: {
     type: String,
-    required: true,
     unique: true,
   },
   center: {
