@@ -30,7 +30,7 @@
             class="card-link"
             >Editar <span class="text-capitalize"><%= type %></span>
           </a>
-          <% } %>
+
           <form
             class="d-inline"
             action="/<%= type %>s/<%=item.id%>?_method=DELETE"
@@ -38,6 +38,7 @@
           >
             <button class="btn btn-danger">Esborrar <span class="text-capitalize"><%= type %></span></button>
           </form>
+          <% } %>
         </div>
         <div class="right">
           <a href="/<%= type %>s">Tots els <%= type %>s</a>

@@ -27,13 +27,15 @@ module.exports.createArticle = async (req, res, next) => {
 };
 
 module.exports.showArticle = async (req, res, next) => {
+  const { user } = req
   const article = await Article.findById(req.params.id).populate("responsable");
+  const responsable = article.responsable
 
   if (!article) {
     req.flash("error", "No es pot trobar l'article!");
     return res.redirect("/articles");
   }
-  res.render("articles/show", { article, isAdmin: req.user.isAdmin });
+  res.render("articles/show", { article, isAdmin: req.user.isAdmin, isOwner: responsable && responsable._id.equals(user.id) });
 };
 
 module.exports.renderEditForm = async (req, res) => {
