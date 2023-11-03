@@ -7,7 +7,8 @@ module.exports.index = async (req, res) => {
 }
 
 module.exports.renderNewForm = (req, res) => {
-    res.render('areas/new');
+    const { tab } = req.query
+    res.render('areas/new', { autoclose: tab });
 }
 
 module.exports.createArea = async (req, res, next) => {
@@ -19,7 +20,11 @@ module.exports.createArea = async (req, res, next) => {
     area.responsable = req.user._id;
     await area.save();
     req.flash('success', 'Area creada correctament!');
-    res.redirect(`/areas/${area._id}`);
+    if (areaBody.autoclose) {
+        res.redirect('/autoclose');
+    } else {
+        res.redirect(`/areas/${area._id}`);
+    }
 }
 
 module.exports.showArea =  async (req, res, next) => {

@@ -7,6 +7,9 @@
             <form action="/plantas" method="POST"  class="validated-form">
 
                 <div class="mb-3">
+                    <% if(autoclose) { %>
+                        <input type="text" id="autoclose" name="planta[autoclose]" value="true" hidden>
+                    <% } %>
                     <label class="form-label" for="nom">Nom Planta</label>
                     <input class="form-control" type="text" id="nom" name="planta[nom]" required>
                     <div class="valid-feedback">Sembla correcte!</div>

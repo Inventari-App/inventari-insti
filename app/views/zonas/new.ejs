@@ -7,6 +7,9 @@
             <form action="/zonas" method="POST" class="validated-form">
 
                 <div class="mb-3">
+                    <% if(autoclose) { %>
+                        <input type="text" id="autoclose" name="zona[autoclose]" value="true" hidden>
+                    <% } %>
                     <label class="form-label" for="nom">Nom Zona</label>
                     <input class="form-control" type="text" id="nom" name="zona[nom]" required>
                     <div class="valid-feedback">Sembla correcte!</div>

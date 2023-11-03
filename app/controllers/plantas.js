@@ -7,7 +7,8 @@ module.exports.index = async (req, res) => {
 }
 
 module.exports.renderNewForm = (req, res) => {
-    res.render('plantas/new');
+    const { tab } = req.query
+    res.render('plantas/new', { autoclose: tab });
 }
 
 module.exports.createPlanta = async (req, res, next) => {
@@ -19,6 +20,11 @@ module.exports.createPlanta = async (req, res, next) => {
     planta.responsable = req.user._id;
     await planta.save();
     req.flash('success', 'Planta creada correctament!');
+    if (plantaBody.autoclose) {
+        res.redirect('/autoclose');
+    } else {
+        res.redirect(`/plantas/${planta._id}`);
+    }
     res.redirect(`/plantas/${planta._id}`);
 }
 

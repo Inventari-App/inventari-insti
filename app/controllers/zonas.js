@@ -7,7 +7,8 @@ module.exports.index = async (req, res) => {
 }
 
 module.exports.renderNewForm = (req, res) => {
-    res.render('zonas/new');
+    const { tab } = req.query
+    res.render('zonas/new', { autoclose: tab });
 }
 
 module.exports.createZona = async (req, res, next) => {
@@ -19,7 +20,11 @@ module.exports.createZona = async (req, res, next) => {
     zona.responsable = req.user._id;
     await zona.save();
     req.flash('success', 'Zona creada correctament!');
-    res.redirect(`/zonas/${zona._id}`);
+    if (zonaBody.autoclose) {
+        res.redirect('/autoclose');
+    } else {
+        res.redirect(`/zonas/${zona._id}`);
+    }
 }
 
 module.exports.showZona =  async (req, res, next) => {

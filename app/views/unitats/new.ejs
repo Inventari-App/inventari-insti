@@ -84,7 +84,7 @@
     newSelectedZona.addEventListener('click', () => {
       if (newSelectedZona.value == "new") {
         selectElZona.value = 'default'
-        window.open('../zonas/new')    // zonas, plantas o areas
+        window.open('../zonas/new?tab=true')    // zonas, plantas o areas
       }
     })
     function removeZonaOptions(targetElZona) {
@@ -133,7 +133,7 @@
     newSelectedPlanta.addEventListener('click', () => {
       if (newSelectedPlanta.value == "new") {
         selectElPlanta.value = 'default'
-        window.open('../plantas/new')    // plantas, plantas o areas
+        window.open('../plantas/new?tab=true')    // plantas, plantas o areas
       }
     })
     function removePlantaOptions(targetElPlanta) {
@@ -182,7 +182,7 @@
     newSelectedArea.addEventListener('click', () => {
       if (newSelectedArea.value == "new") {
         selectElArea.value = 'default'
-        window.open('../areas/new')    // areas, areas o areas
+        window.open('../areas/new?tab=true')    // areas, areas o areas
       }
     })
     function removeAreaOptions(targetElArea) {

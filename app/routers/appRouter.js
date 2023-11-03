@@ -32,6 +32,10 @@ function appRouter () {
     return res.redirect(301, '/login')
   });
 
+  router.get("/autoclose", (req, res) => {
+    return res.render('autoclose')
+  });
+
   router.all("*", (req, res, next) => {
     return res.render('error')
     // next(new ExpressError("Pàgina no trobada", 404));

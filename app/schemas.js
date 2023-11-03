@@ -88,6 +88,7 @@ module.exports.unitatSchema = Joi.object({
     //factura: Joi.string().required()
     //imatge: Joi.string().escapeHTML(),
     //descripcio: Joi.string().escapeHTML()
+    autoclose: Joi.string(),
   }).required(),
 });
 
@@ -95,6 +96,7 @@ module.exports.zonaSchema = Joi.object({
   zona: Joi.object({
     //preu: Joi.number().required().min(0),
     nom: Joi.string().required().escapeHTML(),
+    autoclose: Joi.string(),
   }).required(),
 });
 
@@ -102,6 +104,7 @@ module.exports.plantaSchema = Joi.object({
   planta: Joi.object({
     //preu: Joi.number().required().min(0),
     nom: Joi.string().required().escapeHTML(),
+    autoclose: Joi.string(),
 
     //num_serie: Joi.string().required().escapeHTML(),
     //unitats_integrants: Joi.number().required().min(0),
@@ -132,6 +135,7 @@ module.exports.areaSchema = Joi.object({
   area: Joi.object({
     //preu: Joi.number().required().min(0),
     nom: Joi.string().required().escapeHTML(),
+    autoclose: Joi.string(),
 
     //num_serie: Joi.string().required().escapeHTML(),
     //unitats_integrants: Joi.number().required().min(0),
@@ -160,6 +164,7 @@ module.exports.areaSchema = Joi.object({
 
 module.exports.utilitatSchema = Joi.object({
   utilitat: Joi.object({
+    autoclose: Joi.string(),
     //preu: Joi.number().required().min(0),
     //nom: Joi.string().required().escapeHTML(),
     //num_serie: Joi.string().required().escapeHTML(),
@@ -194,5 +199,6 @@ module.exports.proveidorSchema = Joi.object({
     adreca: Joi.string().required().escapeHTML(),
     telefon: Joi.string().required().escapeHTML(),
     email: Joi.string().required().escapeHTML(),
+    autoclose: Joi.string(),
   }).required(),
 });
