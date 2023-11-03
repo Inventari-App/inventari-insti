@@ -4,7 +4,11 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const UnitatSchema = new Schema({
-  nom: String,
+  nom: {
+    type: String,
+    unique: true,
+    required: true,
+  },
   planta: String,
   zona: String,
   area: String,
