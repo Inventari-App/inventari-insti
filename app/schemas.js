@@ -195,10 +195,10 @@ module.exports.utilitatSchema = Joi.object({
 module.exports.proveidorSchema = Joi.object({
   proveidor: Joi.object({
     nom: Joi.string().required().escapeHTML(),
-    cif: Joi.string().required().escapeHTML(),
-    adreca: Joi.string().required().escapeHTML(),
-    telefon: Joi.string().required().escapeHTML(),
-    email: Joi.string().required().escapeHTML(),
+    cif: Joi.string().escapeHTML(),
+    adreca: Joi.string().escapeHTML(),
+    telefon: Joi.string().escapeHTML(),
+    email: Joi.string().escapeHTML(),
     autoclose: Joi.string(),
   }).required(),
 });
