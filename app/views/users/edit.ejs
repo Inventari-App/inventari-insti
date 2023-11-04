@@ -42,7 +42,6 @@
           name="user[name]"
           value="<%=user.name %>"
           required
-          disabled
         />
       </div>
       <div class="mb-3">
@@ -54,21 +53,22 @@
           name="user[surname]"
           value="<%=user.surname %>"
           required
-          disabled
         />
       </div>
+
       <div class="mb-3">
-        <label for="department">Departament</label>
-        <input
-          class="form-control"
-          type="text"
-          id="department"
-          name="user[department]"
-          value="<%=user.department %>"
-          required
-          disabled
-        />
+        <label class="form-label" for="department">Departament</label>
+        <select class="form-select" name="user[department]" id="department">
+          <% departments.forEach((department) => { %>
+            <% const selected = department.id.trim() == user.department ? "selected" : "" %>
+            <option value="<%= department._id %>" <%= selected %> >
+              <%= department.name %>
+            </option>
+          <% }) %>
+        </select>
+        <a href= "/departments/new?tab=true" class="create-link" target="parent">Crear department</a>
       </div>
+
       <div class="mb-3">
         <label for="admin">Is Admin</label>
         <input class="" type="checkbox" id="admin-checkbox" <%= user.isAdmin &&

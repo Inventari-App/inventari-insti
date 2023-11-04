@@ -3,6 +3,7 @@ const router = express.Router();
 const passport = require("passport");
 const catchAsync = require("../utils/catchAsync");
 const User = require("../models/user");
+const Department = require("../models/department");
 const {
   getAllUsers,
   getUser,
@@ -72,7 +73,8 @@ router.get(
   isSameUserOrAdmin,
   catchAsync(async (req, res) => {
     const user = await getUser(req);
-    res.render("users/edit", { ...user });
+    const departments = await Department.find()
+    res.render("users/edit", { ...user, departments });
   })
 );
 

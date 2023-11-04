@@ -131,7 +131,7 @@ async function updateUser(req, res, next) {
   const { isAdmin } = req.body.user;
   const user = await User.findByIdAndUpdate(id, {
     ...req.body.user,
-    isAdmin,
+    isAdmin: !!isAdmin,
   });
   return user;
 }
