@@ -1,4 +1,5 @@
 const Article = require("../models/article");
+const Unitat = require("../models/unitat");
 
 module.exports.index = async (req, res) => {
   const articles = await Article
@@ -40,11 +41,13 @@ module.exports.showArticle = async (req, res, next) => {
 
 module.exports.renderEditForm = async (req, res) => {
   const article = await Article.findById(req.params.id);
+  const unitats = await Unitat.find()
+
   if (!article) {
     req.flash("error", "No es pot trobar l'article!");
     return res.redirect("/articles");
   }
-  res.render("articles/edit", { article });
+  res.render("articles/edit", { article, unitats });
 };
 
 module.exports.updateArticle = async (req, res) => {

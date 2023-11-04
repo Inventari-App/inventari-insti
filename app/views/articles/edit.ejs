@@ -19,16 +19,17 @@
           required
         />
       </div>
+
       <div class="mb-3">
         <label class="form-label" for="unitat">Ubicació</label>
-        <input
-          class="form-control"
-          type="text"
-          id="unitat"
-          name="article[unitat]"
-          required
-          value="<%= article.unitat%>"
-        />
+        <select class="form-select" name="article[unitat]" id="unitat">
+          <% unitats.forEach((unitat) => { %>
+            <option value="<%= unitat.nom %>" default="<% article.unitat === unitat.nom ? true : false %>">
+              <%= unitat.nom %>
+            </option>
+          <% }) %>
+        </select>
+        <a href= "/unitats/new?tab=true" class="create-link" target="parent">Crear Unitat</a>
       </div>
 
       <div class="mb-3">
