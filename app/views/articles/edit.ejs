@@ -9,6 +9,17 @@
       class="validated-form"
     >
       <div class="mb-3">
+        <label class="form-label" for="numSerie">Num. Serie</label>
+        <input
+          class="form-control"
+          type="text"
+          id="numSerie"
+          name="article[numSerie]"
+          value="<%=article.numSerie %>"
+        />
+      </div>
+
+      <div class="mb-3">
         <label class="form-label" for="nom">Nom Article</label>
         <input
           class="form-control"
@@ -58,10 +69,10 @@
           class="form-control"
           type="text"
           id="descripcio"
-          required
           name="article[descripcio]"
         >
-<%= article.descripcio%></textarea
+          <%= article.descripcio%>
+        </textarea
         >
       </div>
       <div class="mb-3">
