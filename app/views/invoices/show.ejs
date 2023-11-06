@@ -1,7 +1,6 @@
 <% layout('layouts/boilerplate')%>
-<p>
-  <b>Responsable: <%= invoice.responsable.username %> </b>
-</p>
+
+<%- include('../partials/invoiceHeader.ejs') %>
 
 <% if (invoice.status === 'aprovada') { %>
   <div class="d-grid gap-2 d-md-flex justify-content-md-end">

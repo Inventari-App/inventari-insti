@@ -44,7 +44,8 @@ module.exports.articleSchema = Joi.object({
 
 module.exports.invoiceSchema = Joi.object({
   invoiceItems: Joi.array(),
-  status: Joi.string().valid('aprovada', 'pendent', 'rebuda', 'rebutjada')
+  status: Joi.string().valid('aprovada', 'pendent', 'rebuda', 'rebutjada'),
+  total: Joi.number(),
 });
 
 module.exports.itemSchema = Joi.object({

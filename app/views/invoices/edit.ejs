@@ -102,6 +102,8 @@
     if (!confirmation) return
 
     const invoiceData = getInvoiceData();
+    const total = calculateTotals()
+
     console.log(invoiceData);
     fetch("/invoices/<%= invoice.id %>", {
       method: "PUT",
@@ -109,7 +111,7 @@
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ invoiceItems: [...invoiceData] }),
+      body: JSON.stringify({ total, invoiceItems: [...invoiceData] }),
     })
       .then(() => (window.location.href = '/invoices/<%= invoice.id %>'))
       .catch((e) => console.error(e));
@@ -150,6 +152,7 @@
       0
     );
     totalEl.innerHTML = `Total Comanda: ${total.toFixed(2)}€`;
+    return total
   }
 
   function showError (inputEl) {
