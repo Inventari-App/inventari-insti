@@ -173,7 +173,9 @@
     console.log(articles)
     if (!articles.length) return
 
-    const createArticles = articles.map(article => createArticle(article))
+    const createArticles = articles
+      .filter(article => article.inventariable === "true") // filter only inventariables
+      .map(article => createArticle(article))
 
     Promise.all([ ...createArticles ])
       .then(updateRebuts)

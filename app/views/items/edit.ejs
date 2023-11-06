@@ -8,36 +8,19 @@
       method="POST"
       class="validated-form"
     >
-      <div class="form-select mb-3">
-        <input
-          class="form-check-input"
-          type="radio"
-          name="item[inventariable]"
-          required
-          id="inventariable2"
-          value="true"
-        />
-        <label class="form-check-label" for="inventariable">
-          Inventariable
-        </label>
+
+      <div class="mb-3">
+        <label class="form-label" for="inventariable">Inventariable</label>
+        <select class="form-select" name="item[inventariable]" id="inventariable">
+          <option value="true" <%= item.inventariable ? 'selected' : '' %>>
+            Inventariable
+          </option>
+          <option value="false" <%= !item.inventariable ? 'selected' : '' %>>
+            No Inventariable
+          </option>
+        </select>
       </div>
 
-      <div class="form-select mb-3">
-        <input
-          class="form-check-input"
-          type="radio"
-          name="item[inventariable]"
-          required
-          id="inventariable1"
-          value="false"
-        />
-        <label class="form-check-label" for="inventariable1">
-          No inventariable
-        </label>
-      </div>
-
-      <p></p>
-      <p></p>
 
       <div class="mb-3">
         <label class="form-label" for="nom">Nom Item</label>
@@ -73,7 +56,6 @@
           class="form-control"
           type="text"
           id="descripcio"
-          required
           name="item[descripcio]"
         >
 <%= item.descripcio%></textarea

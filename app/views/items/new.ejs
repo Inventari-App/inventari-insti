@@ -4,49 +4,18 @@
 
       <div class="container">
 
-        <div class="row">
-          <div class="col-lg-6 mx-auto">
+        <div class="mb-3">
+          <label class="form-label" for="inventariable">Inventariable</label>
+          <select class="form-select" name="inventariable" id="inventariable">
+            <option value="true">
+              Inventariable
+            </option>
+            <option value="false">
+              No Inventariable
+            </option>
+          </select>
+        </div>
 
-            <div class="row py-2">
-              <label class="form-label" for="inventariable">Inventariable</label>
-              <div class="col-sm">
-                <div class="form-check border rounded">
-                  <div class="p-2">
-                      <input
-                        class="form-check-input"
-                        type="radio"
-                        name="inventariable"
-                        required
-                        id="inventariable2"
-                        value="true"
-                        checked
-                      />
-                      <label class="form-check-label" for="inventariable2">
-                        Inventariable
-                      </label>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm">
-                <div class="form-check border rounded">
-                  <div class="p-2">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="inventariable"
-                      required
-                      id="inventariable1"
-                      value="false"
-                    />
-                    <label class="form-check-label" for="inventariable1">
-                      No inventariable
-                    </label>
-    
-                  </div>
-                </div>
-              </div>
-            </div>
-    
             <div class="row">
               <div class="col-sm">
                 <div class="mb-3">
@@ -115,7 +84,7 @@
   const tab = urlParams.get("tab");
 
   const inputEls = document.querySelectorAll(
-    'input[type="text"], input[type="radio"]:checked, select, textarea'
+    'input[type="text"], input[type="checkbox"], select, textarea'
   );
 
   formEl.addEventListener("submit", async function (event) {
@@ -124,7 +93,7 @@
       inputEls,
       (acc, inputEl) => {
         const key = inputEl.name;
-        const value = inputEl.value;
+        const value = inputEl.checked || inputEl.value;
         return { ...acc, [key]: value };
       },
       {}
