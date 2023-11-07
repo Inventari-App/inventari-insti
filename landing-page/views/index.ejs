@@ -123,7 +123,7 @@
         </p>
         <a href="#how-it-works" class="btn btn-light btn-lg">Més informació</a>
         <a href="#signup" class="btn btn-light btn-lg">Registra't</a>
-        <a href="https://app.controlamaterial.com" class="btn btn-light btn-lg">Accedeix a l'Aplicacio</a>
+        <a href=<%= appTargetUrl %> class="btn btn-light btn-lg">Accedeix a l'Aplicacio</a>
       </div>
       <a href="#features" class="chevron">
         <img src="/images/down-chevron.svg" />
@@ -195,7 +195,7 @@
         <h2 class="text-center mb-4">Registra't</h2>
         <div class="row">
           <div class="col-md-6 mx-auto">
-            <form id="registerForm" method="post" action="<%= registerCenterTarget %>/register-center">
+            <form id="registerForm" method="post" action="<%= appTargetUrl %>/register-center">
               <div class="mb-3">
                 <label for="center" class="form-label">Nom del Centre</label>
                 <input
