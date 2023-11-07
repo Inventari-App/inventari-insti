@@ -10,8 +10,9 @@ module.exports.index = async (req, res) => {
   res.render("articles/index", { articles });
 };
 
-module.exports.renderNewForm = (req, res) => {
-  res.render("articles/new");
+module.exports.renderNewForm = async (req, res) => {
+  const unitats = await Unitat.find()
+  res.render("articles/new", { unitats });
 };
 
 module.exports.createArticle = async (req, res, next) => {

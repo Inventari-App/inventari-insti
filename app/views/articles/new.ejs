@@ -14,17 +14,19 @@
         />
         <div class="valid-feedback">Sembla correcte!</div>
       </div>
+
       <div class="mb-3">
-        <label class="form-label" for="unitat">Ubicació</label>
-        <input
-          class="form-control"
-          type="text"
-          id="unitat"
-          name="article[unitat]"
-          required
-        />
-        <div class="valid-feedback">Sembla correcte!</div>
+        <label class="form-label" for="unitat">Unitat</label>
+        <select class="form-select" name="article[unitat]" id="department">
+          <% unitats.forEach((unitat) => { %>
+            <option value="<%= unitat._id %>" >
+              <%= unitat.nom %>
+            </option>
+          <% }) %>
+        </select>
+        <a href= "/unitats/new?tab=true" class="create-link" target="parent">Crear unitat</a>
       </div>
+
       <div class="mb-3">
         <label class="form-label" for="imatge">Imatge Url</label>
         <input
