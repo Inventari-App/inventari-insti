@@ -20,10 +20,10 @@ module.exports.createArticle = async (req, res, next) => {
     const article = new Article(articleBody);
     await article.save();
     req.flash("success", "Article creat correctament!");
-    res.sendStatus(200)
+    res.redirect("/articles")
   } catch (error) {
-    console.error(error)
-    res.sendStatus(400)
+    req.flash("error", "Alguna cosa no ha anat be al crear l'article.");
+    res.redirect("/articles")
   }
 };
 

@@ -35,8 +35,8 @@ module.exports.articleSchema = Joi.object({
     proveidor: Joi.string().escapeHTML(),
     tipus: Joi.string().escapeHTML(),
     unitat: Joi.string().required().escapeHTML(),
-    imatge: Joi.string().escapeHTML(),
-    descripcio: Joi.string().escapeHTML(),
+    imatge: Joi.string().allow('').escapeHTML(),
+    descripcio: Joi.string().allow('').escapeHTML(),
     numSerie: Joi.string().allow('').escapeHTML(),
     responsable: Joi.object()
   }).required(),
