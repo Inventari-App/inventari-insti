@@ -1,10 +1,4 @@
-const path = require('path');
-
-function getProtocol() {
-  return process.env.NODE_ENV === 'prod' ? 'https' : 'http'
-}
-
-const isProduction = process.env.NODE_ENV === "production"
+const isProduction = process.env.NODE_ENV === "prod"
 
 exports.index = (req, res) => {
   // Assuming you already have the view code in views/index.ejs
