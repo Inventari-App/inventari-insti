@@ -16,7 +16,7 @@ const ProveidorSchema = new Schema({
   },
   cif: {
     type: String,
-    unique: true,
+    // unique: true,
   },
   adreca: {
     type: String,

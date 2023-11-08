@@ -200,6 +200,6 @@ module.exports.proveidorSchema = Joi.object({
     adreca: Joi.string().empty(''),
     telefon: Joi.string().empty(''),
     email: Joi.string().empty(''),
-    autoclose: Joi.string(),
+    autoclose: Joi.string().empty(''),
   }).required(),
 });
