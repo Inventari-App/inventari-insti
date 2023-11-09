@@ -117,7 +117,7 @@
                             <div class="camps value" name="proveidor" data-value="<%= item.proveidor %>"><%= item.proveidor %></div>
                         </td>
                         <td width="20%">
-                            <input class="value" type="text" name="numSerie" value="<%= item.rebuts[i].numSerie %>" <%= isRebut && "disabled" %>>
+                            <input class="value" type="text" name="numSerie" value="<%= item.rebuts[i].numSerie %>" <%= (isRebut || !item.inventariable) && "disabled" %>>
                         </td>
                     </tr>
                 <% } %>
