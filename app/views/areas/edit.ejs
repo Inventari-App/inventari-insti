@@ -9,36 +9,6 @@
                     <input class="form-control" type="text" id="nom" name="area[nom]" value="<%=area.nom %>" required>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label" for="area">Ubicació</label>
-                    <input class="form-control" type="text" id="area" name="area[area]" required
-                        value="<%= area.area%>">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" for="imatge">Imatge Url</label>
-                    <input class="form-control" type="text" id="imatge" name="area[imatge]"
-                        value="<%= area.imatge%>">
-                </div>
-
-
-
-                <div class="mb-3">
-                    <label class="form-label" for="preu">Preu de cost</label>
-                    <div class="input-group">
-                        <span class="input-group-text" id="preu-label">€</span>
-                        <input type="number" min="0"  step="0.01" class="form-control" name="area[preu]" id="preu"
-                            placeholder="0.00" value="<%= area.preu%>" aria-label="preu"
-                            aria-describedby="preu-label" required>
-                    </div>
-
-                </div>
-
-
-                <div class="mb-3">
-                    <label class="form-label" for="descripcio">Descripció</label>
-                    <textarea class="form-control" type="text" id="descripcio" required
-                        name="area[descripcio]"><%= area.descripcio%></textarea>
-                </div>
-                <div class="mb-3">
                     <button class="btn btn-success">Modifica àrea</button>
                 </div>
             </form>
