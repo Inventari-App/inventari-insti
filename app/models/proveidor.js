@@ -26,7 +26,7 @@ const ProveidorSchema = new Schema({
   },
   email: {
     type: String,
-    unique: true,
+    // unique: true,
   },
   center: {
     type: Schema.Types.ObjectId,

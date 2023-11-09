@@ -196,10 +196,10 @@ module.exports.utilitatSchema = Joi.object({
 module.exports.proveidorSchema = Joi.object({
   proveidor: Joi.object({
     nom: Joi.string().required().escapeHTML(),
-    cif: Joi.string().empty(''),
-    adreca: Joi.string().empty(''),
-    telefon: Joi.string().empty(''),
-    email: Joi.string().empty(''),
-    autoclose: Joi.string().empty(''),
+    cif: Joi.string().allow('').optional(),
+    adreca: Joi.string().allow('').optional(),
+    telefon: Joi.number().allow('').optional(),
+    email: Joi.string().email().allow('').optional(),
+    autoclose: Joi.string().allow('').empty(''),
   }).required(),
 });
