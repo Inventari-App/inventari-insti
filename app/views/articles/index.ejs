@@ -8,8 +8,9 @@
 <table id="articles-table" class="table table-striped align-middle">
   <thead>
     <tr>
+      <th scope="col">Num. Serie</th>
       <th scope="col">Nom</th>
-      <th scope="col">Descripcio</th>
+      <th scope="col">Preu</th>
       <th scope="col">Unitat</th>
       <th scope="col">Creador</th>
       <th scope="col" data-type="date">Ultima modificacio</th>
@@ -19,8 +20,9 @@
   <tbody>
     <% for (let article of articles) { %>
       <tr>
+        <td><%= article.numSerie || "n/a" %></td>
         <td><%= article.article %></td>
-        <td><%= article.descripcio %></td>
+        <td><%= article.preu %></td>
         <td><%= article.unitat %></td>
         <td><%= article.responsable?.username || " - " %></td>
         <td><%= new Date(article.updatedAt).toLocaleString('es-es', { dateStyle: 'short', timeStyle: 'short' }) %></td>
