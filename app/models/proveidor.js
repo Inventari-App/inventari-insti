@@ -8,7 +8,7 @@ const ProveidorSchema = new Schema({
   nom: {
     type: String,
     required: true,
-    unique: true,
+    // unique: true,
   },
   responsable: {
     type: Schema.Types.ObjectId,
@@ -41,5 +41,8 @@ ProveidorSchema.plugin(contextPlugin, {
 });
 
 ProveidorSchema.plugin(addCenterFilter)
+
+// Allow same proveidors in multiple centers
+ProveidorSchema.index({ nom: 1, center: 1 }, { unique: true })
 
 module.exports = mongoose.model("Proveidor", ProveidorSchema);
