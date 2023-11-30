@@ -1,3 +1,4 @@
+require('dotenv').config()
 const sessionConfig = require("./database")
 const configureApp = require("./config")
 const app = configureApp(sessionConfig)

@@ -2,8 +2,8 @@ const session = require("express-session");
 const MongoDBStore = require("connect-mongo")(session);
 const mongoose = require("mongoose");
 const { isProduction } = require("./utils/helpers");
-const dbUrl = "mongodb+srv://AlbertRF147:Ruwter7h@cluster0.lvga5.mongodb.net/inventari-insti?retryWrites=true&w=majority"
-const secret = process.env.SECRET || "hauriadesermillorsecret!";
+const dbUrl = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.lvga5.mongodb.net/inventari-insti?retryWrites=true&w=majority`
+const secret = process.env.SECRET
 const db = mongoose.connection;
 const store = new MongoDBStore({
   url: dbUrl,

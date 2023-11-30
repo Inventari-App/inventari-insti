@@ -1,5 +1,7 @@
+require('dotenv').config({ path: __dirname + '/../.env' })
+
 const mongoose = require('mongoose');
-const dbURI = "mongodb+srv://AlbertRF147:Ruwter7h@cluster0.lvga5.mongodb.net/inventari-insti?retryWrites=true&w=majority"
+const dbURI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.lvga5.mongodb.net/inventari-insti?retryWrites=true&w=majority`
 
 mongoose.connect(dbURI, {
   useNewUrlParser: true,
