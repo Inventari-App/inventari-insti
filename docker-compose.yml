@@ -1,7 +1,7 @@
 version: '3.8'
 
 networks:
-  my_network: # Define the custom network
+  my_network:
     driver: bridge
 
 services:
@@ -13,7 +13,7 @@ services:
       - "3000:3000"
       - "9229:9229"
     networks:
-      - my_network # Connect the "app" service to the custom network
+      - my_network
     restart: always
 
   landing-page:
@@ -23,5 +23,20 @@ services:
     ports:
       - "3001:3001"
     networks:
-      - my_network # Connect the "landing-page" service to the custom network
+      - my_network
     restart: always
+
+  cron:
+    image: alpine
+    volumes:
+      - ./app/scripts:/scripts
+    networks:
+      - my_network
+    command: "crond -f -d 8"
+
+    # Define the cron job to run the script every Sunday at midnight (0 0 * * 0)
+    environment:
+      - 'CRON_SCHEDULE=0 0 * * 0'
+      - 'CRON_COMMAND=node /scripts/deleteNotValidatedUsers.js'
+    restart: always
+
