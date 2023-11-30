@@ -1,5 +1,5 @@
-const Center = require("../models/center");
 const User = require("../models/user");
+const Center = require("../models/center");
 const { generateHash } = require("random-hash");
 const { getExpirationTs } = require("../utils/helpers");
 const { useNodemailer } = require("../nodemailer/sendEmail");
@@ -20,23 +20,29 @@ async function createCenter(req, res, next) {
       verificationTs: getExpirationTs(),
       verificationHash: generateHash({ length: 8 }),
     });
+
     center.users.push(user._id);
+    center.save();
+
     await User.register(user, password);
+
     const { sendEmail, message } = useNodemailer({
       to: user.email,
       model: "user",
       reason: "verify",
     });
+
     await sendEmail({
       subject: message.subject,
       text: message.text.replace(
         /{{url}}/,
-        `${protocol}://${req.headers.host}/verify?userId=${user.id}&token=${user.verificationHash}`
+        `${protocol}://${req.headers.host}/verify?userId=${user.id}&token=${user.verificationHash}`,
       ),
     });
+
     req.flash(
       "info",
-      "Tens 10 minuts per activar el teu usuari fent click al link que t'hem enviat per correu."
+      "Tens 10 minuts per activar el teu usuari fent click al link que t'hem enviat per correu.",
     );
     res.redirect("/login");
   } catch (e) {
@@ -54,8 +60,13 @@ async function createUser(req, res, next) {
       center: centerId,
       verificationTs: getExpirationTs(),
       verificationHash: generateHash({ length: 8 }),
-    });
+    }).save();
+
+    const center = await Center.findById(centerId)
+    center.users.push(user._id)
+
     await User.register(user, password);
+
     const { sendEmail, message } = useNodemailer({
       to: user.email,
       model: "user",
@@ -65,12 +76,12 @@ async function createUser(req, res, next) {
       subject: message.subject,
       text: message.text.replace(
         /{{url}}/,
-        `${protocol}://${req.headers.host}/verify?userId=${user.id}&token=${user.verificationHash}`
+        `${protocol}://${req.headers.host}/verify?userId=${user.id}&token=${user.verificationHash}`,
       ),
     });
     req.flash(
       "info",
-      "Avisa a l'usuari, hem enviar un correu amb un link de verificacio que necessiten clicar per activar l'usuari."
+      "Avisa a l'usuari, hem enviar un correu amb un link de verificacio que necessiten clicar per activar l'usuari.",
     );
     res.redirect("/users");
   } catch (e) {
@@ -108,7 +119,7 @@ async function sendPasswordReset(req, res, next) {
     subject: message.subject,
     text: message.text.replace(
       /{{url}}/,
-      `${protocol}://${req.headers.host}/reset?userId=${user.id}&token=${resetPasswordHash}`
+      `${protocol}://${req.headers.host}/reset?userId=${user.id}&token=${resetPasswordHash}`,
     ),
   });
 
@@ -122,7 +133,7 @@ async function getAllUsers(req, res, next) {
 
 async function getUser(req, res, next) {
   const user = await User.findById(req.params.id);
-  const center = await Center.findById(user.center);
+  const center = await Center.findById(user.center).populate("users");
   return { user, center };
 }
 
@@ -185,7 +196,7 @@ async function verifyUser(req, res, next) {
       subject: message.subject,
       text: message.text.replace(
         /{{url}}/,
-        `${protocol}://${req.headers.host}/verify?userId=${user.id}&token=${newHash}`
+        `${protocol}://${req.headers.host}/verify?userId=${user.id}&token=${newHash}`,
       ),
     });
     req.flash("error", "El token ha expirat - N'hem enviat un de nou.");
