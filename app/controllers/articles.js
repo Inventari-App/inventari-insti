@@ -4,7 +4,10 @@ const Unitat = require("../models/unitat");
 module.exports.index = async (req, res) => {
   const articles = await Article
     .find({})
-    .populate('responsable')
+    .populate({
+      path: 'responsable',
+      populate: { path: 'department' }
+    })
     .sort({ createdAt: -1 });
 
   res.render("articles/index", { articles });
