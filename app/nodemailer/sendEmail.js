@@ -3,7 +3,7 @@ require("dotenv").config();
 const { messages } = require("./messages");
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
+  host: "smtp-es.securemail.pro",
   port: 465,
   secure: true, // true for 465, false for other ports
   auth: {
@@ -21,7 +21,7 @@ const useNodemailer = ({ to, model, reason }) => {
       sendEmail: ({ subject, text }) =>
         transporter.sendMail(
           {
-            from: '"iScool" <ischool@gmail.com>',
+            from: '"iScool" <notifications@controlamaterial.com>',
             to,
             subject,
             text,
