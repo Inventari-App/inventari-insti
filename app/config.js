@@ -37,6 +37,7 @@ function configureApp(sessionConfig) {
   );
   app.use(session(sessionConfig));
   app.use("/utils", express.static(path.join(__dirname, "utils")));
+  app.use("/public", express.static(path.join(__dirname, "public")));
   app.use(handleRouteError)
 
   enforceHttps(app)

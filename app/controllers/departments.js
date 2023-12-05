@@ -11,11 +11,8 @@ module.exports.renderNewForm = (req, res) => {
 }
 
 module.exports.createDepartment = async (req, res, next) => {
-    //console.log(req.body)
     let departmentBody = req.body.department
-    //const albaraArr = JSON.parse(departmentBody.albara)
-    departmentBody = { ...departmentBody }
-    const department = new Department(departmentBody);
+    const department = new Department({ ...departmentBody  });
     await department.save();
     req.flash('success', 'Department creat correctament!');
     res.status(201).json(department)

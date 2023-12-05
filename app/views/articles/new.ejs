@@ -1,75 +1,159 @@
 <% layout('layouts/boilerplate')%>
-<div class="row">
-  <h1 class="text-center">Nou article</h1>
-  <div class="col-6 offset-3">
-    <form action="/articles" method="POST" class="validated-form">
-      <div class="mb-3">
-        <label class="form-label" for="nom">Nom Article</label>
-        <input
-          class="form-control"
-          type="text"
-          id="nom"
-          name="article[article]"
-          required
-        />
-        <div class="valid-feedback">Sembla correcte!</div>
-      </div>
 
-      <div class="mb-3">
-        <label class="form-label" for="unitat">Unitat</label>
-        <select class="form-select" name="article[unitat]" id="department">
-          <% unitats.forEach((unitat) => { %>
-            <option value="<%= unitat._id %>" >
-              <%= unitat.nom %>
-            </option>
-          <% }) %>
-        </select>
-        <a href= "/unitats/new?tab=true" class="create-link" target="parent">Crear unitat</a>
-      </div>
+<h3 id="titol">Afegeix Articles</h3>
+<p></p>
+<p></p>
+<%- include('../partials/articleForm.ejs', { articles: [] }) %>
 
-      <div class="mb-3">
-        <label class="form-label" for="imatge">Imatge Url</label>
-        <input
-          class="form-control"
-          type="text"
-          id="imatge"
-          name="article[imatge]"
-        />
-      </div>
+<script>
+  const articlesTable = document.querySelector("#articles");
+  const addRowTable = document.querySelector("#add-row-table");
+  const addRowBtn = document.querySelector("#add-row-btn");
+  const addRowForm = document.querySelector("#add-row-form");
+  const sendArticlesBtn = document.querySelector("#send-articles");
 
-      <div class="mb-3">
-        <label class="form-label" for="preu">Preu de cost</label>
-        <div class="input-group">
-          <span class="input-group-text" id="preu-label">€</span>
-          <input
-            type="number"
-            min="0"
-            step="0.01"
-            class="form-control"
-            name="article[preu]"
-            id="preu"
-            placeholder="0.00"
-            aria-label="preu"
-            aria-describedby="preu-label"
-            required
-          />
-          <div class="valid-feedback">Sembla correcte!</div>
-        </div>
-      </div>
+  const departmentInputEl = addRowTable.querySelector('#department')
+  const unitatInputEl = addRowTable.querySelector('#unitat')
+  const proveidorInputEl = addRowTable.querySelector('#proveidor')
 
-      <div class="mb-3">
-        <label class="form-label" for="descripcio">Descripció</label>
-        <textarea
-          class="form-control"
-          type="text"
-          id="descripcio"
-          name="article[descripcio]"
-        ></textarea>
-      </div>
-      <div class="mb-3">
-        <button class="btn btn-success">Afegeix Article</button>
-      </div>
-    </form>
-    <a href="/articles">Tots els Articles</a>
-  </div>
-</div>
+  const autocompleteInputs = addRowTable.querySelectorAll(".add-row-row input.autocomplete")
+  Array.prototype.forEach.call(autocompleteInputs, inputEl => {
+    inputEl.addEventListener('change', () => hideError(inputEl))
+  })
+
+  // Add row to articles
+  addRowForm.addEventListener("submit", async (e) => {
+    e.preventDefault()
+    // check autocompletes input
+    // add row to table
+    // get add row inputs
+    const autocompleteInputsAreValid = await checkAutompleteInputs(addRowTable)
+    if (!autocompleteInputsAreValid) return
+
+    const addRowInputs = addRowTable.querySelectorAll(".add-row-row input");
+    const inputValues = Array.prototype.map.call(addRowInputs, (inputEl) => {
+      return {
+        name: inputEl.name,
+        value: inputEl.value,
+        hidden: inputEl.type === "hidden",
+      };
+    });
+    const newRowHTML = `
+      <tr class="article">
+        ${inputValues.reduce((acc, curr) =>
+            (acc += `
+              <td
+                name="${curr.name}"
+                data-value="${curr.value}"
+                style="display: ${curr.hidden ? "none" : "table-cell"}"
+                class="align-middle"
+              >
+                ${curr.value}
+              </td>
+            `),
+            ""
+        )}
+        <td>
+          <button type="button" class="btn btn-danger delete-row-article">X</button>
+        </td>
+      </tr>
+    `;
+    articlesTable.rows[0].insertAdjacentHTML("afterend", newRowHTML);
+
+    // display articles articles table
+    articlesTable.style.display = "table";
+
+    // Keep only iva, unitat and proveidor filled
+    Array.prototype.map.call(addRowInputs, (inputEl) => {
+      const keep = /numSerie|article|preu|unitat|department|proveidor/.test(inputEl.id)
+      if (keep) return
+      inputEl.value = ''
+    })
+  });
+
+  articlesTable.addEventListener("click", (e) => {
+    const { target } = e;
+    const isDeleteRowEl = target.classList.contains('delete-row-article')
+    if (!isDeleteRowEl) return
+    const articleRow = target.closest("tr.article");
+    if (!articleRow) return;
+    articleRow.remove();
+  });
+
+  sendArticlesBtn.addEventListener("click", (e) => {
+    const confirmation = confirm("Estas segur que vols afegir els articles?")
+    if (!confirmation) return
+
+    const articlesData = getArticlesData();
+    console.log(articlesData);
+    fetch("/articles", {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ articles: [...articlesData] }),
+    })
+      .then(() => (window.location.href = "/articles"))
+      .catch((e) => console.error(e));
+  });
+
+  function getArticlesData() {
+    const rowEls = articlesTable.querySelectorAll("tr.article");articles
+    return Array.prototype.map.call(rowEls, (rowEl) => {
+      const rowArticlesValues = Array.prototype.reduce.call(
+        rowEl.cells,
+        (acc, cellEl) => {
+          return {
+            ...acc,
+            [cellEl.getAttribute("name")]: cellEl.dataset.value,
+          };
+        },
+        {}
+      );
+      return rowArticlesValues;
+    });
+  }
+  function showError (inputEl) {
+    inputEl.classList.add('error')
+    const messageErrorEl = inputEl.parentElement.querySelector('.error-message')
+    messageErrorEl.style.display = 'block'
+  }
+
+  function hideError (inputEl) {
+    inputEl.classList.remove('error')
+    const messageErrorEl = inputEl.parentElement.querySelector('.error-message')
+    messageErrorEl.style.display = 'none'
+  }
+
+  function checkAutompleteInput (inputEl, validInputs) {
+    const isValid = validInputs.indexOf(inputEl.value) !== -1
+    if (!isValid) showError(inputEl)
+    return isValid
+  }
+
+  async function checkAutompleteInputs (addRowTable) {
+    const [departmentInputs, unitatInputs, proveidorInputs] = await Promise.all([
+      fetchInputs('../departments/all'),
+      fetchInputs('../unitats/all'),
+      fetchInputs('../proveidors/all')
+    ])
+    const departmentInputIsValid = checkAutompleteInput(departmentInputEl, departmentInputs)
+    const unitatInputIsValid = checkAutompleteInput(unitatInputEl, unitatInputs)
+    const proveidorInputIsValid = checkAutompleteInput(proveidorInputEl, proveidorInputs)
+    return departmentInputIsValid && unitatInputIsValid && proveidorInputIsValid
+  }
+
+  function fetchInputs (route) {
+    return fetch(route)
+      .then(res => res.json())
+      .then(data => {
+        return data.map(d => d.nom)
+      })
+  }
+</script>
+
+<script src="/public/article-autocompletes.js"></script>
+<script>
+  addAutocompletes(["unitat", "proveidor", "department"])
+</script>

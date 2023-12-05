@@ -24,27 +24,32 @@ const extension = (joi) => ({
 
 const Joi = BaseJoi.extend(extension);
 
-//const Joi = require('joi');
-
-module.exports.articleSchema = Joi.object({
-  article: Joi.object({
-    preu: Joi.number().required().min(0),
+const article = Joi.object({
+    preu: Joi.number().min(0),
     article: Joi.string().required().escapeHTML(),
     iva: Joi.number().min(0),
-    inventariable: Joi.boolean(),
-    proveidor: Joi.string().escapeHTML(),
-    tipus: Joi.string().escapeHTML(),
+    proveidor: Joi.string().allow("").escapeHTML(),
+    tipus: Joi.string().allow("").escapeHTML(),
     unitat: Joi.string().required().escapeHTML(),
-    imatge: Joi.string().allow('').escapeHTML(),
-    descripcio: Joi.string().allow('').escapeHTML(),
-    numSerie: Joi.string().allow('').escapeHTML(),
-    responsable: Joi.object()
-  }).required(),
+    descripcio: Joi.string().allow("").escapeHTML(),
+    numSerie: Joi.string().allow("").escapeHTML(),
+    responsable: Joi.object(),
+    department: Joi.string().allow("").escapeHTML(),
+});
+
+module.exports.articleSchema = Joi.object({
+  article
+}); 
+
+module.exports.articlesSchema = Joi.object({
+  articles: Joi.array().items(
+    article
+  ),
 });
 
 module.exports.invoiceSchema = Joi.object({
   invoiceItems: Joi.array(),
-  status: Joi.string().valid('aprovada', 'pendent', 'rebuda', 'rebutjada'),
+  status: Joi.string().valid("aprovada", "pendent", "rebuda", "rebutjada"),
   total: Joi.number(),
 });
 
@@ -53,13 +58,13 @@ module.exports.itemSchema = Joi.object({
     nom: Joi.string().required().escapeHTML(),
     tipus: Joi.string().required().escapeHTML(),
     inventariable: Joi.boolean().required(),
-    descripcio: Joi.string().empty('').escapeHTML(),
+    descripcio: Joi.string().empty("").escapeHTML(),
   }).required(),
 });
 
 module.exports.departmentSchema = Joi.object({
   department: Joi.object({
-    name: Joi.string().required().escapeHTML(),
+    nom: Joi.string().required().escapeHTML(),
   }).required(),
 });
 
@@ -196,10 +201,10 @@ module.exports.utilitatSchema = Joi.object({
 module.exports.proveidorSchema = Joi.object({
   proveidor: Joi.object({
     nom: Joi.string().required().escapeHTML(),
-    cif: Joi.string().allow('').optional(),
-    adreca: Joi.string().allow('').optional(),
-    telefon: Joi.number().allow('').optional(),
-    email: Joi.string().email().allow('').optional(),
-    autoclose: Joi.string().allow('').empty(''),
+    cif: Joi.string().allow("").optional(),
+    adreca: Joi.string().allow("").optional(),
+    telefon: Joi.number().allow("").optional(),
+    email: Joi.string().email().allow("").optional(),
+    autoclose: Joi.string().allow("").empty(""),
   }).required(),
 });

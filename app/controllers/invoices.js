@@ -4,6 +4,7 @@ const Item = require("../models/item");
 const autocomplete = require("autocompleter");
 const { useNodemailer } = require("../nodemailer/sendEmail");
 const { getProtocol } = require("../utils/helpers");
+const Department = require("../models/department");
 const protocol = getProtocol()
 
 module.exports.index = async (req, res) => {
@@ -35,7 +36,8 @@ module.exports.renderNewForm = async (req, res) => {
 module.exports.createInvoice = async (req, res, next) => {
   const { invoiceItems } = req.body;
   const { _id: responsableId, email } = req.user;
-  const invoice = new Invoice({ responsable: responsableId, invoiceItems });
+  const department = await Department.findById(req.user.department)
+  const invoice = new Invoice({ responsable: responsableId, invoiceItems, department: department.nom });
   await invoice.save();
   await emailCreated(invoice, email, req.headers.host)
   req.flash("success", "Comanda creada correctament!");

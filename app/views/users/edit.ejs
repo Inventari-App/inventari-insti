@@ -62,7 +62,7 @@
           <% departments.forEach((department) => { %>
             <% const selected = department.id.trim() == user.department ? "selected" : "" %>
             <option value="<%= department._id %>" <%= selected %> >
-              <%= department.name %>
+              <%= department.nom %>
             </option>
           <% }) %>
         </select>

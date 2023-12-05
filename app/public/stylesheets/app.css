@@ -18,15 +18,12 @@ input[type="number"]::-webkit-outer-spin-button {
   margin: 0;
 }
 
-#autocomplete-item,
-#autocomplete-unitat,
-#autocomplete-proveidor {
+.autocomplete-suggestions {
   background: white;
   border: 1px solid;
   padding: 0 4px;
   height: 50px;
   position: relative;
-  /* left: -15px; */
   background-color: powderblue;
   font-weight: bold;
 }

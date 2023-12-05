@@ -3,14 +3,15 @@ const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
 const articles = require('../controllers/articles');
 const { isLoggedIn, isResponsableOrAdmin, validateSchema } = require('../middleware');
-const { articleSchema } = require('../schemas');
+const { articlesSchema, articleSchema } = require('../schemas');
 const article = require('../models/article');
 
+const validateArticles = validateSchema(articlesSchema)
 const validateArticle = validateSchema(articleSchema)
 
 router.route('/')
 .get(catchAsync(articles.index))
-.post(isLoggedIn, validateArticle, catchAsync(articles.createArticle))
+.post(isLoggedIn, validateArticles, catchAsync(articles.createArticles))
 
 router.get('/new', isLoggedIn, articles.renderNewForm);
 

@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const DepartmentSchema = new Schema({
-  name: String,
+  nom: String,
   center: {
     type: Schema.Types.ObjectId,
     ref: "Center"

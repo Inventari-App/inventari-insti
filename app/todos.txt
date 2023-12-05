@@ -1,0 +1,1 @@
+- Guardar (invoices) i Mostrar (articles) nom departament als articles, no user.departament

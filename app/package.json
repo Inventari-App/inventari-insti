@@ -47,10 +47,18 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "NODE_ENV=prod node --inspect=0.0.0.0:9229 app.js",
-    "dev": "NODE_ENV=dev nodemon --inspect=0.0.0.0:9229 app.js"
+    "start": "concurrently \"npm run build\" \"npm run start-server\"",
+    "start-server": "NODE_ENV=prod node --inspect=0.0.0.0:9229 app.js",
+    "dev-server": "NODE_ENV=dev nodemon --inspect=0.0.0.0:9229 app.js",
+    "dev": "concurrently \"npm run build-watch\" \"npm run dev-server\"",
+    "build": "esbuild ./views/articles/autocompletes.js --bundle --outfile=./public/article-autocompletes.js",
+    "build-watch": "esbuild ./views/articles/autocompletes.js --watch --bundle --outfile=./public/article-autocompletes.js"
   },
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "esbuild": "0.19.8"
+  }
 }

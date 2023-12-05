@@ -16,9 +16,6 @@
           <td style="display: none">
             <input type="hidden" id="tipus" name="tipus" />
           </td>
-          <td style="display: none">
-            <input type="hidden" id="naturalesa" name="naturalesa" value="inventariable" />
-          </td>
           <td>
             <input
               type="text"
@@ -57,19 +54,19 @@
               autocomplete="off"
             />
             <span class="error-message">La unitat no existeix</span>
-            <a href= "../unitats/new?tab=true" class="create-link" target="parent">Crear Unitat</a>
+            <a href= "/unitats/new?tab=true" class="create-link" target="_blank">Crear Unitat</a>
           </td>
           <td>
             <input
               type="text"
               class="camps form-control autocomplete"
-              name="departament"
-              id="departament"
+              name="department"
+              id="department"
               required
               autocomplete="off"
             />
             <span class="error-message">La departament no existeix</span>
-            <a href= "../departaments/new?tab=true" class="create-link" target="parent">Crear Departament</a>
+            <a href= "/departments/new?tab=true" class="create-link" target="_blank">Crear Departament</a>
           </td>
           <td>
             <input
@@ -81,7 +78,7 @@
               required
             />
             <span class="error-message">El proveidor no existeix</span>
-            <a href= "../proveidors/new?tab=true" class="create-link" target="parent">Crear Proveidor</a>
+            <a href= "/proveidors/new?tab=true" class="create-link" target="_blank">Crear Proveidor</a>
           </td>
           <td>
             <button id="add-row-btn" class="btn btn-primary form-control">
@@ -113,29 +110,11 @@
         <th>Proveidor</th>
         <th></th>
     </tr>
-    
-    <% if (articles.length) {
-      articles.forEach(article => { %>
-        <tr class="articles">
-          <td name="tipus" data-value="<%- article.tipus %>" style="display: none" class="align-middle">
-            <%= article.tipus %>
-          </td>
-          <td name="article" data-value="<%- article.article %>" style="display: table-cell" class="align-middle">
-            <%= article.article %>
-          <td name="preu" data-value="<%- article.preu %>" style="display: table-cell" class="align-middle">
-            <%= article.preu %>
-          <td name="unitat" data-value="<%- article.unitat %>" style="display: table-cell" class="align-middle">
-            <%= article.unitat %>
-          <td name="departament" data-value="<%- article.departament %>" style="display: table-cell" class="align-middle">
-            <%= article.departament %>
-          <td name="proveidor" data-value="<%- article.proveidor %>" style="display: table-cell" class="align-middle">
-            <%= article.proveidor %>
-          </td>
-          <td>
-            <button type="button" class="btn btn-danger delete-row-article">X</button>
-          </td>
-        </tr>
-      <% }) %>
-    <% } %>
   </table>
+
+    <div class="mb-3">
+      <button id="send-articles" class="btn btn-success">
+        Afegeix Articles
+      </button>
+    </div>
 </div>
