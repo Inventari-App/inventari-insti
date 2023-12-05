@@ -12,6 +12,7 @@
   const addRowForm = document.querySelector("#add-row-form");
   const sendArticlesBtn = document.querySelector("#send-articles");
 
+  const itemInputEl = addRowTable.querySelector('#item')
   const departmentInputEl = addRowTable.querySelector('#department')
   const unitatInputEl = addRowTable.querySelector('#unitat')
   const proveidorInputEl = addRowTable.querySelector('#proveidor')
@@ -133,15 +134,17 @@
   }
 
   async function checkAutompleteInputs (addRowTable) {
-    const [departmentInputs, unitatInputs, proveidorInputs] = await Promise.all([
+    const [itemInputs, departmentInputs, unitatInputs, proveidorInputs] = await Promise.all([
+      fetchInputs('../items/all'),
       fetchInputs('../departments/all'),
       fetchInputs('../unitats/all'),
       fetchInputs('../proveidors/all')
     ])
+    const itemInputIsValid = checkAutompleteInput(itemInputEl, itemInputs)
     const departmentInputIsValid = checkAutompleteInput(departmentInputEl, departmentInputs)
     const unitatInputIsValid = checkAutompleteInput(unitatInputEl, unitatInputs)
     const proveidorInputIsValid = checkAutompleteInput(proveidorInputEl, proveidorInputs)
-    return departmentInputIsValid && unitatInputIsValid && proveidorInputIsValid
+    return itemInputIsValid && departmentInputIsValid && unitatInputIsValid && proveidorInputIsValid
   }
 
   function fetchInputs (route) {
@@ -155,5 +158,5 @@
 
 <script src="/public/article-autocompletes.js"></script>
 <script>
-  addAutocompletes(["unitat", "proveidor", "department"])
+  addAutocompletes(["item", "unitat", "proveidor", "department"])
 </script>

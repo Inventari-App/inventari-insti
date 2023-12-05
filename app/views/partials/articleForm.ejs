@@ -28,11 +28,14 @@
           <td>
             <input
               type="text"
-              class="numeros form-control article"
+              class="camps form-control article autocomplete"
               name="article"
-              id="article"
+              id="item"
+              autocomplete="off"
               required
             />
+            <span class="error-message">L'item no existeix</span>
+            <a href= "/items/new?tab=true" class="create-link" target="_blank">Crear Item</a>
           </td>
           <td>
             <input
