@@ -64,9 +64,9 @@
     // display articles articles table
     articlesTable.style.display = "table";
 
-    // Keep all input values
+    // Keep all input values but numSerie
     Array.prototype.map.call(addRowInputs, (inputEl) => {
-      const keep = /.*/.test(inputEl.id)
+      const keep = /^(?!.*numSerie).*$/.test(inputEl.id)
       if (keep) return
       inputEl.value = ''
     })
