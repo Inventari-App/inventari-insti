@@ -158,5 +158,10 @@
 
 <script src="/public/autocompletes.js"></script>
 <script>
-  addAutocompletes(["item", "unitat", "proveidor", "department"])
+  addAutocompletes([
+    { autocompleteName: "item", filter: "inventariable" },
+    { autocompleteName: "unitat" },
+    { autocompleteName: "proveidor" },
+    { autocompleteName: "department" }
+  ])
 </script>

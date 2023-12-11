@@ -354,7 +354,7 @@
 
   // scripts/autocompletes.js
   var autocomplete = require_autocomplete();
-  var addAutocompletes = (autocompletes) => autocompletes.forEach((autocompleteName) => {
+  var addAutocompletes = (autocompletes) => autocompletes.forEach(({ autocompleteName, filter }) => {
     const inputEl = document.querySelector(`#${autocompleteName}`);
     const optionsRoute = `/${autocompleteName}s/all`;
     autocomplete({
@@ -365,7 +365,9 @@
           var suggestions = data.filter(
             (data2) => data2.nom.toLowerCase().includes(text)
           );
-          update(suggestions);
+          update(
+            filter ? suggestions.filter((suggestion) => suggestion[filter]) : suggestions
+          );
         });
       },
       onSelect: function(suggestion) {
