@@ -5,7 +5,8 @@ const autocomplete = require("autocompleter");
 const { useNodemailer } = require("../nodemailer/sendEmail");
 const { getProtocol } = require("../utils/helpers");
 const Department = require("../models/department");
-const protocol = getProtocol()
+const Article = require("../models/article");
+const protocol = getProtocol();
 
 module.exports.index = async (req, res) => {
   const { isAdmin, id: userId } = req.user;
@@ -19,7 +20,7 @@ module.exports.index = async (req, res) => {
 
   // Show only user/admin invoices based on filter
   const invoices = await Invoice.find(
-    !isAdmin ? { ...filter, responsable: { _id: userId } } : filter
+    !isAdmin ? { ...filter, responsable: { _id: userId } } : filter,
   )
     .populate("responsable")
     .sort({ createdAt: -1 });
@@ -36,10 +37,14 @@ module.exports.renderNewForm = async (req, res) => {
 module.exports.createInvoice = async (req, res, next) => {
   const { invoiceItems } = req.body;
   const { _id: responsableId, email } = req.user;
-  const department = await Department.findById(req.user.department)
-  const invoice = new Invoice({ responsable: responsableId, invoiceItems, department: department.nom });
+  const department = await Department.findById(req.user.department);
+  const invoice = new Invoice({
+    responsable: responsableId,
+    invoiceItems,
+    department: department.nom,
+  });
   await invoice.save();
-  await emailCreated(invoice, email, req.headers.host)
+  await emailCreated(invoice, email, req.headers.host);
   req.flash("success", "Comanda creada correctament!");
   res.json(invoice);
 };
@@ -47,6 +52,10 @@ module.exports.createInvoice = async (req, res, next) => {
 module.exports.showInvoice = async (req, res, next) => {
   const invoice = await Invoice.findById(req.params.id)
     .populate("responsable")
+    .populate({
+      path: "responsable",
+      populate: { path: "department" }, // Complete path for nested population
+    })
     .lean();
 
   if (!invoice) {
@@ -54,15 +63,20 @@ module.exports.showInvoice = async (req, res, next) => {
     return res.redirect("/invoices");
   }
 
-  const items = await Item.find();
+  const items = await Item.find({
+    nom: {
+      $in: invoice.invoiceItems.map((item) => item.article),
+    },
+  });
+
   res.render(
     invoice.status === "aprovada" ? "invoices/receive" : "invoices/show",
     {
       invoice,
-      invoiceJSON: JSON.stringify(invoice),
       items,
-      isResponsable: invoice.responsable._id.equals(req.user.id)
-    }
+      invoiceJSON: JSON.stringify(invoice),
+      isResponsable: invoice.responsable._id.equals(req.user.id),
+    },
   );
 };
 
@@ -80,51 +94,50 @@ module.exports.renderEditForm = async (req, res) => {
 module.exports.updateInvoiceStatus = async (req, res) => {
   try {
     const { id } = req.params;
-    const { status } = req.body
+    const { status } = req.body;
 
     const invoice = await Invoice.findByIdAndUpdate(
       id,
       { status },
-      { new: true }
+      { new: true },
     ).populate("responsable");
 
-    status === 'rebuda'
+    status === "rebuda"
       ? await emailReceived(invoice, req.headers.host)
       : await emailStatusChange(invoice, status, req.headers.host);
 
-    res.redirect('/invoices');
+    res.redirect("/invoices");
   } catch (error) {
     console.error(error);
   }
 };
-
 
 module.exports.updateInvoice = async (req, res) => {
   try {
     const { id } = req.params;
     const { redirect } = req.query;
-    const { isAdmin } = req.user
+    const { isAdmin } = req.user;
 
     const invoice = await Invoice.findByIdAndUpdate(
       id,
       { ...req.body },
-      { new: true }
+      { new: true },
     ).populate("responsable");
 
-    await emailModified({ invoice, user: req.user, host: req.headers.host })
+    await emailModified({ invoice, user: req.user, host: req.headers.host });
 
     req.flash("success", "Comanda actualitzada correctament!");
 
-    if (redirect) return isAdmin
-      ? res.redirect(`/invoices`)
-      : res.redirect(`/invoices/${id}`)
+    if (redirect)
+      return isAdmin
+        ? res.redirect(`/invoices`)
+        : res.redirect(`/invoices/${id}`);
 
-    return res.status(201).json(invoice.toJSON())
+    return res.status(201).json(invoice.toJSON());
   } catch (error) {
     console.error(error);
   }
 };
-
 
 module.exports.deleteInvoice = async (req, res) => {
   const { id } = req.params;
@@ -134,15 +147,16 @@ module.exports.deleteInvoice = async (req, res) => {
   res.redirect("/invoices");
 };
 
-async function getAdminEmails () {
+async function getAdminEmails() {
   const admins = await User.find({ isAdmin: true }).exec();
-  const adminEmails = admins.length && admins.map(admin => admin.email).join('; ')
-  return adminEmails
+  const adminEmails =
+    admins.length && admins.map((admin) => admin.email).join("; ");
+  return adminEmails;
 }
 
-async function emailCreated (invoice, email, host) {
-  const adminEmails = await getAdminEmails()
-  if (!adminEmails) return console.error('No admin emails?')
+async function emailCreated(invoice, email, host) {
+  const adminEmails = await getAdminEmails();
+  if (!adminEmails) return console.error("No admin emails?");
 
   const { message, sendEmail } = useNodemailer({
     to: adminEmails,
@@ -151,28 +165,28 @@ async function emailCreated (invoice, email, host) {
   });
   return sendEmail({
     subject: message.subject.replace(/{{user}}/, email),
-    text: message.text
-      .replace(/{{url}}/, `${protocol}://${host}/invoices/${invoice._id}`)
-  })
+    text: message.text.replace(
+      /{{url}}/,
+      `${protocol}://${host}/invoices/${invoice._id}`,
+    ),
+  });
 }
 
-async function emailModified ({ invoice, user, host }) {
-  const adminEmails = await getAdminEmails()
-  if (!adminEmails) return console.error('No admin emails?')
+async function emailModified({ invoice, user, host }) {
+  const adminEmails = await getAdminEmails();
+  if (!adminEmails) return console.error("No admin emails?");
 
-  const responsableEmail = invoice.responsable.email
+  const responsableEmail = invoice.responsable.email;
 
   // 1. User === responsable => email admin
   // 2. User !== responsable => email responsable
   // 3. User === responsable && isAdmin => email admin??
 
-  const responsableIsEditing = user.email === responsableEmail
+  const responsableIsEditing = user.email === responsableEmail;
   // const adminIsEditing = user.isAdmin
 
   const { message, sendEmail } = useNodemailer({
-    to: responsableIsEditing
-      ? adminEmails
-      : responsableEmail,
+    to: responsableIsEditing ? adminEmails : responsableEmail,
     model: "invoice",
     reason: "modified",
   });
@@ -180,19 +194,17 @@ async function emailModified ({ invoice, user, host }) {
     subject: message.subject,
     text: message.text
       .replace(/{{user}}/, invoice.responsable.email)
-      .replace(/{{url}}/, `${protocol}://${host}/invoices/${invoice._id}`)
-  })
+      .replace(/{{url}}/, `${protocol}://${host}/invoices/${invoice._id}`),
+  });
 }
 
-async function emailStatusChange (invoice, status, host) {
-  const adminEmails = await getAdminEmails()
-  if (!adminEmails) return console.error('No admin emails?')
+async function emailStatusChange(invoice, status, host) {
+  const adminEmails = await getAdminEmails();
+  if (!adminEmails) return console.error("No admin emails?");
 
-  const responsableEmail = invoice.responsable.email
+  const responsableEmail = invoice.responsable.email;
   const { message, sendEmail } = useNodemailer({
-    to: /aprovada|pendent/.test(status)
-      ? responsableEmail
-      : adminEmails,
+    to: /aprovada|pendent/.test(status) ? responsableEmail : adminEmails,
     model: "invoice",
     reason: "status",
   });
@@ -201,15 +213,15 @@ async function emailStatusChange (invoice, status, host) {
     text: message.text
       .replace(/{{user}}/, invoice.responsable.email)
       .replace(/{{status}}/, status)
-      .replace(/{{url}}/, `${protocol}://${host}/invoices/${invoice._id}`)
-  })
+      .replace(/{{url}}/, `${protocol}://${host}/invoices/${invoice._id}`),
+  });
 }
 
-async function emailReceived (invoice, host) {
-  const adminEmails = await getAdminEmails()
-  if (!adminEmails) return console.error('No admin emails?')
+async function emailReceived(invoice, host) {
+  const adminEmails = await getAdminEmails();
+  if (!adminEmails) return console.error("No admin emails?");
 
-  const responsableEmail = invoice.responsable.email
+  const responsableEmail = invoice.responsable.email;
   const { message, sendEmail } = useNodemailer({
     to: adminEmails,
     model: "invoice",
@@ -219,6 +231,6 @@ async function emailReceived (invoice, host) {
     subject: message.subject,
     text: message.text
       .replace(/{{user}}/, responsableEmail)
-      .replace(/{{url}}/, `${protocol}://${host}/invoices`)
-  })
+      .replace(/{{url}}/, `${protocol}://${host}/invoices`),
+  });
 }

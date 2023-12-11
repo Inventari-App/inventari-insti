@@ -1,6 +1,6 @@
 const contextPlugin = require("mongoose-request-context");
 const mongoose = require("mongoose");
-const { addCenterFilter } = require("../db/middlewares");
+const { addCenterFilter, addResponsable } = require("../db/middlewares");
 const Schema = mongoose.Schema;
 
 const ArticleSchema = new Schema(
@@ -9,7 +9,6 @@ const ArticleSchema = new Schema(
     preu: Number,
     iva: Number,
     proveidor: String,
-    tipus: String,
     unitat: String,
     descripcio: String,
     numSerie: { type: String, default: "" },
@@ -33,5 +32,7 @@ ArticleSchema.plugin(contextPlugin, {
 });
 
 ArticleSchema.plugin(addCenterFilter);
+
+ArticleSchema.plugin(addResponsable);
 
 module.exports = mongoose.model("Article", ArticleSchema);

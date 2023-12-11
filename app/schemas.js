@@ -28,12 +28,12 @@ const article = Joi.object({
     preu: Joi.number().min(0),
     article: Joi.string().required().escapeHTML(),
     iva: Joi.number().min(0),
+    inventariable: Joi.string().allow("").escapeHTML(),
     proveidor: Joi.string().allow("").escapeHTML(),
     tipus: Joi.string().allow("").escapeHTML(),
     unitat: Joi.string().required().escapeHTML(),
     descripcio: Joi.string().allow("").escapeHTML(),
     numSerie: Joi.string().allow("").escapeHTML(),
-    responsable: Joi.object(),
     department: Joi.string().allow("").escapeHTML(),
 });
 

@@ -51,8 +51,8 @@
     "start-server": "NODE_ENV=prod node --inspect=0.0.0.0:9229 app.js",
     "dev-server": "NODE_ENV=dev nodemon --inspect=0.0.0.0:9229 app.js",
     "dev": "concurrently \"npm run build-watch\" \"npm run dev-server\"",
-    "build": "esbuild ./views/articles/autocompletes.js --bundle --outfile=./public/article-autocompletes.js",
-    "build-watch": "esbuild ./views/articles/autocompletes.js --watch --bundle --outfile=./public/article-autocompletes.js"
+    "build": "esbuild ./scripts/autocompletes.js --bundle --outfile=./public/autocompletes.js",
+    "build-watch": "esbuild ./scripts/autocompletes.js --watch --bundle --outfile=./public/autocompletes.js"
   },
   "author": "",
   "license": "ISC",

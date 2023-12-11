@@ -171,7 +171,7 @@
     return isValid
   }
 
-  async function checkAutompleteInputs (addRowTable) {
+  async function checkAutompleteInputs () {
     const [itemInputs, unitatInputs, proveidorInputs] = await Promise.all([
       fetchInputs('../items/all'),
       fetchInputs('../unitats/all'),
@@ -192,80 +192,7 @@
   }
 </script>
 
-<script type="module">
-  const tipusInputEl = document.querySelector('#tipus')
-  const inventariableInputEl = document.querySelector('#inventariable')
-  const itemsInputEl = document.querySelector('#item');
-  const unitatsInputEl = document.querySelector('#unitat');
-  const proveidorsInputEl = document.querySelector('#proveidor');
-  const _autocomplete = <%- autocomplete %>
-  import Autocompleter from '../../utils/Autocompleter.js';
-
-  Autocompleter({
-    autocomplete: _autocomplete,
-    inputEl: itemsInputEl,
-    optionsRoute: '/items/all',
-    onSelect: function(suggestion) {
-      const {
-        nom,
-        inventariable,
-        tipus
-      } = suggestion
-      this.input.value = nom;
-      inventariableInputEl.value = inventariable
-      tipusInputEl.value = tipus
-    },
-    render: function(suggestion, currentInput) {
-      if (suggestion) {
-        const nom = suggestion.nom
-        const div = document.createElement('div')
-        div.setAttribute("id", "autocomplete-item");
-        div.textContent = nom
-        return div
-      }
-    }
-  })
-  Autocompleter({
-    autocomplete: _autocomplete,
-    inputEl: unitatsInputEl,
-    optionsRoute: '/unitats/all',
-    onSelect: function(suggestion) {
-      const {
-        nom,
-        zona,
-        planta,
-        area
-      } = suggestion
-      this.input.value = nom;
-    },
-    render: function(suggestion, currentInput) {
-      if (suggestion) {
-        const nom = suggestion.nom
-        const div = document.createElement('div')
-        div.setAttribute("id", "autocomplete-unitat");
-        div.textContent = nom
-        return div
-      }
-    }
-  })
-  Autocompleter({
-    autocomplete: _autocomplete,
-    inputEl: proveidorsInputEl,
-    optionsRoute: '/proveidors/all',
-    onSelect: function(suggestion) {
-      const {
-        nom,
-      } = suggestion
-      this.input.value = nom;
-    },
-    render: function(suggestion, currentInput) {
-      if (suggestion) {
-        const nom = suggestion.nom
-        const div = document.createElement('div')
-        div.setAttribute("id", "autocomplete-proveidor");
-        div.textContent = nom
-        return div
-      }
-    }
-  })
+<script src="/public/autocompletes.js"></script>
+<script>
+  addAutocompletes(["item", "unitat", "proveidor"])
 </script>

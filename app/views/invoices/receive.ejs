@@ -28,9 +28,10 @@
     </thead>
 
     <%
-        let i = 0
-        for (const item of invoice.invoiceItems) {
-    %>
+      let i = 0
+      for (const invoiceItem of invoice.invoiceItems) {
+        const item = items.find(item => item.nom == invoiceItem.article) || {}
+      %>
         <tbody>
             <tr class="table-secondary">
                 <td width="3%">
@@ -49,36 +50,36 @@
                     <div class="camps" name="tipus"><%= item.tipus %></div>
                 </td>
                 <td width="20%">
-                    <div class="camps" name="article"><%= item.article %></div>
+                    <div class="camps" name="article"><%= invoiceItem.article %></div>
                 </td>
                 <td width="10%">
-                    <div class="numeros" name="quantitat"><%= item.quantitat %>unitat/s</div>
+                    <div class="numeros" name="quantitat"><%= invoiceItem.quantitat %>unitat/s</div>
                 </td>
                 <td width="10%">
-                    <div class="numeros" name="preu"><%= item.preu %>€/u</div>
+                    <div class="numeros" name="preu"><%= invoiceItem.preu %>€/u</div>
                 </td>
                 <td width="10%">
-                    <div class="numeros" name="iva"><%= item.iva %>%</div>
+                    <div class="numeros" name="iva"><%= invoiceItem.iva %>%</div>
                 </td>
                 <td width="10%">
                     <div class="numeros" name="subtotal">
-                    <%= item.subtotal %>€
+                    <%= invoiceItem.subtotal %>€
                     </div>
                 </td>
                 <td width="20%">
-                    <div class="camps" name="unitat"><%= item.unitat %></div>
+                    <div class="camps" name="unitat"><%= invoiceItem.unitat %></div>
                 </td>
                 <td width="20%">
-                    <div class="camps" name="proveidor"><%= item.proveidor %></div>
+                    <div class="camps" name="proveidor"><%= invoiceItem.proveidor %></div>
                 </td>
                 <td width="20%"></td>
             </tr>
         </tbody>
-        <% if (item.quantitat >= 1) { %>
-            <tbody id="children-rows-<%= i %>" class="collapse" data-invoice-item-id="<%= item._id %>">
+        <% if (invoiceItem.quantitat >= 1) { %>
+            <tbody id="children-rows-<%= i %>" class="collapse" data-invoice-item-id="<%= invoiceItem._id %>">
                 <%
-                    for (let i = 0; i < item.rebuts.length; i++) {
-                    const isRebut = item.rebuts[i].rebut
+                    for (let i = 0; i < invoiceItem.rebuts.length; i++) {
+                    const isRebut = invoiceItem.rebuts[i].rebut
                 %>
                     <tr class="row-item <%= isRebut && "disabled" %>">
                         <td width="3%"></td>
@@ -87,6 +88,9 @@
                                 <input type="checkbox" name="rebut" <%= isRebut && "checked disabled" %>>
                             </div>
                         </td>
+                        <td width="10%" hidden>
+                            <div class="camps value" name="department" data-value="<%= invoice.responsable.department.nom %>" hidden></div>
+                        </td>
                         <td width="10%">
                             <div class="camps value" name="inventariable" data-value="<%= item.inventariable %>"><%= item.inventariable %></div>
                         </td>
@@ -94,30 +98,30 @@
                             <div class="camps value" name="tipus" data-value="<%= item.tipus %>"><%= item.tipus %></div>
                         </td>
                         <td width="20%">
-                            <div class="camps value" name="article" data-value="<%= item.article %>"><%= item.article %></div>
+                            <div class="camps value" name="article" data-value="<%= invoiceItem.article %>"><%= invoiceItem.article %></div>
                         </td>
                         <td width="10%">
                             <div class="numeros">1 unitat/s</div>
                         </td>
                         <td width="10%">
-                            <div class="numeros value" name="preu" data-value="<%= item.preu %>"><%= item.preu %>€/u</div>
+                            <div class="numeros value" name="preu" data-value="<%= invoiceItem.preu %>"><%= invoiceItem.preu %>€/u</div>
                         </td>
                         <td width="10%">
-                            <div class="numeros value" name="iva" data-value="<%= item.iva %>"><%= item.iva %>%</div>
+                            <div class="numeros value" name="iva" data-value="<%= invoiceItem.iva %>"><%= invoiceItem.iva %>%</div>
                         </td>
                         <td width="10%">
                             <div class="numeros">
-                            <%= item.subtotal %>€
+                            <%= invoiceItem.subtotal %>€
                             </div>
                         </td>
                         <td width="20%">
-                            <div class="camps value" name="unitat" data-value="<%= item.unitat %>"><%= item.unitat %></div>
+                            <div class="camps value" name="unitat" data-value="<%= invoiceItem.unitat %>"><%= invoiceItem.unitat %></div>
                         </td>
                         <td width="20%">
-                            <div class="camps value" name="proveidor" data-value="<%= item.proveidor %>"><%= item.proveidor %></div>
+                            <div class="camps value" name="proveidor" data-value="<%= invoiceItem.proveidor %>"><%= invoiceItem.proveidor %></div>
                         </td>
                         <td width="20%">
-                            <input class="value" type="text" name="numSerie" value="<%= item.rebuts[i].numSerie %>" <%= (isRebut || !item.inventariable) && "disabled" %>>
+                            <input class="value" type="text" name="numSerie" value="<%= invoiceItem.rebuts[i].numSerie %>" <%= (isRebut || !invoiceItem.inventariable) && "disabled" %>>
                         </td>
                     </tr>
                 <% } %>
@@ -173,11 +177,10 @@
     console.log(articles)
     if (!articles.length) return
 
-    const createArticles = articles
+    const inventariableArticles = articles
       .filter(article => article.inventariable == "true") // filter only inventariables
-      .map(article => createArticle(article))
 
-    Promise.all([ ...createArticles ])
+    createArticles(inventariableArticles)
       .then(updateRebuts)
       .then(() => {
         window.location.href = '/invoices'
@@ -185,14 +188,14 @@
       .catch(e => console.error(e))
   })
     
-  function createArticle(article) {
+  function createArticles(articles) {
     return fetch('/articles', {
       method: 'POST',
       mode: 'cors',
       headers: {
         "Content-Type": 'application/json'
       },
-      body: JSON.stringify({ article: {...article, responsable: invoice.responsable } })
+      body: JSON.stringify({ articles })
     })
   }
 

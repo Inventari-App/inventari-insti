@@ -24,7 +24,9 @@
     </thead>
 
     <tbody>
-      <% for (const item of invoice.invoiceItems) { %>
+      <% for (const invoiceItem of invoice.invoiceItems) {
+        const item = items.find(item => item.nom == invoiceItem.article) || {}
+      %>
         <tr>
           <td width="10%">
             <div class="camps"><%= item.inventariable %></div>
@@ -33,24 +35,24 @@
             <div class="camps"><%= item.tipus %></div>
           </td>
           <td width="20%">
-            <div class="camps"><%= item.article %></div>
+            <div class="camps"><%= invoiceItem.article %></div>
           </td>
           <td width="10%">
-            <div class="numeros"><%= item.quantitat %>unitat/s</div>
+            <div class="numeros"><%= invoiceItem.quantitat %>unitat/s</div>
           </td>
           <td width="10%">
-            <div class="numeros"><%= item.preu %>€/u</div>
+            <div class="numeros"><%= invoiceItem.preu %>€/u</div>
           </td>
           <td width="10%">
-            <div class="numeros"><%= item.iva %>%</div>
+            <div class="numeros"><%= invoiceItem.iva %>%</div>
           </td>
           <td width="10%">
             <div class="numeros">
-              <%= item.subtotal %>€
+              <%= invoiceItem.subtotal %>€
             </div>
           </td>
           <td width="20%">
-            <div class="camps"><%= item.unitat %></div>
+            <div class="camps"><%= invoiceItem.unitat %></div>
           </td>
         </tr>
       <% } %>

@@ -352,7 +352,7 @@
     }
   });
 
-  // views/articles/autocompletes.js
+  // scripts/autocompletes.js
   var autocomplete = require_autocomplete();
   var addAutocompletes = (autocompletes) => autocompletes.forEach((autocompleteName) => {
     const inputEl = document.querySelector(`#${autocompleteName}`);

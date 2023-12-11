@@ -5,7 +5,10 @@ const Schema = mongoose.Schema;
 
 const ItemSchema = new Schema(
   {
-    nom: String,
+    nom: {
+      type: String,
+      required: true
+    },
     imatge: Array,
     descripcio: String,
     inventariable: Boolean,
@@ -21,6 +24,9 @@ const ItemSchema = new Schema(
   },
   { timestamps: true }
 );
+//
+// Allow same items in multiple centers
+ItemSchema.index({ nom: 1, center: 1 }, { unique: true })
 
 ItemSchema.plugin(contextPlugin, {
   contextPath: "request:user.center",

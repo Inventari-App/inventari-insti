@@ -13,12 +13,6 @@
 
       <tr class="add-row-row">
         <div class="form-group">
-          <td style="display: none">
-            <input type="hidden" id="tipus" name="tipus" />
-          </td>
-          <td style="display: none">
-            <input type="hidden" id="inventariable" name="inventariable" />
-          </td>
           <td>
             <input
               type="number"
@@ -124,11 +118,6 @@
     <% if (invoiceItems.length) {
       invoiceItems.forEach(item => { %>
         <tr class="invoice-item">
-          <td name="tipus" data-value="<%- item.tipus %>" style="display: none" class="align-middle">
-            <%= item.tipus %>
-          </td>
-          <td name="inventariable" data-value="<%- item.inventariable %>" style="display: none" class="align-middle">
-            <%= item.inventariable %>
           <td name="quantitat" data-value="<%- item.quantitat %>" style="display: table-cell" class="align-middle">
             <%= item.quantitat %>
           <td name="article" data-value="<%- item.article %>" style="display: table-cell" class="align-middle">
