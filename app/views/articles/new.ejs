@@ -64,9 +64,9 @@
     // display articles articles table
     articlesTable.style.display = "table";
 
-    // Keep only iva, unitat and proveidor filled
+    // Keep all input values
     Array.prototype.map.call(addRowInputs, (inputEl) => {
-      const keep = /numSerie|article|preu|unitat|department|proveidor/.test(inputEl.id)
+      const keep = /.*/.test(inputEl.id)
       if (keep) return
       inputEl.value = ''
     })
