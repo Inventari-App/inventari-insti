@@ -11,6 +11,7 @@ const plantaRoutes = require("./plantas");
 const areaRoutes = require("./areas");
 const utilitatRoutes = require("./utilitats");
 const proveidorRoutes = require("./proveidors");
+const centreRoutes = require("./centre");
 const { requireLogin } = require("../middleware");
 
 function appRouter () {
@@ -26,6 +27,7 @@ function appRouter () {
   router.use("/areas", requireLogin, areaRoutes);
   router.use("/utilitats", requireLogin, utilitatRoutes);
   router.use("/proveidors", requireLogin, proveidorRoutes);
+  router.use("/centre", requireLogin, centreRoutes);
 
   router.get("/", (req, res) => {
     if (req.user) return res.redirect(301, "/invoices");
