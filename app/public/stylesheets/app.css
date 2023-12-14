@@ -104,3 +104,7 @@ input[id^='expand-rows-']:checked ~ label {
 .table>:not(caption) {
   white-space: nowrap;
 }
+
+.datatable-top {
+  padding: 8px 0 !important;
+}

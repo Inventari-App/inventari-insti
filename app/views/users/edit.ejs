@@ -2,7 +2,8 @@
 
 <div class="row">
   <div class="col-6 offset-3">
-    <h1>Editar User</h1>
+    <%- include('../partials/title.ejs', { title: 'Editar User' }) %>
+
     <form
       action="/users/<%=user._id%>?_method=PUT"
       method="POST"

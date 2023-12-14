@@ -5,10 +5,65 @@ const { getExpirationTs } = require("../utils/helpers");
 const { useNodemailer } = require("../nodemailer/sendEmail");
 const { getProtocol } = require("../utils/helpers");
 const protocol = getProtocol();
+const {
+  RecaptchaEnterpriseServiceClient,
+} = require("@google-cloud/recaptcha-enterprise");
+
+async function validateRecaptchaToken(token) {
+  projectID = "inventari-insti-1702298921092";
+  recaptchaKey = "6LdcwiwpAAAAADCjabSnzKkkqDm1yRg-k4TDco8W";
+  recaptchaAction = "REGISTER";
+
+  const client = new RecaptchaEnterpriseServiceClient();
+  const projectPath = client.projectPath(projectID);
+
+  // Build the assessment request.
+  const request = {
+    assessment: {
+      event: {
+        token: token,
+        siteKey: recaptchaKey,
+      },
+    },
+    parent: projectPath,
+  };
+
+  const [response] = await client.createAssessment(request);
+
+  // Check if the token is valid.
+  if (!response.tokenProperties.valid) {
+    console.log(
+      `The CreateAssessment call failed because the token was: ${response.tokenProperties.invalidReason}`,
+    );
+    return null;
+  }
+
+  // Check if the expected action was executed.
+  // The `action` property is set by user client in the grecaptcha.enterprise.execute() method.
+  if (response.tokenProperties.action === recaptchaAction) {
+    // Get the risk score and the reason(s).
+    // For more information on interpreting the assessment, see:
+    // https://cloud.google.com/recaptcha-enterprise/docs/interpret-assessment
+    console.log(`The reCAPTCHA score is: ${response.riskAnalysis.score}`);
+    response.riskAnalysis.reasons.forEach((reason) => {
+      console.log(reason);
+    });
+
+    return response.riskAnalysis.score;
+  } else {
+    console.log(
+      "The action attribute in your reCAPTCHA tag does not match the action you are expecting to score",
+    );
+    return null;
+  }
+}
 
 async function createCenter(req, res, next) {
+  debugger
+  validateRecaptchaToken(req.body.token)
+    /*
   try {
-    const { center: centerName, name, surname, email, password } = req.body;
+    const { center: centerName, name, surname, email, password, token } = req.body;
     const center = await new Center({ name: centerName }).save();
     const user = new User({
       email,
@@ -49,6 +104,7 @@ async function createCenter(req, res, next) {
     req.flash("error", e.message);
     res.redirect("register");
   }
+  */
 }
 
 async function createUser(req, res, next) {
@@ -62,8 +118,8 @@ async function createUser(req, res, next) {
       verificationHash: generateHash({ length: 8 }),
     }).save();
 
-    const center = await Center.findById(centerId)
-    center.users.push(user._id)
+    const center = await Center.findById(centerId);
+    center.users.push(user._id);
 
     await User.register(user, password);
 

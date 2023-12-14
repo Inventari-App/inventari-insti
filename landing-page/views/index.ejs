@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>La teva aplicació de gestió d'inventari escolar</title>
 
+    <!-- ReCapthca -->
+    <script src="https://www.google.com/recaptcha/enterprise.js?render=6LdcwiwpAAAAADCjabSnzKkkqDm1yRg-k4TDco8W"></script>
+
     <!-- Bootstrap CSS -->
     <link
       rel="stylesheet"
@@ -311,12 +314,30 @@
       Array.prototype.forEach.call(passwordInputs, passwordInput => {
           passwordInput.addEventListener('input', () => passwordResetFeedbackEl.classList.remove('d-block'))
       })
-      formEl.addEventListener('submit', e => {
-          const isPasswordValid = validatePassword(passwordInputs)
-          if (!isPasswordValid) {
-              e.preventDefault()
-              passwordResetFeedbackEl.classList.add('d-block')
+      formEl.addEventListener('submit', function (e) {
+        e.preventDefault()
+        const isPasswordValid = validatePassword(passwordInputs)
+
+        if (!isPasswordValid) {
+          passwordResetFeedbackEl.classList.add('d-block')
+          return
+        }
+
+        const formData = new FormData(this)
+
+        grecaptcha.enterprise.ready(async () => {
+          let data = {}
+          const token = await grecaptcha.enterprise.execute('6LdcwiwpAAAAADCjabSnzKkkqDm1yRg-k4TDco8W', {action: 'REGISTER'});
+
+          for (let [ key, val ] of formData) {
+            data = {...data, [key]: val}
           }
+
+          fetch("<%= appTargetUrl %>/register-center", {
+            method: "POST",
+            body: JSON.stringify({ ...data, token })
+          })
+        });
       })
   })
 

@@ -1,5 +1,6 @@
 <% layout('layouts/boilerplate')%>
-<h1>Tots els Items</h1>
+<%- include('../partials/title.ejs', { title: 'Tots els Items' }) %>
+
 <div class="d-flex justify-content-end mb-3">
   <a href="/items/new">
     <button href="/items/new" class="btn btn-primary">Afegeix Item</button>

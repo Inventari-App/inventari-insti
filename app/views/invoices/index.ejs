@@ -1,15 +1,16 @@
 <% layout('layouts/boilerplate')%>
-<h1>Totes les Comandes</h1>
 
-<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+<%- include('../partials/title.ejs', { title: 'Totes les Comandes' }) %>
+
+<div class="d-md-flex justify-content-between mt-4">
+  <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+    <a class="btn btn-outline-dark mb-3 filter-all" href="/invoices">Totes</a>
+    <a class="btn btn-info mb-3 filter-pending" href="/invoices?status=pendent">Pendents</a>
+    <a class="btn btn-primary mb-3 filter-approved" href="/invoices?status=aprovada">Aprovades</a>
+    <a class="btn btn-success mb-3 filter-received" href="/invoices?status=rebuda">Rebudes</a>
+
+  </div>
   <a class="btn btn-primary mb-3" href="/invoices/new">Afegeix Comanda</a>
-</div>
-
-<div class="d-grid gap-2 d-md-flex justify-content-md-start">
-  <a class="btn btn-outline-dark mb-3 filter-all" href="/invoices">Totes</a>
-  <a class="btn btn-info mb-3 filter-pending" href="/invoices?status=pendent">Pendents</a>
-  <a class="btn btn-primary mb-3 filter-approved" href="/invoices?status=aprovada">Aprovades</a>
-  <a class="btn btn-success mb-3 filter-received" href="/invoices?status=rebuda">Rebudes</a>
 </div>
 
 <table id="invoices-table" class="table table-striped align-middle">

@@ -1,12 +1,8 @@
 <% layout('layouts/boilerplate')%>
 
-<h3 id="titol">Nova Comanda</h3>
-<p></p>
-<p></p>
-<%- include('../partials/invoiceForm.ejs', { invoiceItems: [] }) %>
+<%- include('../partials/title.ejs', { title: 'Nova Comanda' }) %>
 
-<script>
-</script>
+<%- include('../partials/invoiceForm.ejs', { invoiceItems: [] }) %>
 
 <script>
   const invoiceItemsTable = document.querySelector("#invoice-items");
