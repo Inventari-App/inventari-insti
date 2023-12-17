@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const { addCenterFilter, addResponsable } = require("../db/middlewares");
 const Schema = mongoose.Schema;
 
-const ArticleSchema = new Schema(
+const InventariSchema = new Schema(
   {
     article: String,
     preu: Number,
@@ -25,14 +25,14 @@ const ArticleSchema = new Schema(
   { timestamps: true },
 );
 
-ArticleSchema.plugin(contextPlugin, {
+InventariSchema.plugin(contextPlugin, {
   contextPath: "request:user.center",
   propertyName: "center",
   contextObjectType: Schema.Types.ObjectId,
 });
 
-ArticleSchema.plugin(addCenterFilter);
+InventariSchema.plugin(addCenterFilter);
 
-ArticleSchema.plugin(addResponsable);
+InventariSchema.plugin(addResponsable);
 
-module.exports = mongoose.model("Article", ArticleSchema);
+module.exports = mongoose.model("Inventari", InventariSchema);

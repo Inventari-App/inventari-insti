@@ -24,7 +24,7 @@ const extension = (joi) => ({
 
 const Joi = BaseJoi.extend(extension);
 
-const article = Joi.object({
+const inventari = Joi.object({
     preu: Joi.number().min(0),
     article: Joi.string().required().escapeHTML(),
     iva: Joi.number().min(0),
@@ -37,13 +37,13 @@ const article = Joi.object({
     department: Joi.string().allow("").escapeHTML(),
 });
 
-module.exports.articleSchema = Joi.object({
-  article
+module.exports.inventariSchema = Joi.object({
+  inventari
 }); 
 
-module.exports.articlesSchema = Joi.object({
-  articles: Joi.array().items(
-    article
+module.exports.inventarisSchema = Joi.object({
+  inventaris: Joi.array().items(
+    inventari
   ),
 });
 

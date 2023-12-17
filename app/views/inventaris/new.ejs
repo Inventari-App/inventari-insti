@@ -1,16 +1,16 @@
 <% layout('layouts/boilerplate')%>
 
-<h3 id="titol">Afegeix Articles</h3>
+<h3 id="titol">Afegeix Inventaris</h3>
 <p></p>
 <p></p>
-<%- include('../partials/articleForm.ejs', { articles: [] }) %>
+<%- include('../partials/inventariForm.ejs', { inventaris: [] }) %>
 
 <script>
-  const articlesTable = document.querySelector("#articles");
+  const inventarisTable = document.querySelector("#inventaris");
   const addRowTable = document.querySelector("#add-row-table");
   const addRowBtn = document.querySelector("#add-row-btn");
   const addRowForm = document.querySelector("#add-row-form");
-  const sendArticlesBtn = document.querySelector("#send-articles");
+  const sendInventarisBtn = document.querySelector("#send-inventaris");
 
   const itemInputEl = addRowTable.querySelector('#item')
   const departmentInputEl = addRowTable.querySelector('#department')
@@ -22,7 +22,7 @@
     inputEl.addEventListener('change', () => hideError(inputEl))
   })
 
-  // Add row to articles
+  // Add row to inventaris
   addRowForm.addEventListener("submit", async (e) => {
     e.preventDefault()
     // check autocompletes input
@@ -40,7 +40,7 @@
       };
     });
     const newRowHTML = `
-      <tr class="article">
+      <tr class="inventari">
         ${inputValues.reduce((acc, curr) =>
             (acc += `
               <td
@@ -55,14 +55,14 @@
             ""
         )}
         <td>
-          <button type="button" class="btn btn-danger delete-row-article">X</button>
+          <button type="button" class="btn btn-danger delete-row-inventari">X</button>
         </td>
       </tr>
     `;
-    articlesTable.rows[0].insertAdjacentHTML("afterend", newRowHTML);
+    inventarisTable.rows[0].insertAdjacentHTML("afterend", newRowHTML);
 
-    // display articles articles table
-    articlesTable.style.display = "table";
+    // display inventaris inventaris table
+    inventarisTable.style.display = "table";
 
     // Keep all input values but numSerie
     Array.prototype.map.call(addRowInputs, (inputEl) => {
@@ -72,37 +72,37 @@
     })
   });
 
-  articlesTable.addEventListener("click", (e) => {
+  inventarisTable.addEventListener("click", (e) => {
     const { target } = e;
-    const isDeleteRowEl = target.classList.contains('delete-row-article')
+    const isDeleteRowEl = target.classList.contains('delete-row-inventari')
     if (!isDeleteRowEl) return
-    const articleRow = target.closest("tr.article");
-    if (!articleRow) return;
-    articleRow.remove();
+    const inventariRow = target.closest("tr.inventari");
+    if (!inventariRow) return;
+    inventariRow.remove();
   });
 
-  sendArticlesBtn.addEventListener("click", (e) => {
-    const confirmation = confirm("Estas segur que vols afegir els articles?")
+  sendInventarisBtn.addEventListener("click", (e) => {
+    const confirmation = confirm("Estas segur que vols afegir els inventaris?")
     if (!confirmation) return
 
-    const articlesData = getArticlesData();
-    console.log(articlesData);
-    fetch("/articles", {
+    const inventarisData = getInventarisData();
+    console.log(inventarisData);
+    fetch("/inventaris", {
       method: "POST",
       mode: "cors",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ articles: [...articlesData] }),
+      body: JSON.stringify({ inventaris: [...inventarisData] }),
     })
-      .then(() => (window.location.href = "/articles"))
+      .then(() => (window.location.href = "/inventaris"))
       .catch((e) => console.error(e));
   });
 
-  function getArticlesData() {
-    const rowEls = articlesTable.querySelectorAll("tr.article");articles
+  function getInventarisData() {
+    const rowEls = inventarisTable.querySelectorAll("tr.inventari");inventaris
     return Array.prototype.map.call(rowEls, (rowEl) => {
-      const rowArticlesValues = Array.prototype.reduce.call(
+      const rowInventarisValues = Array.prototype.reduce.call(
         rowEl.cells,
         (acc, cellEl) => {
           return {
@@ -112,7 +112,7 @@
         },
         {}
       );
-      return rowArticlesValues;
+      return rowInventarisValues;
     });
   }
   function showError (inputEl) {

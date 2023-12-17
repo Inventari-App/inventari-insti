@@ -5,7 +5,7 @@
 </p>
 
 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-  <button id="rebre-comanda-btn" type="button" class="btn btn-primary mb-2">Rebre articles</button>
+  <button id="rebre-comanda-btn" type="button" class="btn btn-primary mb-2">Rebre inventaris</button>
 </div>
 
 <table class="table table-condensed">
@@ -165,7 +165,7 @@
   rebreComandaBtn.addEventListener('click', () => {
     const itemRowEls = document.querySelectorAll('tbody[id^="children-rows-"] tr')
     const checkedItemRowEls = Array.prototype.filter.call(itemRowEls, itemRowEl => itemRowEl.querySelector('input[type="checkbox"]:checked:not(:disabled)'))
-    const articles = Array.prototype.map.call(checkedItemRowEls, checkedItemRowEl => {
+    const inventaris = Array.prototype.map.call(checkedItemRowEls, checkedItemRowEl => {
       const valueEls = checkedItemRowEl.querySelectorAll('div.value, input.value')
       return Array.prototype.reduce.call(valueEls, (acc, valueEl) => {
         return {
@@ -174,13 +174,13 @@
         }
       }, {})
     })
-    console.log(articles)
-    if (!articles.length) return
+    console.log(inventaris)
+    if (!inventaris.length) return
 
-    const inventariableArticles = articles
-      .filter(article => article.inventariable == "true") // filter only inventariables
+    const inventariableInventaris = inventaris
+      .filter(inventari => inventari.inventariable == "true") // filter only inventariables
 
-    createArticles(inventariableArticles)
+    createInventaris(inventariableInventaris)
       .then(updateRebuts)
       .then(() => {
         window.location.href = '/invoices'
@@ -188,14 +188,14 @@
       .catch(e => console.error(e))
   })
     
-  function createArticles(articles) {
-    return fetch('/articles', {
+  function createInventaris(inventaris) {
+    return fetch('/inventaris', {
       method: 'POST',
       mode: 'cors',
       headers: {
         "Content-Type": 'application/json'
       },
-      body: JSON.stringify({ articles })
+      body: JSON.stringify({ inventaris })
     })
   }
 

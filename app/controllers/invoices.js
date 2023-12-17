@@ -5,7 +5,7 @@ const autocomplete = require("autocompleter");
 const { useNodemailer } = require("../nodemailer/sendEmail");
 const { getProtocol } = require("../utils/helpers");
 const Department = require("../models/department");
-const Article = require("../models/article");
+const Inventari = require("../models/inventari");
 const protocol = getProtocol();
 
 module.exports.index = async (req, res) => {

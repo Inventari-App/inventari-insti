@@ -1,11 +1,11 @@
 <% layout('layouts/boilerplate')%>
 
 <div class="row">
-  <%- include('../partials/title.ejs', { title: 'Editar Article' }) %>
+  <%- include('../partials/title.ejs', { title: 'Editar Inventari' }) %>
 
   <div class="col-6 offset-3">
     <form
-      action="/articles/<%=article._id%>?_method=PUT"
+      action="/inventaris/<%=inventari._id%>?_method=PUT"
       method="POST"
       class="validated-form"
     >
@@ -15,28 +15,28 @@
           class="form-control"
           type="text"
           id="numSerie"
-          name="article[numSerie]"
-          value="<%=article.numSerie %>"
+          name="inventari[numSerie]"
+          value="<%=inventari.numSerie %>"
         />
       </div>
 
       <div class="mb-3">
-        <label class="form-label" for="nom">Nom Article</label>
+        <label class="form-label" for="nom">Nom Inventari</label>
         <input
           class="form-control"
           type="text"
           id="nom"
-          name="article[article]"
-          value="<%=article.article %>"
+          name="inventari[article]"
+          value="<%=inventari.article %>"
           required
         />
       </div>
 
       <div class="mb-3">
         <label class="form-label" for="unitat">Ubicació</label>
-        <select class="form-select" name="article[unitat]" id="unitat">
+        <select class="form-select" name="inventari[unitat]" id="unitat">
           <% unitats.forEach((unitat) => { %>
-            <option value="<%= unitat.nom %>" default="<% article.unitat === unitat.nom ? true : false %>">
+            <option value="<%= unitat.nom %>" default="<% inventari.unitat === unitat.nom ? true : false %>">
               <%= unitat.nom %>
             </option>
           <% }) %>
@@ -53,10 +53,10 @@
             min="0"
             step="0.01"
             class="form-control"
-            name="article[preu]"
+            name="inventari[preu]"
             id="preu"
             placeholder="0.00"
-            value="<%= article.preu%>"
+            value="<%= inventari.preu%>"
             aria-label="preu"
             aria-describedby="preu-label"
             required
@@ -70,16 +70,16 @@
           class="form-control"
           type="text"
           id="descripcio"
-          name="article[descripcio]"
+          name="inventari[descripcio]"
         >
-          <%= article.descripcio%>
+          <%= inventari.descripcio%>
         </textarea
         >
       </div>
       <div class="mb-3">
-        <button class="btn btn-success">Modifica article</button>
+        <button class="btn btn-success">Modifica inventari</button>
       </div>
     </form>
-    <a href="/articles">Tots els Articles</a>
+    <a href="/inventaris">Tots els Inventaris</a>
   </div>
 </div>
