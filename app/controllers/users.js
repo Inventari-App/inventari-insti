@@ -59,9 +59,9 @@ async function validateRecaptchaToken(token) {
 }
 
 async function createCenter(req, res, next) {
-  debugger
-  validateRecaptchaToken(req.body.token)
-    /*
+  debugger;
+  validateRecaptchaToken(req.body.token);
+  /*
   try {
     const { center: centerName, name, surname, email, password, token } = req.body;
     const center = await new Center({ name: centerName }).save();
@@ -183,24 +183,36 @@ async function sendPasswordReset(req, res, next) {
 }
 
 async function getAllUsers(req, res, next) {
-  const users = await User.find({});
-  return users;
+  try {
+    const users = await User.find({});
+    return users;
+  } catch (err) {
+    next(err);
+  }
 }
 
 async function getUser(req, res, next) {
-  const user = await User.findById(req.params.id);
-  const center = await Center.findById(user.center).populate("users");
-  return { user, center };
+  try {
+    const user = await User.findById(req.params.id);
+    const center = await Center.findById(user.center).populate("users");
+    return { user, center };
+  } catch (err) {
+    next(err);
+  }
 }
 
 async function updateUser(req, res, next) {
-  const { id } = req.params;
-  const { isAdmin } = req.body.user;
-  const user = await User.findByIdAndUpdate(id, {
-    ...req.body.user,
-    isAdmin: !!isAdmin,
-  });
-  return user;
+  try {
+    const { id } = req.params;
+    const { isAdmin } = req.body.user;
+    const user = await User.findByIdAndUpdate(id, {
+      ...req.body.user,
+      isAdmin: !!isAdmin,
+    });
+    return user;
+  } catch (err) {
+    next(err);
+  }
 }
 
 async function deleteUser(req, res, next) {
@@ -209,60 +221,66 @@ async function deleteUser(req, res, next) {
     await User.findByIdAndDelete(id);
     req.flash("success", "Usuari esborrat correctament");
     res.sendStatus(200);
-  } catch (error) {
+    next();
+  } catch (err) {
     req.flash("error", "L'usuari no s'ha pogut esborrar");
     res.sendStatus(400);
+    next(err);
   }
 }
 
 async function verifyUser(req, res, next) {
-  const { token, userId } = req.query;
-  const user = await User.findById(userId);
-  if (!user) {
-    req.flash("error", "L'usuari no existeix.");
-    res.redirect("/");
-  }
-  if (!token) {
-    req.flash("error", "El token esta buit");
-    res.redirect("/");
-  }
-  const { verificationHash, verificationTs, isVerified } = user;
-  if (isVerified) {
-    req.flash("error", "L'usuari ja esta verificat.");
-    res.redirect("/login");
-  }
-  const isTokenCorrect = token === verificationHash;
-  const isTokenExpired = new Date().getTime() > verificationTs;
-  if (!isTokenCorrect) {
-    req.flash("error", "El token es invalid o ha expirat");
-    res.redirect("/login");
-  }
-  if (isTokenExpired) {
-    const { sendEmail, message } = useNodemailer({
-      to: user.email,
-      model: "user",
-      reason: "verify",
-    });
-    const newExpirationTs = getExpirationTs(60 * 10 * 1000); // 10mins
-    const newHash = generateHash({ length: 8 });
-    user.verificationTs = newExpirationTs;
-    user.verificationHash = newHash;
-    await user.save();
-    await sendEmail({
-      subject: message.subject,
-      text: message.text.replace(
-        /{{url}}/,
-        `${protocol}://${req.headers.host}/verify?userId=${user.id}&token=${newHash}`,
-      ),
-    });
-    req.flash("error", "El token ha expirat - N'hem enviat un de nou.");
-    res.redirect("/login");
-  }
-  if (isTokenCorrect && !isTokenExpired) {
-    user.isVerified = true;
-    await user.save();
-    req.flash("success", "L'usuari ha estat activat correctament");
-    res.redirect("/login");
+  try {
+    const { token, userId } = req.query;
+    const user = await User.findById(userId);
+    if (!user) {
+      req.flash("error", "L'usuari no existeix.");
+      res.redirect("/");
+    }
+    if (!token) {
+      req.flash("error", "El token esta buit");
+      res.redirect("/");
+    }
+    const { verificationHash, verificationTs, isVerified } = user;
+    if (isVerified) {
+      req.flash("error", "L'usuari ja esta verificat.");
+      res.redirect("/login");
+    }
+    const isTokenCorrect = token === verificationHash;
+    const isTokenExpired = new Date().getTime() > verificationTs;
+    if (!isTokenCorrect) {
+      req.flash("error", "El token es invalid o ha expirat");
+      res.redirect("/login");
+    }
+    if (isTokenExpired) {
+      const { sendEmail, message } = useNodemailer({
+        to: user.email,
+        model: "user",
+        reason: "verify",
+      });
+      const newExpirationTs = getExpirationTs(60 * 10 * 1000); // 10mins
+      const newHash = generateHash({ length: 8 });
+      user.verificationTs = newExpirationTs;
+      user.verificationHash = newHash;
+      await user.save();
+      await sendEmail({
+        subject: message.subject,
+        text: message.text.replace(
+          /{{url}}/,
+          `${protocol}://${req.headers.host}/verify?userId=${user.id}&token=${newHash}`,
+        ),
+      });
+      req.flash("error", "El token ha expirat - N'hem enviat un de nou.");
+      res.redirect("/login");
+    }
+    if (isTokenCorrect && !isTokenExpired) {
+      user.isVerified = true;
+      await user.save();
+      req.flash("success", "L'usuari ha estat activat correctament");
+      res.redirect("/login");
+    }
+  } catch (err) {
+    next(err);
   }
 }
 

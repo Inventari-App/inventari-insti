@@ -121,7 +121,7 @@
                             <div class="camps value" name="proveidor" data-value="<%= invoiceItem.proveidor %>"><%= invoiceItem.proveidor %></div>
                         </td>
                         <td width="20%">
-                            <input class="value" type="text" name="numSerie" value="<%= invoiceItem.rebuts[i].numSerie %>" <%= (isRebut || !invoiceItem.inventariable) && "disabled" %>>
+                            <input class="value" type="text" name="numSerie" value="<%= invoiceItem.rebuts[i].numSerie %>" <%= (isRebut || !item.inventariable) && "disabled" %>>
                         </td>
                     </tr>
                 <% } %>

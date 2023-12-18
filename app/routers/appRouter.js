@@ -39,7 +39,7 @@ function appRouter () {
   });
 
   router.all("*", (req, res, next) => {
-    return res.render('error')
+    return res.render("404")
     // next(new ExpressError("Pàgina no trobada", 404));
   });
 

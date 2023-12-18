@@ -5,30 +5,33 @@ const autocomplete = require("autocompleter");
 const { useNodemailer } = require("../nodemailer/sendEmail");
 const { getProtocol } = require("../utils/helpers");
 const Department = require("../models/department");
-const Inventari = require("../models/inventari");
 const protocol = getProtocol();
 
-module.exports.index = async (req, res) => {
-  const { isAdmin, id: userId } = req.user;
-  const { status } = req.query;
+module.exports.index = async (req, res, next) => {
+  try {
+    const { isAdmin, id: userId } = req.user;
+    const { status } = req.query;
 
-  // Filter by invoice status if provided
-  const filter = {};
-  if (status && ["pendent", "aprovada", "rebuda"].includes(status)) {
-    filter.status = status;
+    // Filter by invoice status if provided
+    const filter = {};
+    if (status && ["pendent", "aprovada", "rebuda"].includes(status)) {
+      filter.status = status;
+    }
+
+    // Show only user/admin invoices based on filter
+    const invoices = await Invoice.find(
+      !isAdmin ? { ...filter, responsable: { _id: userId } } : filter,
+    )
+      .populate("responsable")
+      .sort({ createdAt: -1 });
+
+    res.render("invoices/index", { invoices });
+  } catch (err) {
+    next(err)
   }
-
-  // Show only user/admin invoices based on filter
-  const invoices = await Invoice.find(
-    !isAdmin ? { ...filter, responsable: { _id: userId } } : filter,
-  )
-    .populate("responsable")
-    .sort({ createdAt: -1 });
-
-  res.render("invoices/index", { invoices });
 };
 
-module.exports.renderNewForm = async (req, res) => {
+module.exports.renderNewForm = async (req, res, next) => {
   res.render("invoices/new", {
     autocomplete,
   });
@@ -80,7 +83,7 @@ module.exports.showInvoice = async (req, res, next) => {
   );
 };
 
-module.exports.renderEditForm = async (req, res) => {
+module.exports.renderEditForm = async (req, res, next) => {
   const invoice = await Invoice.findById(req.params.id).populate("responsable");
 
   if (!invoice) {
@@ -91,7 +94,7 @@ module.exports.renderEditForm = async (req, res) => {
   res.render("invoices/edit", { invoice, autocomplete });
 };
 
-module.exports.updateInvoiceStatus = async (req, res) => {
+module.exports.updateInvoiceStatus = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
@@ -112,7 +115,7 @@ module.exports.updateInvoiceStatus = async (req, res) => {
   }
 };
 
-module.exports.updateInvoice = async (req, res) => {
+module.exports.updateInvoice = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { redirect } = req.query;
@@ -139,7 +142,7 @@ module.exports.updateInvoice = async (req, res) => {
   }
 };
 
-module.exports.deleteInvoice = async (req, res) => {
+module.exports.deleteInvoice = async (req, res, next) => {
   const { id } = req.params;
 
   await Invoice.findByIdAndDelete(id);

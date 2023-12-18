@@ -1,68 +1,102 @@
 const Item = require("../models/item");
 
-module.exports.index = async (req, res) => {
-  const items = await Item.find({}).populate('responsable');
-  res.render("items/index", { items });
+module.exports.index = async (req, res, next) => {
+  try {
+    const items = await Item.find({}).populate("responsable");
+    res.render("items/index", { items });
+  } catch (err) {
+    next(err);
+  }
 };
 
-module.exports.renderNewForm = (req, res) => {
-  res.render("items/new");
+module.exports.renderNewForm = (req, res, next) => {
+  try {
+    res.render("items/new");
+  } catch (err) {
+    next(err);
+  }
 };
 
 module.exports.createItem = async (req, res, next) => {
-  //console.log(req.body)
-  let itemBody = req.body.item;
-  //const albaraArr = JSON.parse(itemBody.albara)
-  itemBody = { ...itemBody };
-  const item = new Item(itemBody);
-  item.responsable = req.user._id;
-  await item.save();
-  req.flash("success", "Item creat correctament!");
-  res.status(201).json(item)
+  try {
+    let itemBody = req.body.item;
+    itemBody = { ...itemBody };
+    const item = new Item(itemBody);
+    item.responsable = req.user._id;
+    await item.save();
+    req.flash("success", "Item creat correctament!");
+    res.status(201).json(item);
+  } catch (err) {
+    next(err);
+  }
 };
 
 module.exports.showItem = async (req, res, next) => {
-  const { user } = req
-  const item = await Item.findById(req.params.id).populate("responsable");
-  const responsable = item.responsable
+  try {
+    const { user } = req;
+    const item = await Item.findById(req.params.id).populate("responsable");
+    const responsable = item.responsable;
 
-  if (!item) {
-    req.flash("error", "No es pot trobar l'item!");
-    return res.redirect("/items");
+    if (!item) {
+      req.flash("error", "No es pot trobar l'item!");
+      return res.redirect("/items");
+    }
+    res.render("items/show", {
+      item,
+      isAdmin: user.isAdmin,
+      isOwner: responsable && responsable._id.equals(user.id),
+    });
+  } catch (err) {
+    next(err);
   }
-  res.render("items/show", { item, isAdmin: user.isAdmin, isOwner: responsable && responsable._id.equals(user.id) });
 };
 
 module.exports.getItems = async (req, res, next) => {
-  const items = await Item.find().populate('responsable');
+  try {
+    const items = await Item.find().populate("responsable");
 
-  if (!items) {
-    req.flash("error", "No es poden trobar items!");
-    return;
+    if (!items) {
+      req.flash("error", "No es poden trobar items!");
+      return;
+    }
+    res.json(items);
+  } catch (err) {
+    next(err);
   }
-  res.json(items);
 };
 
-module.exports.renderEditForm = async (req, res) => {
-  const item = await Item.findById(req.params.id);
-  if (!item) {
-    req.flash("error", "No es pot trobar l'item!");
-    return res.redirect("/items");
+module.exports.renderEditForm = async (req, res, next) => {
+  try {
+    const item = await Item.findById(req.params.id);
+    if (!item) {
+      req.flash("error", "No es pot trobar l'item!");
+      return res.redirect("/items");
+    }
+    res.render("items/edit", { item });
+  } catch (err) {
+    next(err);
   }
-  res.render("items/edit", { item });
 };
 
-module.exports.updateItem = async (req, res) => {
-  const { id } = req.params;
+module.exports.updateItem = async (req, res, next) => {
+  try {
+    const { id } = req.params;
 
-  const item = await Item.findByIdAndUpdate(id, { ...req.body.item });
-  req.flash("success", "Item actualitzat correctament!");
-  res.redirect(`/items/${item._id}`);
+    const item = await Item.findByIdAndUpdate(id, { ...req.body.item });
+    req.flash("success", "Item actualitzat correctament!");
+    res.redirect(`/items/${item._id}`);
+  } catch (err) {
+    next(err);
+  }
 };
 
-module.exports.deleteItem = async (req, res) => {
-  const { id } = req.params;
-  await Item.findByIdAndDelete(id);
-  req.flash("success", "Item eliminat correctament!");
-  res.redirect("/items");
+module.exports.deleteItem = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    await Item.findByIdAndDelete(id);
+    req.flash("success", "Item eliminat correctament!");
+    res.redirect("/items");
+  } catch (err) {
+    next(err);
+  }
 };

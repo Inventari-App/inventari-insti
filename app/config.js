@@ -11,7 +11,6 @@ const configurePassport = require("./passport");
 const enforceHttps = require("./utils/enforceHttps");
 const configureFlash = require("./flash");
 const appRouter = require("./routers/appRouter");
-const { handleRouteError } = require("./middleware");
 const contextService = require("request-context")
 
 if (!isProduction) {
@@ -38,7 +37,6 @@ function configureApp(sessionConfig) {
   app.use(session(sessionConfig));
   app.use("/utils", express.static(path.join(__dirname, "utils")));
   app.use("/public", express.static(path.join(__dirname, "public")));
-  app.use(handleRouteError)
 
   enforceHttps(app)
   configHelmet(app)
