@@ -270,7 +270,8 @@
                     El password no coincideix
                 </div>
               </div>
-              <button type="submit" class="btn btn-primary">Registra't</button>
+              <!-- <button type="submit" class="btn btn-primary">Registra't</button> -->
+              <button class="g-recaptcha btn btn-primary" data-sitekey="6LdcwiwpAAAAADCjabSnzKkkqDm1yRg-k4TDco8W" data-callback="submitForm" data-action="submit">Registra't</button>
             </form>
             <div class="mt-4">
               <small>Al enregistrar-te s'enviara un correu electronic de validacio a l'adreca indicada. Un cop validat, podras entrar a l'aplicacio del teu centre com a administrador.</small>
@@ -322,24 +323,21 @@
           passwordResetFeedbackEl.classList.add('d-block')
           return
         }
-
-        const formData = new FormData(this)
-
-        grecaptcha.enterprise.ready(async () => {
-          let data = {}
-          const token = await grecaptcha.enterprise.execute('6LdcwiwpAAAAADCjabSnzKkkqDm1yRg-k4TDco8W', {action: 'REGISTER'});
-
-          for (let [ key, val ] of formData) {
-            data = {...data, [key]: val}
-          }
-
-          fetch("<%= appTargetUrl %>/register-center", {
-            method: "POST",
-            body: JSON.stringify({ ...data, token })
-          })
-        });
       })
   })
+
+  function submitForm (token) {
+      const formEl = document.querySelector('#registerForm')
+      const passwordInputs = document.querySelectorAll('#password, #passwordRepeat')
+      const isPasswordValid = validatePassword(passwordInputs)
+
+      if (!isPasswordValid) {
+        passwordResetFeedbackEl.classList.add('d-block')
+        return
+      }
+
+      formEl.submit()
+  }
 
   function validatePassword(passwordInputs) {
       let isValid = true

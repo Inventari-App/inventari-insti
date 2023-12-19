@@ -12,6 +12,7 @@ const enforceHttps = require("./utils/enforceHttps");
 const configureFlash = require("./flash");
 const appRouter = require("./routers/appRouter");
 const contextService = require("request-context")
+const cors = require("cors")
 
 if (!isProduction) {
   require("dotenv").config();
@@ -19,6 +20,14 @@ if (!isProduction) {
 
 function configureApp(sessionConfig) {
   const app = express();
+
+  // Allow CORS
+  const corsOptions = {
+    origin: ["http://localhost:3001", "https://controlamaterial.com"],
+    methods: "GET,POST",
+    credentials: true,
+  }
+  app.use(cors(corsOptions))
 
   // App configuration
   app.engine("ejs", ejsMate);
