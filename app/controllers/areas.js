@@ -39,13 +39,14 @@ module.exports.createArea = async (req, res, next) => {
 
 module.exports.showArea = async (req, res, next) => {
   try {
+    const user = req.user
     const area = await Area.findById(req.params.id).populate("responsable");
 
     if (!area) {
       req.flash("error", "No es pot trobar la area!");
       return res.redirect("/areas");
     }
-    res.render("areas/show", { area });
+    res.render("areas/show", { area, isAdmin: user.isAdmin });
   } catch (err) {
     next(err);
   }

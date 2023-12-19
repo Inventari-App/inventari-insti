@@ -1,33 +1,13 @@
 <% layout('layouts/boilerplate')%>
 
-<h1><%= proveidor.nom %></h1>
-<p> <a href="/proveidors/<%=proveidor._id%>/edit">Editar Proveidor</a></p>
-<p>
-<form action="/proveidors/<%=proveidor._id%>?_method=DELETE" method="POST">
-    <button disabled class="btn btn-danger">Esborrar proveidor</button>
-</form>
-</p>
-<footer>
-    <a href="/proveidors">Tots els Proveidors</a>
-</footer>
-
-<script>
-  const formEl = document.querySelector('form')
-  formEl.addEventListener('submit', async (e) => {
-    e.preventDefault()
-
-    const confirmation = confirm("Estas segur que vols esborrar l\'proveidor?")
-    if (!confirmation) return
-
-
-    await fetch('/proveidors/<%= proveidor._id %>', {
-      method: "DELETE",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-      }
-    })
-      .then(() => window.location.href = '/proveidors')
-      .catch(() => window.location.href = '/proveidors')
-  })
-</script>
+<%- include('../partials/detail', {
+    type: 'proveidor',
+    item: proveidor,
+    features: {
+      nom: proveidor.nom,
+      cif: proveidor.cif,
+      adreca: proveidor.addreca,
+      telefon: proveidor.telefon,
+      email: proveidor.email,
+    }
+}) %>

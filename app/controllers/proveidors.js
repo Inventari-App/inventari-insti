@@ -33,6 +33,7 @@ module.exports.createProveidor = async (req, res, next) => {
 
 module.exports.showProveidor = async (req, res, next) => {
   try {
+    const user = req.user
     const proveidor = await Proveidor.findById(req.params.id).populate(
       "responsable",
     );
@@ -42,7 +43,7 @@ module.exports.showProveidor = async (req, res, next) => {
       return res.redirect("/proveidors");
     }
 
-    res.render("proveidors/show", { proveidor });
+    res.render("proveidors/show", { proveidor, isAdmin: user.isAdmin });
   } catch (err) {
     next(err);
   }

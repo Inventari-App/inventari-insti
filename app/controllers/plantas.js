@@ -39,13 +39,14 @@ module.exports.createPlanta = async (req, res, next) => {
 
 module.exports.showPlanta = async (req, res, next) => {
   try {
+    const user = req.user
     const planta = await Planta.findById(req.params.id).populate("responsable");
 
     if (!planta) {
       req.flash("error", "No es pot trobar la planta!");
       return res.redirect("/plantas");
     }
-    res.render("plantas/show", { planta });
+    res.render("plantas/show", { planta, isAdmin: user.isAdmin });
   } catch (err) {
     next(err);
   }

@@ -21,22 +21,25 @@ router.get("/register", (req, res) => {
   res.render("users/register");
 });
 
-router.get("/verify", catchAsync(async (req, res, next) => {
-  await verifyUser(req, res, next)
-}))
+router.get(
+  "/verify",
+  catchAsync(async (req, res, next) => {
+    await verifyUser(req, res, next);
+  }),
+);
 
 router.post(
   "/register-center",
   catchAsync(async (req, res, next) => {
-    await createCenter(req, res, next)
-  })
+    await createCenter(req, res, next);
+  }),
 );
 
 router.post(
   "/register",
   catchAsync(async (req, res, next) => {
-    await createUser(req, res, next)
-  })
+    await createUser(req, res, next);
+  }),
 );
 
 router.get(
@@ -45,27 +48,32 @@ router.get(
   catchAsync(async (req, res) => {
     const users = await getAllUsers(req);
     res.render("users/index", { users });
-  })
+  }),
 );
 
 router.get(
   "/users/new",
   isAdmin,
   catchAsync(async (req, res, next) => {
-    const center = await Center.findById(req.user.center)
-    if (!center) return next()
+    const center = await Center.findById(req.user.center);
+    if (!center) return next();
 
     res.render("users/new", { center });
-  })
+  }),
 );
 
 router.get(
   "/users/:id",
   isSameUserOrAdmin,
   catchAsync(async (req, res) => {
-    const user = await getUser(req);
-    res.render("users/show", { ...user });
-  })
+    const { user, center } = await getUser(req);
+    res.render("users/show", {
+      user,
+      center,
+      isAdmin: req.user.isAdmin,
+      isOwner: user.id == req.user.id,
+    });
+  }),
 );
 
 router.get(
@@ -73,9 +81,9 @@ router.get(
   isSameUserOrAdmin,
   catchAsync(async (req, res) => {
     const user = await getUser(req);
-    const departments = await Department.find()
+    const departments = await Department.find();
     res.render("users/edit", { ...user, departments });
-  })
+  }),
 );
 
 router.put(
@@ -84,14 +92,10 @@ router.put(
   catchAsync(async (req, res) => {
     const user = await updateUser(req);
     res.redirect(301, `/users/${user._id}`);
-  })
+  }),
 );
 
-router.delete(
-  "/users/:id",
-  isAdmin,
-  catchAsync(deleteUser)
-);
+router.delete("/users/:id", isAdmin, catchAsync(deleteUser));
 
 router.get("/users");
 
@@ -104,27 +108,27 @@ router.get("/account-recovery", (req, res) => {
 });
 
 router.get("/reset-sent", (req, res) => {
-  res.render("users/reset-sent")
-})
+  res.render("users/reset-sent");
+});
 
 router.get("/reset-error", (req, res) => {
-  res.render("users/reset-error")
+  res.render("users/reset-error");
 });
 
 router.post(
   "/login",
   async (req, res, next) => {
     try {
-      const { isVerified } = await User.findByUsername(req.body.username)
+      const { isVerified } = await User.findByUsername(req.body.username);
       if (!isVerified) {
-        req.flash('error', 'Has de verificar el teu correu electronic')
-        res.redirect(301, '/login')
+        req.flash("error", "Has de verificar el teu correu electronic");
+        res.redirect(301, "/login");
       } else {
-        next()
+        next();
       }
     } catch (error) {
-      req.flash("error", "L'usuari o el password son incorrectes")
-      res.redirect(301, "/login")
+      req.flash("error", "L'usuari o el password son incorrectes");
+      res.redirect(301, "/login");
     }
   },
   passport.authenticate("local", {
@@ -138,37 +142,45 @@ router.post(
     const redirectUrl = req.session.returnTo || "/invoices";
     //delete req.session.returnTo;
     res.redirect(301, redirectUrl);
-  }
+  },
 );
 
-router.post("/account-recovery", catchAsync(sendPasswordReset))
+router.post("/account-recovery", catchAsync(sendPasswordReset));
 
 router.get("/reset", async (req, res) => {
-  const { token, userId } = req.query
+  const { token, userId } = req.query;
   const user = await User.findById(userId);
-  if (!user || user.resetPasswordHash !== token || user.resetPasswordTs < Date.now()) {
-    return res.redirect("/reset-error")
+  if (
+    !user ||
+    user.resetPasswordHash !== token ||
+    user.resetPasswordTs < Date.now()
+  ) {
+    return res.redirect("/reset-error");
   }
-  res.render("users/reset", { token, userId })
-})
+  res.render("users/reset", { token, userId });
+});
 
 router.post("/reset", async (req, res) => {
   const { userId, token, password: newPassword } = req.body;
   const user = await User.findById(userId);
 
-  if (!user || user.resetPasswordHash !== token || user.resetPasswordTs < Date.now()) {
-    return res.redirect("/reset-error")
+  if (
+    !user ||
+    user.resetPasswordHash !== token ||
+    user.resetPasswordTs < Date.now()
+  ) {
+    return res.redirect("/reset-error");
   }
 
   // Update the user's password and clear the reset token
-  await user.setPassword(newPassword)
+  await user.setPassword(newPassword);
   user.resetPasswordHash = undefined;
   user.resetPasswordTs = undefined;
-  await user.save()
+  await user.save();
 
-  req.flash("success", "La contrasenya s'ha restablert amb exit.")
-  res.redirect("/login")
-})
+  req.flash("success", "La contrasenya s'ha restablert amb exit.");
+  res.redirect("/login");
+});
 
 router.get("/logout", (req, res, next) => {
   req.logout(function (err) {
