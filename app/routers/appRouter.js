@@ -12,11 +12,13 @@ const areaRoutes = require("./areas");
 const utilitatRoutes = require("./utilitats");
 const proveidorRoutes = require("./proveidors");
 const centreRoutes = require("./centre");
+const reportRoutes = require("./report");
 const { requireLogin } = require("../middleware");
 
 function appRouter () {
   const router = express.Router();
   router.use("/", userRoutes);
+  router.use("/reports", requireLogin, reportRoutes);
   router.use("/inventaris", requireLogin, inventariRoutes);
   router.use("/invoices", requireLogin, invoiceRoutes);
   router.use("/items", requireLogin, itemRoutes);

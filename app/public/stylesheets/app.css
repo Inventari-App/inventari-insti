@@ -108,3 +108,5 @@ input[id^='expand-rows-']:checked ~ label {
 .datatable-top {
   padding: 8px 0 !important;
 }
+
+[x-cloak] { display: none !important; }

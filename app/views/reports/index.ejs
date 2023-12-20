@@ -1,0 +1,70 @@
+<% layout('layouts/boilerplate')%>
+
+<%- include('../partials/title.ejs', { title: 'Reports' }) %>
+
+<div class="container" x-data="{ departament: {}, unitat: {} }">
+  <div class="row">
+    <div class="col-lg-2 col-4">
+      <div class="dropdown">
+          <button
+            class="btn btn-secondary dropdown-toggle w-100"
+            type="button"
+            id="departament"
+            data-bs-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false">
+              Departament
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="departament">
+              <% departaments.forEach(departament => { %>
+              <li><a class="dropdown-item" @click="departament.nom = '<%= departament.nom %>'; departament.id = '<%= departament.id %>';" href="#"><%= departament.nom %></a></li>
+              <% }) %>
+              <li><a class="dropdown-item" @click="departament.nom = 'Tots els departaments'" href="#">Tots els departaments</a></li>
+          </ul>
+      </div>
+    </div>
+
+    <div class="col-lg-4 col-6">
+      <div class="input-group my-lg-0">
+          <input type="text" class="form-control" :value="departament.nom" disabled aria-label="Username" aria-describedby="basic-addon1" placeholder="Selecciona un departament" />
+      </div>
+    </div>
+  </div>
+
+  <div class="row my-4">
+    <div class="col-lg-2 col-4">
+      <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle w-100" type="button" data-input="unitat-input" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Unitat
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="unitat">
+              <% unitats.forEach(unitat => { %>
+              <li><a class="dropdown-item" @click="unitat.nom = '<%= unitat.nom %>'; unitat.id = '<%= unitat.id %>';" href="#"><%= unitat.nom %></a></li>
+              <% }) %>
+              <li><a class="dropdown-item" @click="unitat.nom = 'Tots els unitats'" href="#">Totes les unitats</a></li>
+          </ul>
+      </div>
+    </div>
+
+    <div class="col-lg-4 col-6">
+      <div class="input-group my-lg-0">
+          <input type="text" class="form-control":value="unitat.nom" disabled aria-label="Username" aria-describedby="basic-addon1" placeholder="Selecciona una unitat" />
+      </div>
+    </div>
+  </div>
+
+  <div class="row my-4">
+    <div class="col-lg-2 col-4">
+      <button class="btn btn-primary w-100" type="button" x-cloak x-show="departament.id || unitat.id" @click="() => createReport(departament, unitat)">
+          Crea Report
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function createReport(departament, unitat) {
+    const url = `/reports/show?departament=${departament.nom}&unitat=${unitat.nom}`
+    window.location.href = url
+  }
+</script>
