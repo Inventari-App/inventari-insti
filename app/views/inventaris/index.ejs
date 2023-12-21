@@ -1,6 +1,6 @@
 <% layout('layouts/boilerplate')%>
 
-<%- include('../partials/title.ejs', { title: 'Tots els Inventaris' }) %>
+<%- include('../partials/title.ejs', { title: 'Inventari del Centre' }) %>
 
 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
   <a class="btn btn-primary mb-3" href="/inventaris/new">Afegeix Inventari</a>
@@ -28,7 +28,7 @@
         <td><%= inventari.department || " - " %></td>
         <td><%= new Date(inventari.updatedAt).toLocaleString('es-es', { dateStyle: 'short', timeStyle: 'short' }) %></td>
         <td>
-          <a href="/inventaris/<%= inventari._id %>" class="btn btn-primary">Veure</a>
+          <a href="/inventaris/<%= inventari._id %>" class="btn dark w-100">Veure</a>
         </td>
       </tr>
     <% } %>

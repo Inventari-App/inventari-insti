@@ -29,7 +29,7 @@
           <% if( isAdmin || (currentUser && isOwner)) { %>
           <a
             href="/<%= type %>s/<%=item.id%>/edit"
-            class="card-link btn btn-info"
+            class="card-link btn mid-dark"
             class="card-link"
             >Editar <span class="text-capitalize"><%= type %></span>
           </a>
@@ -39,7 +39,7 @@
             action="/<%= type %>s/<%=item.id%>?_method=DELETE"
             method="POST"
           >
-            <button class="btn btn-danger">Esborrar <span class="text-capitalize"><%= type %></span></button>
+            <button class="btn light-red">Esborrar <span class="text-capitalize"><%= type %></span></button>
           </form>
           <% } %>
         </div>

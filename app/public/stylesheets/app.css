@@ -72,11 +72,11 @@ input[type="number"]::-webkit-outer-spin-button {
   text-overflow: ellipsis;
 }
 
-input[id^='expand-rows-'] {
+input[id^="expand-rows-"] {
   display: none;
 }
 
-input[id^='expand-rows-']:checked ~ label {
+input[id^="expand-rows-"]:checked ~ label {
   transform: rotate(180deg);
 }
 
@@ -101,7 +101,7 @@ input[id^='expand-rows-']:checked ~ label {
   background-color: rgb(243, 243, 243);
 }
 
-.table>:not(caption) {
+.table > :not(caption) {
   white-space: nowrap;
 }
 
@@ -109,4 +109,52 @@ input[id^='expand-rows-']:checked ~ label {
   padding: 8px 0 !important;
 }
 
-[x-cloak] { display: none !important; }
+[x-cloak] {
+  display: none !important;
+}
+
+.light {
+  background: white;
+  border: 1px solid black;
+  color: black;
+}
+
+.light-dark {
+  background: #ccc;
+  color: black;
+}
+
+.mid-dark {
+  background: #808080;
+  color: white;
+}
+
+.dark {
+  background: var(--bs-dark);
+  color: white;
+}
+
+.light-red {
+  background: #ff7575;
+  color: white;
+  border: 0;
+}
+
+.light:hover {
+  background: var(--bs-dark);
+  border: 1px solid white;
+  color: white;
+}
+
+.light-dark:hover,
+.mid-dark:hover,
+.dark:hover {
+  background: white;
+  border: 1px solid var(--bs-dark);
+  color: var(--bs-dark);
+}
+
+.footer {
+  position: sticky;
+  bottom: 0;
+}
