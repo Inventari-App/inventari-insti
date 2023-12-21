@@ -17,16 +17,16 @@
           </button>
           <ul class="dropdown-menu" aria-labelledby="departament">
               <% departaments.forEach(departament => { %>
-              <li><a class="dropdown-item" @click="departament.nom = '<%= departament.nom %>'; departament.id = '<%= departament.id %>';" href="#"><%= departament.nom %></a></li>
+              <li><a class="dropdown-item" @click="departament.nom = '<%= departament.nom %>'; departament.copy = '<%= departament.nom %>';" href="#"><%= departament.nom %></a></li>
               <% }) %>
-              <li><a class="dropdown-item" @click="departament.nom = 'Tots els departaments'" href="#">Tots els departaments</a></li>
+              <li><a class="dropdown-item" @click="departament.nom = '.*'; departament.copy = 'Tots els departaments'" href="#">Tots els departaments</a></li>
           </ul>
       </div>
     </div>
 
     <div class="col-lg-4 col-6">
       <div class="input-group my-lg-0">
-          <input type="text" class="form-control" :value="departament.nom" disabled aria-label="Username" aria-describedby="basic-addon1" placeholder="Selecciona un departament" />
+          <input type="text" class="form-control" :value="departament.copy" disabled aria-label="Username" aria-describedby="basic-addon1" placeholder="Selecciona un departament" />
       </div>
     </div>
   </div>
@@ -39,23 +39,23 @@
           </button>
           <ul class="dropdown-menu" aria-labelledby="unitat">
               <% unitats.forEach(unitat => { %>
-              <li><a class="dropdown-item" @click="unitat.nom = '<%= unitat.nom %>'; unitat.id = '<%= unitat.id %>';" href="#"><%= unitat.nom %></a></li>
+              <li><a class="dropdown-item" @click="unitat.nom = '<%= unitat.nom %>'; unitat.copy = '<%= unitat.nom %>';" href="#"><%= unitat.nom %></a></li>
               <% }) %>
-              <li><a class="dropdown-item" @click="unitat.nom = 'Tots els unitats'" href="#">Totes les unitats</a></li>
+              <li><a class="dropdown-item" @click="unitat.nom = '.*'; unitat.copy = 'Totes les unitats'" href="#">Totes les unitats</a></li>
           </ul>
       </div>
     </div>
 
     <div class="col-lg-4 col-6">
       <div class="input-group my-lg-0">
-          <input type="text" class="form-control":value="unitat.nom" disabled aria-label="Username" aria-describedby="basic-addon1" placeholder="Selecciona una unitat" />
+          <input type="text" class="form-control":value="unitat.copy" disabled aria-label="Username" aria-describedby="basic-addon1" placeholder="Selecciona una unitat" />
       </div>
     </div>
   </div>
 
   <div class="row my-4">
     <div class="col-lg-2 col-4">
-      <button class="btn btn-primary w-100" type="button" x-cloak x-show="departament.id || unitat.id" @click="() => createReport(departament, unitat)">
+      <button class="btn btn-primary w-100" type="button" x-cloak x-show="departament.nom || unitat.nom" @click="() => createReport(departament, unitat)">
           Crea Report
       </button>
     </div>

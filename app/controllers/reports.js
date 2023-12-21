@@ -15,7 +15,9 @@ module.exports.index = async (req, res, next) => {
 module.exports.show = async (req, res, next) => {
   try {
     const { departament, unitat } = req.query
-    const inventaris = await Inventari.find({ departament, unitat })
+    const departamentRegex = new RegExp(departament, 'i')
+    const unitatRegex = new RegExp(unitat, 'i')
+    const inventaris = await Inventari.find({ departament: departamentRegex, unitat: unitatRegex })
     res.render("reports/show", { inventaris });
   } catch (err) {
     next(err);
