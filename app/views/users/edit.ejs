@@ -72,10 +72,9 @@
 
       <div class="mb-3">
         <label for="admin">Is Admin</label>
-        <input class="" type="checkbox" id="admin-checkbox" <%= user.isAdmin &&
+        <input id="admin" name="user[isAdmin]" class="" type="checkbox" id="admin-checkbox" <%= user.isAdmin &&
         'checked' %> />
       </div>
-      <input type="text" id="admin" name="user[isAdmin]" hidden />
       <div class="mb-3">
         <button class="btn btn-primary" type="submit">Actualitzar User</button>
       </div>

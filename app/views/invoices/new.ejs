@@ -109,7 +109,10 @@
     })
       .then((res) => res.json())
       .then(({ _id }) => (window.location.href = _id))
-      .catch((e) => console.error(e));
+      .catch((e) => {
+        console.error(e)
+        window.location.href = "/invoices"
+      })
   });
 
   function getRowTotal(rowEl) {

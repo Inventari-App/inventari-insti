@@ -27,7 +27,7 @@ module.exports.index = async (req, res, next) => {
 
     res.render("invoices/index", { invoices });
   } catch (err) {
-    next(err)
+    next(err);
   }
 };
 
@@ -38,18 +38,23 @@ module.exports.renderNewForm = async (req, res, next) => {
 };
 
 module.exports.createInvoice = async (req, res, next) => {
-  const { invoiceItems } = req.body;
-  const { _id: responsableId, email } = req.user;
-  const department = await Department.findById(req.user.department);
-  const invoice = new Invoice({
-    responsable: responsableId,
-    invoiceItems,
-    department: department.nom,
-  });
-  await invoice.save();
-  await emailCreated(invoice, email, req.headers.host);
-  req.flash("success", "Comanda creada correctament!");
-  res.json(invoice);
+  try {
+    const { invoiceItems } = req.body;
+    const { _id: responsableId, email } = req.user;
+    const department = await Department.findById(req.user.department);
+
+    const invoice = new Invoice({
+      responsable: responsableId,
+      invoiceItems,
+      department: department.nom,
+    });
+    await invoice.save();
+    await emailCreated(invoice, email, req.headers.host);
+    req.flash("success", "Comanda creada correctament!");
+    res.json(invoice);
+  } catch (err) {
+    next(err)
+  }
 };
 
 module.exports.showInvoice = async (req, res, next) => {

@@ -5,15 +5,26 @@ const invoices = require('../controllers/invoices');
 const { isLoggedIn, isResponsableOrAdmin, validateSchema, isInvoiceAprovada } = require('../middleware');
 const { invoiceSchema } = require('../schemas');
 const Invoice = require('../models/invoice');
+const Department = require('../models/department');
 
 const validateInvoice = validateSchema(invoiceSchema)
 const isInvoiceResponsableOrAdmin = isResponsableOrAdmin(Invoice)
+
+const checkUserHasDepartment = async (req, res, next) => {
+  const user = req.user
+  const department = await Department.findById(user.department)
+  if (!department) {
+    req.flash("error", "Usuari no vinculat a departament.");
+    return res.redirect("/invoices");
+  }
+  next()
+}
 
 router.route('/')
 .get(catchAsync(invoices.index))
 .post(isLoggedIn, validateInvoice, catchAsync(invoices.createInvoice))
 
-router.get('/new', isLoggedIn, invoices.renderNewForm);
+router.get('/new', isLoggedIn, checkUserHasDepartment, invoices.renderNewForm);
 
 router.route('/:id')
 .get(isInvoiceAprovada, catchAsync(invoices.showInvoice))
