@@ -75,14 +75,13 @@
       method="POST"
     >
       <input type="text" hidden="hidden" name="status" value="aprovada">
-      <button class="btn mid-dark type="submit">Aprovar Comanda</button>
+      <button class="btn approved type="submit">Aprovar Comanda</button>
     </form>
     <% } %>
 
     <a
       href="/invoices/<%=invoice._id%>/edit"
-      class="card-link btn light-dark"
-      class="card-link"
+      class="card-link btn pending"
       >Editar Comanda</a
     >
     <form
@@ -91,7 +90,7 @@
       action="/invoices/<%=invoice._id%>?_method=DELETE"
       method="POST"
     >
-      <button class="btn light-red" type="submit">Esborrar Comanda</button>
+      <button class="btn red" type="submit">Esborrar Comanda</button>
     </form>
 
     <p class="h5 row numeros">

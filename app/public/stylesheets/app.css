@@ -125,13 +125,19 @@ input[id^="expand-rows-"]:checked ~ label {
 }
 
 .mid-dark {
-  background: #808080;
+  background: #303030;
   color: white;
 }
 
 .dark {
   background: var(--bs-dark);
   color: white;
+}
+
+.red {
+  background: #fc5454;
+  color: white;
+  border: 0;
 }
 
 .light-red {
@@ -152,6 +158,24 @@ input[id^="expand-rows-"]:checked ~ label {
   background: white;
   border: 1px solid var(--bs-dark);
   color: var(--bs-dark);
+}
+
+.approved {
+  background: #009DDC;
+  color: white;
+}
+
+.pending {
+  background: #FFB100;
+}
+
+.pending:hover {
+  color: white;
+}
+
+.received {
+  background: #009B72;
+  color: white;
 }
 
 .footer {

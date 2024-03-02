@@ -5,9 +5,9 @@
 <div class="d-md-flex justify-content-between mt-4">
   <div class="d-grid gap-2 d-md-flex justify-content-md-start">
     <a class="btn light mb-3 filter-all" href="/invoices">Totes</a>
-    <a class="btn light-dark mb-3 filter-pending" href="/invoices?status=pendent">Pendents</a>
-    <a class="btn mid-dark mb-3 filter-approved" href="/invoices?status=aprovada">Aprovades</a>
-    <a class="btn dark mb-3 filter-received" href="/invoices?status=rebuda">Rebudes</a>
+    <a class="btn pending mb-3 filter-pending" href="/invoices?status=pendent">Pendents</a>
+    <a class="btn approved mb-3 filter-approved" href="/invoices?status=aprovada">Aprovades</a>
+    <a class="btn received mb-3 filter-received" href="/invoices?status=rebuda">Rebudes</a>
 
   </div>
   <a class="btn btn-primary mb-3" href="/invoices/new">Afegeix Comanda</a>
@@ -54,11 +54,11 @@
           </span>
         <td>
           <% if (isRebuda) { %>
-            <span style="min-width: 100%; cursor: unset;" class="btn dark received status">Rebuda</span>
+            <span style="min-width: 100%; cursor: unset;" class="btn received status">Rebuda</span>
           <% } else if (isAprovada) { %>
-            <a href="/invoices/<%= invoice._id %>" style="min-width: 100%" class="btn mid-dark approved status">Aprovada</a>
+            <a href="/invoices/<%= invoice._id %>" style="min-width: 100%" class="btn approved status">Aprovada</a>
           <% } else { %>
-            <a href="/invoices/<%= invoice._id %>" style="min-width: 100%" class="btn light-dark pending status">Pendent</a>
+            <a href="/invoices/<%= invoice._id %>" style="min-width: 100%" class="btn pending status">Pendent</a>
           <% } %>
         </td>
       </tr>
