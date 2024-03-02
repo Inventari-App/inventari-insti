@@ -6,7 +6,6 @@ const Schema = mongoose.Schema;
 const UnitatSchema = new Schema({
   nom: {
     type: String,
-    unique: true,
     required: true,
   },
   planta: String,
@@ -29,5 +28,8 @@ UnitatSchema.plugin(contextPlugin, {
 });
 
 UnitatSchema.plugin(addCenterFilter)
+//
+// Allow same unitats in multiple centers
+UnitatSchema.index({ nom: 1, center: 1 }, { unique: true })
 
 module.exports = mongoose.model("Unitat", UnitatSchema);
