@@ -61,11 +61,16 @@ async function createUser(req, res, next) {
       center: centerId,
       verificationTs: getExpirationTs(),
       verificationHash: generateHash({ length: 8 }),
-    }).save();
+    })
+
+    if (!user) {
+      throw new Error("Alguna cosa ha sortit malament al crear l'usuari")
+    }
 
     const center = await Center.findById(centerId);
     center.users.push(user._id);
 
+    // User is saved here
     await User.register(user, password);
 
     const { sendEmail, message } = useNodemailer({
@@ -82,7 +87,7 @@ async function createUser(req, res, next) {
     });
     req.flash(
       "info",
-      "Avisa a l'usuari, hem enviar un correu amb un link de verificacio que necessiten clicar per activar l'usuari.",
+      "Avisa a l'usuari, hem enviat un correu amb un link de verificacio que necessiten clicar per activar l'usuari.",
     );
     res.redirect("/users");
   } catch (e) {
