@@ -21,7 +21,7 @@ const useNodemailer = ({ to, model, reason }) => {
       sendEmail: ({ subject, text }) =>
         transporter.sendMail(
           {
-            from: '"iScool" <notifications@controlamaterial.com>',
+            from: '"Controlamaterial" <notifications@controlamaterial.com>',
             to,
             subject,
             text,
