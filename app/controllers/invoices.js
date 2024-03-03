@@ -5,6 +5,7 @@ const autocomplete = require("autocompleter");
 const { useNodemailer } = require("../nodemailer/sendEmail");
 const { getProtocol } = require("../utils/helpers");
 const Department = require("../models/department");
+const Center = require("../models/center");
 const protocol = getProtocol();
 
 module.exports.index = async (req, res, next) => {
@@ -82,6 +83,40 @@ module.exports.showInvoice = async (req, res, next) => {
     {
       invoice,
       items,
+      invoiceJSON: JSON.stringify(invoice),
+      isResponsable: invoice.responsable._id.equals(req.user.id),
+    },
+  );
+};
+
+module.exports.printInvoice = async (req, res, next) => {
+  const invoice = await Invoice.findById(req.params.id)
+    .populate("responsable")
+    .populate({
+      path: "responsable",
+      populate: { path: "department" }, // Complete path for nested population
+    })
+    .lean();
+
+  if (!invoice) {
+    req.flash("error", "No es pot trobar l'invoice!");
+    return res.redirect("/invoices");
+  }
+
+  const items = await Item.find({
+    nom: {
+      $in: invoice.invoiceItems.map((item) => item.article),
+    },
+  });
+
+  const center = await Center.findById(invoice.center)
+
+  res.render(
+    "invoices/print",
+    {
+      invoice,
+      items,
+      center,
       invoiceJSON: JSON.stringify(invoice),
       isResponsable: invoice.responsable._id.equals(req.user.id),
     },

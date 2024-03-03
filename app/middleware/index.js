@@ -93,6 +93,17 @@ module.exports.isInvoiceAprovada = async (req, res, next) => {
   next();
 };
 
+module.exports.isInvoiceRebuda = async (req, res, next) => {
+  const { id } = req.params;
+  const invoice = await Invoice.findById(id);
+  const isRebuda = invoice.status === "rebuda";
+  if (!isRebuda) {
+    req.flash("error", "Aquesta commanda no esta rebuda.");
+    return res.redirect(`/invoices`);
+  }
+  next();
+};
+
 module.exports.requireLogin = async (req, res, next) => {
   if (req.user) {
     return next();

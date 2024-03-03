@@ -54,7 +54,8 @@
           </span>
         <td>
           <% if (isRebuda) { %>
-            <span style="min-width: 100%; cursor: unset;" class="btn received status">Rebuda</span>
+            <span style="width: 50%; cursor: unset; pointer-events: none;" class="btn received status">Rebuda</span>
+            <a href="/invoices/<%= invoice._id %>/print" style="width: 50%" class="btn light">Imprimeix</a>
           <% } else if (isAprovada) { %>
             <a href="/invoices/<%= invoice._id %>" style="min-width: 100%" class="btn approved status">Aprovada</a>
           <% } else { %>

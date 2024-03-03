@@ -33,6 +33,7 @@
     "has-symbols": "^1.0.3",
     "has-yarn": "^2.1.0",
     "helmet": "^5.1.0",
+    "html2canvas": "^1.4.1",
     "joi": "^17.6.0",
     "method-override": "^3.0.0",
     "mongoose": "^6.3.1",
@@ -54,7 +55,7 @@
     "start-server": "NODE_ENV=prod node --inspect=0.0.0.0:9229 app.js",
     "dev-server": "NODE_ENV=dev nodemon --inspect=0.0.0.0:9229 app.js",
     "dev": "concurrently \"npm run build-watch\" \"npm run dev-server\"",
-    "build": "esbuild ./scripts/autocompletes.js --bundle --outfile=./public/autocompletes.js",
+    "build": "esbuild ./bundles/*.js --bundle --outdir=./public/bundles",
     "build-watch": "esbuild ./scripts/autocompletes.js --watch --bundle --outfile=./public/autocompletes.js"
   },
   "author": "",
@@ -62,6 +63,6 @@
   "description": "",
   "devDependencies": {
     "concurrently": "^8.2.2",
-    "esbuild": "0.19.8"
+    "esbuild": "^0.19.8"
   }
 }
