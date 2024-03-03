@@ -144,7 +144,7 @@ async function getAllUsers(req, res, next) {
 
 async function getUser(req, res, next) {
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(req.params.id).populate("department");
     const center = await Center.findById(user.center).populate("users");
     return { user, center };
   } catch (err) {
