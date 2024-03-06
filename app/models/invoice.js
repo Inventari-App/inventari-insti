@@ -53,7 +53,12 @@ const InvoiceSchema = new Schema(
   { timestamps: true }
 );
 
-InvoiceSchema.plugin(AutoIncrement, { inc_field: "numInvoice" });
+// Scoped autoincrement
+InvoiceSchema.plugin(AutoIncrement, {
+  id: 'numInvoice_seq',
+  inc_field: 'numInvoice',
+  reference_fields: ['center'],
+});
 
 InvoiceSchema.plugin(contextPlugin, {
   contextPath: "request:user.center",
