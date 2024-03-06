@@ -14,36 +14,20 @@ const {
   createCenter,
   sendPasswordReset,
 } = require("../controllers/users");
-const { isAdmin, isSameUserOrAdmin } = require("../middleware");
+const { isAdmin, isSameUserOrAdmin, validateRecaptcha } = require("../middleware");
 const Center = require("../models/center");
 
 router.get("/register", (req, res) => {
   res.render("users/register");
 });
 
-router.get(
-  "/verify",
-  catchAsync(async (req, res, next) => {
-    await verifyUser(req, res, next);
-  }),
-);
+router.get("/verify", catchAsync(verifyUser))
 
-router.post(
-  "/register-center",
-  catchAsync(async (req, res, next) => {
-    await createCenter(req, res, next);
-  }),
-);
+router.post("/register-center", catchAsync(validateRecaptcha), catchAsync(createCenter))
 
-router.post(
-  "/register",
-  catchAsync(async (req, res, next) => {
-    await createUser(req, res, next);
-  }),
-);
+router.post("/register", catchAsync(createUser))
 
-router.get(
-  "/users",
+router.get("/users",
   isAdmin,
   catchAsync(async (req, res) => {
     const users = await getAllUsers(req);

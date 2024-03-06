@@ -6,7 +6,7 @@
     <title>La teva aplicació de gestió d'inventari escolar</title>
 
     <!-- ReCapthca -->
-    <script src="https://www.google.com/recaptcha/enterprise.js?render=6LdcwiwpAAAAADCjabSnzKkkqDm1yRg-k4TDco8W"></script>
+    <script src="https://www.google.com/recaptcha/api.js"></script>
 
     <!-- Bootstrap CSS -->
     <link
@@ -270,8 +270,15 @@
                     El password no coincideix
                 </div>
               </div>
+              <input type="text" hidden="hidden" name="redirect" value="<%= redirect %>">
               <!-- <button type="submit" class="btn btn-primary">Registra't</button> -->
-              <button class="g-recaptcha btn btn-primary" data-sitekey="6LdcwiwpAAAAADCjabSnzKkkqDm1yRg-k4TDco8W" data-callback="submitForm" data-action="submit">Registra't</button>
+              <button
+                class="g-recaptcha btn btn-primary"
+                data-sitekey="6LcDV44pAAAAAKVIO-3IOIBjloV67xalQTnT6pmp"
+                data-callback="submitForm"
+                data-action="submit">
+                  Registra't
+              </button>
             </form>
             <div class="mt-4">
               <small>Al enregistrar-te s'enviara un correu electronic de validacio a l'adreca indicada. Un cop validat, podras entrar a l'aplicacio del teu centre com a administrador.</small>

@@ -1,5 +1,6 @@
 const User = require("../models/user.js");
 const Invoice = require("../models/invoice.js");
+const fetch = require("node-fetch");
 
 module.exports.validateSchema = (schema) => (req, res, next) => {
   const { error } = schema.validate(req.body);
@@ -127,3 +128,29 @@ module.exports.handleError = async (err, req, res, next) => {
   console.error(err)
   next(err);
 };
+
+module.exports.validateRecaptcha = async (req, res, next) => {
+  try {
+    const gRecaptchaResponse = req.body["g-recaptcha-response"]
+    const secret = '6LcDV44pAAAAACxZIgn9aMiGmiovr9sWWfcceTFm'
+
+    const params = new URLSearchParams()
+    params.append('secret', secret)
+    params.append('response', gRecaptchaResponse)
+
+    const googleRes = await fetch('https://www.google.com/recaptcha/api/siteverify', {
+      method: "POST",
+      body: params,
+    })
+    const googleResJson = await googleRes.json()
+
+    if (googleResJson.success) {
+      next()
+    } else {
+      throw new Error()
+    }
+  } catch (err) {
+    req.flash("error", "Alguna cosa ha anat malament...")
+    res.redirect(req.body.redirect)
+  }
+}

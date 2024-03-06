@@ -40,6 +40,7 @@
     "mongoose-request-context": "^0.0.5",
     "mongoose-sequence": "^5.3.1",
     "node": "^17.7.2",
+    "node-fetch": "^2.7.0",
     "nodemailer": "^6.9.1",
     "nodemon": "^2.0",
     "passport": "^0.6.0",
@@ -56,7 +57,7 @@
     "dev-server": "NODE_ENV=dev nodemon --inspect=0.0.0.0:9229 app.js",
     "dev": "concurrently \"npm run build-watch\" \"npm run dev-server\"",
     "build": "esbuild ./bundles/*.js --bundle --outdir=./public/bundles",
-    "build-watch": "esbuild ./scripts/autocompletes.js --watch --bundle --outfile=./public/autocompletes.js"
+    "build-watch": "esbuild ./bundles/*.js --bundle --watch --outdir=./public/bundles"
   },
   "author": "",
   "license": "ISC",
