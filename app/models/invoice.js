@@ -1,5 +1,4 @@
 const contextPlugin = require("mongoose-request-context");
-const { number } = require("joi");
 const mongoose = require("mongoose");
 const { addCenterFilter } = require("../db/middlewares");
 const Schema = mongoose.Schema;
@@ -49,21 +48,22 @@ const InvoiceSchema = new Schema(
       ref: "Center"
     },
     status: { type: String, default: "pendent" }, // pendent, aprovada, rebutjada, rebuda
+    numInvoice: Number,
   },
   { timestamps: true }
 );
+
+InvoiceSchema.plugin(contextPlugin, {
+  contextPath: "request:user.center",
+  propertyName: "center",
+  contextObjectType: Schema.Types.ObjectId,
+});
 
 // Scoped autoincrement
 InvoiceSchema.plugin(AutoIncrement, {
   id: 'numInvoice_seq',
   inc_field: 'numInvoice',
   reference_fields: ['center'],
-});
-
-InvoiceSchema.plugin(contextPlugin, {
-  contextPath: "request:user.center",
-  propertyName: "center",
-  contextObjectType: Schema.Types.ObjectId,
 });
 
 InvoiceSchema.plugin(addCenterFilter)
