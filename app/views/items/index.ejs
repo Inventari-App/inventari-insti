@@ -33,3 +33,24 @@
         <% } %>
     </tbody>
 </table>
+
+<script>
+  const dataTable = new simpleDatatables.DataTable("#inventaris-table", {
+    searchable: false,
+    paging: false,
+    sortable: true,
+    fixedHeight: true,
+    labels: {
+      placeholder: "Busca...",
+      searchTitle: "Busca a la taula",
+      perPage: "entrades per pagina",
+      noRows: "No s'han trobat inventaris",
+      info: "Mostrant {start} - {end} d'un total de {rows} inventaris",
+      noResults: "No s'han trobat inventaris",
+    }
+  })
+
+  function printTable () {
+    dataTable.print()
+  }
+</script>
