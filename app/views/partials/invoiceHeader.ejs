@@ -1,11 +1,18 @@
 <div class="container mb-4">
-  <div class="row">
+  <div class="row mb-4 mx-0">
     <div class="col px-0">
       <strong>Responsable: </strong><%= invoice.responsable.username %>
     </div>
-    <div class="col px-0">
-      <div class="text-end">
+    <div class="col d-flex justify-content-end align-items-end px-0">
+      <div class="text-end me-4">
         <strong>Num. Comanda: </strong><%= invoice.numInvoice %>
+      </div>
+      <div class="text-end">
+        <a
+        href="/invoices/<%=invoice._id%>/print"
+        >
+          <button class="btn btn-primary print">Imprimeix</button>
+        </a
       </div>
     </div>
   </div>

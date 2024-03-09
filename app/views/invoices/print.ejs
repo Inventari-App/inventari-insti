@@ -5,13 +5,18 @@
 <div id="printable-area">
   <div class="d-flex align-items-end mt-5 mb-2">
     <div class="field d-flex align-items-end me-4">
-      <h4 class="my-0 me-2">Departament:</h4>
+      <h5 class="my-0 me-2">Departament:</h5>
       <div><%= invoice.responsable.department.nom %></div>
     </div>
 
     <div class="field d-flex align-items-end me-4">
-      <h4 class="my-0 me-2">Data:</h4>
+      <h5 class="my-0 me-2">Data:</h5>
       <div><%= new Date(invoice.createdAt).toLocaleString() %></div>
+    </div>
+
+    <div class="field d-flex align-items-end me-4">
+      <h5 class="my-0 me-2">Estat:</h5>
+      <div class="text-capitalize"><%= invoice.status %></div>
     </div>
 
     <!-- Print table -->
@@ -25,7 +30,7 @@
 
   <div class="d-flex align-items-end">
     <div class="field d-flex align-items-end me-4">
-      <h4 class="my-0 me-2">Centre:</h4>
+      <h5 class="my-0 me-2">Centre:</h5>
       <div><%= center.name %></div>
     </div>
   </div>

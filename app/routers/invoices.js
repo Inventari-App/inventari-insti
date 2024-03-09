@@ -32,7 +32,7 @@ router.route('/:id')
   .delete(isLoggedIn, isInvoiceResponsableOrAdmin, catchAsync(invoices.deleteInvoice));
 
 router.route('/:id/print')
-  .get(isLoggedIn, isInvoiceRebuda, isInvoiceResponsableOrAdmin, catchAsync(invoices.printInvoice))
+  .get(isLoggedIn, isInvoiceResponsableOrAdmin, catchAsync(invoices.printInvoice))
 
 router.get('/:id/edit', isLoggedIn, isInvoiceResponsableOrAdmin, catchAsync(invoices.renderEditForm));
 

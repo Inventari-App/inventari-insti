@@ -4,8 +4,11 @@
   <b>Responsable: <%= invoice.responsable.username %> </b>
 </p>
 
-<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-  <button id="rebre-comanda-btn" type="button" class="btn btn-primary mb-2">Rebre inventaris</button>
+<div class="d-flex justify-content-end">
+    <button id="rebre-comanda-btn" type="button" class="me-2 btn btn-primary mb-2">Rebre inventaris</button>
+    <a href="/invoices/<%=invoice._id%>/print">
+      <button class="btn btn-primary print">Imprimeix</button>
+    </a>
 </div>
 
 <table class="table table-condensed">
