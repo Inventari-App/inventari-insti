@@ -38,8 +38,13 @@
             class="d-inline"
             action="/<%= type %>s/<%=item.id%>?_method=DELETE"
             method="POST"
+            x-data="{}"
+            x-ref="deleteForm"
           >
-            <button class="btn red">Esborrar <span class="text-capitalize"><%= type %></span></button>
+            <% const content = `<span class="me-1">Esborrar</span><span class="text-capitalize">${type}</span>`; %>
+            <% const callback = "$refs.deleteForm.submit()" %>
+            <%- include("../partials/confirmButton.ejs", { content, callback }) %>
+            
           </form>
           <% } %>
         </div>

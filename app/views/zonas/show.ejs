@@ -15,8 +15,11 @@
                     <div class="card-body">
                         <a href="/zonas/<%=zona.id%>/edit" class="card-link btn btn-info" class="card-link">Editar
                             Zona</a>
-                        <form class="d-inline" action="/zonas/<%=zona._id%>?_method=DELETE" method="POST">
-                            <button class="btn btn-danger">Esborrar Zona</button>
+                        <form x-data="{}" x-ref="deleteForm" class="d-inline" action="/zonas/<%=zona._id%>?_method=DELETE" method="POST">
+                            <% const content = "<span>Esborrar Zona</span>"; %>
+                            <% const callback = "$refs.deleteForm.submit()" %>
+                            <%- include("../partials/confirmButton.ejs", { content, callback }) %>
+                            
                         </form>
                     </div>
                     <% } %>

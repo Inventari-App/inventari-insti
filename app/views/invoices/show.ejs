@@ -89,8 +89,12 @@
       class="d-inline"
       action="/invoices/<%=invoice._id%>?_method=DELETE"
       method="POST"
+      x-data="{}"
+      x-ref="deleteForm"
     >
-      <button class="btn red" type="submit">Esborrar Comanda</button>
+      <% const content = "<span>Esborrar Comanda</span>"; %>
+      <% const callback = "$refs.deleteForm.submit()" %>
+      <%- include("../partials/confirmButton.ejs", { content, callback }) %>
     </form>
 
     <p class="h5 row numeros">
