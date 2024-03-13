@@ -83,9 +83,16 @@ router.delete("/users/:id", isAdmin, catchAsync(deleteUser));
 
 router.get("/users");
 
-router.get("/login", (req, res) => {
-  res.render("users/login");
-});
+router.get("/login",
+  (req, res, next) => {
+    if (res.locals?.currentUser) {
+      return res.redirect("/")
+    }
+    next()
+  },
+  (req, res) => {
+    res.render("users/login");
+  });
 
 router.get("/account-recovery", (req, res) => {
   res.render("users/account-recovery");
@@ -167,16 +174,11 @@ router.post("/reset", async (req, res) => {
 });
 
 router.get("/logout", (req, res, next) => {
-  req.logout(function (err) {
-    if (err) {
-      return next(err);
-    }
-    req.flash("success", "Adéu!");
+  req.session.destroy(function(err) {
+    if (err) return next(err);
     res.redirect(301, "/login");
-  });
+  })
 });
-
-// forgot route
 
 router.get;
 
