@@ -1,10 +1,9 @@
-
 <%- include('../partials/detail', {
     type: 'item',
     item,
     features:
     {
-        inventariable: item.inventariable,
+        inventariable: localizeBoolean(item.inventariable),
         responsable: item.responsable.username
     }
 }) %>

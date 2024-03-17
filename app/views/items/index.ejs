@@ -23,7 +23,7 @@
         <tr>
             <th><%= item.nom %></th>
             <td><%= item.descripcio %></td>
-            <td><%= item.inventariable %></td>
+            <td><%= localizeBoolean(item.inventariable) %></td>
             <td><%= item.tipus %></td>
             <td><%= item.responsable?.username || " - " %></td>
             <td>

@@ -7,8 +7,8 @@
         usuari: user.username,
         nom: user.name,
         cognoms: user.surname,
-        administrador: user.isAdmin,
-        verificat: user.isVerified,
+        administrador: localizeBoolean(user.isAdmin),
+        verificat: localizeBoolean(user.isVerified),
         departament: user.department?.nom,
     }
 }) %>

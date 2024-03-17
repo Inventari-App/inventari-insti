@@ -1,9 +1,10 @@
 const Item = require("../models/item");
+const { localizeBoolean } = require("../utils/helpers");
 
 module.exports.index = async (req, res, next) => {
   try {
     const items = await Item.find({}).populate("responsable");
-    res.render("items/index", { items });
+    res.render("items/index", { items, localizeBoolean });
   } catch (err) {
     next(err);
   }
@@ -45,6 +46,7 @@ module.exports.showItem = async (req, res, next) => {
       item,
       isAdmin: user.isAdmin,
       isOwner: responsable && responsable._id.equals(user.id),
+      localizeBoolean,
     });
   } catch (err) {
     next(err);
@@ -72,7 +74,7 @@ module.exports.renderEditForm = async (req, res, next) => {
       req.flash("error", "No es pot trobar l'item!");
       return res.redirect("/items");
     }
-    res.render("items/edit", { item });
+    res.render("items/edit", { item, localizeBoolean });
   } catch (err) {
     next(err);
   }

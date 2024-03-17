@@ -16,6 +16,7 @@ const {
 } = require("../controllers/users");
 const { isAdmin, isSameUserOrAdmin, validateRecaptcha } = require("../middleware");
 const Center = require("../models/center");
+const { localizeBoolean } = require("../utils/helpers");
 
 router.get("/register", (req, res) => {
   res.render("users/register");
@@ -56,6 +57,7 @@ router.get(
       center,
       isAdmin: req.user.isAdmin,
       isOwner: user.id == req.user.id,
+      localizeBoolean,
     });
   }),
 );
@@ -66,7 +68,7 @@ router.get(
   catchAsync(async (req, res) => {
     const user = await getUser(req);
     const departments = await Department.find();
-    res.render("users/edit", { ...user, departments });
+    res.render("users/edit", { ...user, departments, localizeBoolean });
   }),
 );
 
