@@ -1,74 +1,42 @@
 <% layout('layouts/boilerplate')%>
   <div class="row">
-    <%- include('../partials/title.ejs', { title: 'Nova Unitat' }) %>
-
+    <%- include('../partials/title.ejs', { title: 'Editar Zona' }) %>
     <p></p>
     <p></p>
     <div class="col-6 offset-3">
       <form id="unitats" action="/unitats" method="POST"  class="validated-form">
         <div class="mb-3">
           <label class="form-label" for="nom">Nom Unitat</label>
-          <input class="form-control" type="text" id="nom" name="nom" required>
+          <input class="form-control" type="text" id="nom" name="unitat[nom]" required>
           <div class="valid-feedback">Sembla correcte!</div>
         </div>
-        <select name="zona" class="form-select mb-3" aria-label="tipus" id="zonas">
+        <select name="unitat[zona]" class="form-select mb-3" aria-label="tipus" id="zonas">
           <option value="default" selected>Selecciona una zona</option>
           <option id="new" class="text-danger" value="new">Crea una nova zona</option>
         </select>
-        <select id="plantas" class="form-select mb-3" aria-label="tipus" name="planta" required>
+        <select id="plantas" class="form-select mb-3" aria-label="tipus" name="unitat[planta]" required>
           <option value="default" selected>Selecciona una planta</option>
           <option id="new" class="text-danger" value="new">Crea una nova planta</option>
         </select>
-        <select id="areas" class="form-select mb-3" aria-label="tipus" name="area" required>
+        <select id="areas" class="form-select mb-3" aria-label="tipus" name="unitat[area]" required>
           <option value="default" selected>Selecciona una àrea</option>
           <option id="new" class="text-danger" value="new">Crea una nova àrea</option>
         </select>
-        <div class="mb-3">
-          <button class="btn btn-success">Afegeix Unitat</button>
-        </div>
+        <button type="submit" class="btn btn-success">Afegeix Unitat</button>
       </form>
-      <a href="/unitats">Totes les Unitats</a>
     </div>
   </div>
 
   <script>
-    const formEl = document.querySelector("form");
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const tab = urlParams.get("tab");
-  
-    const inputEls = document.querySelectorAll(
-      'input[type="text"], input[type="radio"]:checked, select, textarea'
-    );
-  
-    formEl.addEventListener("submit", async function (event) {
-      event.preventDefault();
-      const formData = Array.prototype.reduce.call(
-        inputEls,
-        (acc, inputEl) => {
-          const key = inputEl.name;
-          const value = inputEl.value;
-          return { ...acc, [key]: value };
-        },
-        {}
-      );
-      console.log(formData);
-  
-      const response = await fetch("/unitats", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ unitat: formData }),
-      });
-      const unitat = await response.json()
-  
-      if (tab) {
-          window.close();
-      } else {
-          window.location.href = `/unitats/${unitat._id}`
-      }
-    });
+    
+    if (tab) {
+      const formEl = document.querySelector("form")
+      const actionAttr = formEl.getAttribute("action")
+      formEl.setAttribute("action", `${actionAttr}?tab=true`)
+    }
   </script>  
 
   <script>

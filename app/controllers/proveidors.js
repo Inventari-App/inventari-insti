@@ -24,9 +24,20 @@ module.exports.createProveidor = async (req, res, next) => {
     const proveidor = new Proveidor(proveidorBody);
     proveidor.responsable = req.user._id;
     await proveidor.save();
+
+    if (req.query.tab) {
+      return res.status(201).send(`
+        <script>window.close()</script>
+      `)
+    }
+
     req.flash("success", "Proveidor creat correctament!");
-    res.status(201).json(proveidor);
+    res.status(201).redirect("/proveidors")
   } catch (err) {
+    if (err.code == 11000) {
+      req.flash("error", "Un proveidor amb el mateix nom ja existeix.")
+      return res.redirect(`/proveidors/new${req.query.tab ? "?tab=true" : ""}`)
+    }
     next(err);
   }
 };

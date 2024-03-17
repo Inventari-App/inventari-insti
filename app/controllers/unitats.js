@@ -24,9 +24,21 @@ module.exports.createUnitat = async (req, res, next) => {
     const unitat = new Unitat(unitatBody);
     unitat.responsable = req.user._id;
     await unitat.save();
+
+    if (req.query.tab) {
+      return res.status(201).send(`
+        <script>window.close()</script>
+      `)
+
+    }
+
     req.flash("success", "Unitat creada correctament!");
-    res.status(201).json(unitat);
+    res.status(201).redirect("/unitats")
   } catch (err) {
+    if (err.code == 11000) {
+      req.flash("error", "Una unitat amb el mateix nom ja existeix.")
+      return res.redirect(`/unitats/new${req.query.tab ? "?tab=true" : ""}`)
+    }
     next(err);
   }
 };
