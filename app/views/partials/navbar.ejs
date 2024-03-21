@@ -48,7 +48,9 @@
         <a class="nav-link px-2" href="/login">Connexió</a>
         <a class="nav-link px-2" href="/register">Registre</a>
         <% } else { %>
-          <a class="nav-link px-2" href="/logout">Desconnexió</a>
+          <form action="logout" method="post">
+            <button class="nav-link px-2" style="background: none; border: none;" type="submit">Desconnexió</button>
+          </form>
           <% } %>
     </div>
   </div>

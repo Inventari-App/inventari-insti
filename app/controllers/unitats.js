@@ -29,7 +29,6 @@ module.exports.createUnitat = async (req, res, next) => {
       return res.status(201).send(`
         <script>window.close()</script>
       `)
-
     }
 
     req.flash("success", "Unitat creada correctament!");

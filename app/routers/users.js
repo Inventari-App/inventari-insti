@@ -175,13 +175,11 @@ router.post("/reset", async (req, res) => {
   res.redirect("/login");
 });
 
-router.get("/logout", (req, res, next) => {
-  req.session.destroy(function(err) {
+router.post("/logout", (req, res, next) => {
+  req.logout(function(err) {
     if (err) return next(err);
     res.redirect(301, "/login");
   })
 });
-
-router.get;
 
 module.exports = router;
