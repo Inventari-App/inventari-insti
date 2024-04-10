@@ -1,4 +1,5 @@
 const Planta = require("../models/planta");
+const { renderNewForm, createItem } = require("./helpers");
 
 module.exports.index = async (req, res, next) => {
   try {
@@ -9,33 +10,9 @@ module.exports.index = async (req, res, next) => {
   }
 };
 
-module.exports.renderNewForm = (req, res, next) => {
-  try {
-    const { tab } = req.query;
-    res.render("plantas/new", { autoclose: tab });
-  } catch (err) {
-    next(err);
-  }
-};
+module.exports.renderNewForm = renderNewForm("plantas/new")
 
-module.exports.createPlanta = async (req, res, next) => {
-  try {
-    let plantaBody = req.body.planta;
-    plantaBody = { ...plantaBody };
-    const planta = new Planta(plantaBody);
-    planta.responsable = req.user._id;
-    await planta.save();
-    req.flash("success", "Planta creada correctament!");
-    if (plantaBody.autoclose) {
-      res.redirect("/autoclose");
-    } else {
-      res.redirect(`/plantas/${planta._id}`);
-    }
-    res.redirect(`/plantas/${planta._id}`);
-  } catch (err) {
-    next(err);
-  }
-};
+module.exports.createPlanta = createItem(Planta, 'planta')
 
 module.exports.showPlanta = async (req, res, next) => {
   try {

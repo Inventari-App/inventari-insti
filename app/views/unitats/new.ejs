@@ -7,18 +7,18 @@
       <form id="unitats" action="/unitats" method="POST"  class="validated-form">
         <div class="mb-3">
           <label class="form-label" for="nom">Nom Unitat</label>
-          <input class="form-control" type="text" id="nom" name="unitat[nom]" required>
+          <input class="form-control" type="text" id="nom" name="nom" required>
           <div class="valid-feedback">Sembla correcte!</div>
         </div>
-        <select name="unitat[zona]" class="form-select mb-3" aria-label="tipus" id="zonas">
+        <select name="zona" class="form-select mb-3" aria-label="tipus" id="zonas">
           <option value="default" selected>Selecciona una zona</option>
           <option id="new" class="text-danger" value="new">Crea una nova zona</option>
         </select>
-        <select id="plantas" class="form-select mb-3" aria-label="tipus" name="unitat[planta]" required>
+        <select id="plantas" class="form-select mb-3" aria-label="tipus" name="planta" required>
           <option value="default" selected>Selecciona una planta</option>
           <option id="new" class="text-danger" value="new">Crea una nova planta</option>
         </select>
-        <select id="areas" class="form-select mb-3" aria-label="tipus" name="unitat[area]" required>
+        <select id="areas" class="form-select mb-3" aria-label="tipus" name="area" required>
           <option value="default" selected>Selecciona una àrea</option>
           <option id="new" class="text-danger" value="new">Crea una nova àrea</option>
         </select>
@@ -26,18 +26,6 @@
       </form>
     </div>
   </div>
-
-  <script>
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const tab = urlParams.get("tab");
-    
-    if (tab) {
-      const formEl = document.querySelector("form")
-      const actionAttr = formEl.getAttribute("action")
-      formEl.setAttribute("action", `${actionAttr}?tab=true`)
-    }
-  </script>  
 
   <script>
     // Main

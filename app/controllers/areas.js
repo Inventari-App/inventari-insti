@@ -1,4 +1,5 @@
 const Area = require("../models/area");
+const { renderNewForm, createItem } = require("./helpers");
 
 module.exports.index = async (req, res, next) => {
   try {
@@ -9,33 +10,9 @@ module.exports.index = async (req, res, next) => {
   }
 };
 
-module.exports.renderNewForm = (req, res, next) => {
-  try {
-    const { tab } = req.query;
-    res.render("areas/new", { autoclose: tab });
-  } catch (err) {
-    next(err);
-  }
-};
+module.exports.renderNewForm = renderNewForm("areas/new")
 
-module.exports.createArea = async (req, res, next) => {
-  try {
-    let areaBody = req.body.area;
-    areaBody = { ...areaBody };
-    const area = new Area(areaBody);
-    area.responsable = req.user._id;
-    await area.save();
-    req.flash("success", "Area creada correctament!");
-
-    if (areaBody.autoclose) {
-      res.redirect("/autoclose");
-    } else {
-      res.redirect(`/areas/${area._id}`);
-    }
-  } catch (err) {
-    next(err);
-  }
-};
+module.exports.createArea = createItem(Area, 'area')
 
 module.exports.showArea = async (req, res, next) => {
   try {

@@ -1,4 +1,5 @@
 const Zona = require("../models/zona");
+const { renderNewForm, createItem } = require("./helpers");
 
 module.exports.index = async (req, res, next) => {
   try {
@@ -9,32 +10,9 @@ module.exports.index = async (req, res, next) => {
   }
 };
 
-module.exports.renderNewForm = (req, res, next) => {
-  try {
-    const { tab } = req.query;
-    res.render("zonas/new", { autoclose: tab });
-  } catch (err) {
-    next(err);
-  }
-};
+module.exports.renderNewForm = renderNewForm("zonas/new")
 
-module.exports.createZona = async (req, res, next) => {
-  try {
-    let zonaBody = req.body.zona;
-    zonaBody = { ...zonaBody };
-    const zona = new Zona(zonaBody);
-    zona.responsable = req.user._id;
-    await zona.save();
-    req.flash("success", "Zona creada correctament!");
-    if (zonaBody.autoclose) {
-      res.redirect("/autoclose");
-    } else {
-      res.redirect(`/zonas/${zona._id}`);
-    }
-  } catch (err) {
-    next(err);
-  }
-};
+module.exports.createZona = createItem(Zona, 'zona')
 
 module.exports.showZona = async (req, res, next) => {
   try {

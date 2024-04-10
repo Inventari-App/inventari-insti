@@ -1,5 +1,6 @@
 const Item = require("../models/item");
 const { localizeBoolean } = require("../utils/helpers");
+const { renderNewForm, createItem } = require("./helpers");
 
 module.exports.index = async (req, res, next) => {
   try {
@@ -10,31 +11,9 @@ module.exports.index = async (req, res, next) => {
   }
 };
 
-module.exports.renderNewForm = (req, res, next) => {
-  try {
-    const { tab } = req.query;
-    res.render("items/new", { autoclose: tab });
-  } catch (err) {
-    next(err);
-  }
-};
+module.exports.renderNewForm = renderNewForm("items/new")
 
-module.exports.createItem = async (req, res, next) => {
-  try {
-    const itemBody = req.body
-    const item = new Item(itemBody);
-    item.responsable = req.user._id;
-    await item.save();
-    req.flash("success", "Item creat correctament!");
-    if (itemBody.autoclose) {
-      res.redirect("/autoclose");
-    } else {
-      res.redirect(`/items/${item._id}`);
-    }
-  } catch (err) {
-    next(err);
-  }
-};
+module.exports.createItem = createItem(Item, "item")
 
 module.exports.showItem = async (req, res, next) => {
   try {

@@ -1,4 +1,5 @@
 const Department = require("../models/department");
+const { renderNewForm, createItem } = require("./helpers");
 
 module.exports.index = async (req, res, next) => {
   try {
@@ -9,25 +10,9 @@ module.exports.index = async (req, res, next) => {
   }
 };
 
-module.exports.renderNewForm = (req, res, next) => {
-  try {
-    res.render("departments/new");
-  } catch (err) {
-    next(err);
-  }
-};
+module.exports.renderNewForm = renderNewForm("departments/new")
 
-module.exports.createDepartment = async (req, res, next) => {
-  try {
-    let departmentBody = req.body.department;
-    const department = new Department({ ...departmentBody });
-    await department.save();
-    req.flash("success", "Department creat correctament!");
-    res.status(201).json(department);
-  } catch (err) {
-    next(err);
-  }
-};
+module.exports.createDepartment = createItem(Department, 'department')
 
 module.exports.showDepartment = async (req, res, next) => {
   try {

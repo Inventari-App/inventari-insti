@@ -1,78 +1,51 @@
 <% layout('layouts/boilerplate')%>
-    <div class="row">
-        <%- include('../partials/title.ejs', { title: 'Nou Proveidor' }) %>
 
-        <p></p>
-        <p></p>
-        <div class="col-6 offset-3">
-            <form action="/proveidors" method="POST"  class="validated-form">
+<div class="row">
+    <%- include('../partials/title.ejs', { title: 'Nou Proveidor' }) %>
 
-                <div class="mb-3">
-                    <label class="form-label" for="nom">Nom</label>
-                    <input class="form-control" type="text" id="nom" name="proveidor[nom]" required>
-                    <div class="valid-feedback">Sembla correcte!</div>
-                </div>
+    <p></p>
+    <p></p>
+    <div class="col-6 offset-3">
+        <form action="/proveidors" method="POST"  class="validated-form">
 
-                <div class="mb-3">
-                    <label class="form-label" for="cif">CIF</label>
-                    <input class="form-control" type="text" id="cif" name="proveidor[cif]">
-                    <div class="valid-feedback">Sembla correcte!</div>
-                </div>
+            <div class="mb-3">
+                <label class="form-label" for="nom">Nom</label>
+                <input class="form-control" type="text" id="nom" name="nom" required>
+                <div class="valid-feedback">Sembla correcte!</div>
+            </div>
 
-                <div class="mb-3">
-                    <label class="form-label" for="adreca">Adreça</label>
-                    <input class="form-control" type="text" id="adreca" name="proveidor[adreca]">
-                    <div class="valid-feedback">Sembla correcte!</div>
-                </div>
+            <div class="mb-3">
+                <label class="form-label" for="cif">CIF</label>
+                <input class="form-control" type="text" id="cif" name="cif">
+                <div class="valid-feedback">Sembla correcte!</div>
+            </div>
 
-                <div class="mb-3">
-                    <label class="form-label" for="telefon">Telèfon</label>
-                    <input class="form-control" type="text" id="telefon" name="proveidor[telefon]">
-                    <div class="valid-feedback">Sembla correcte!</div>
-                </div>
+            <div class="mb-3">
+                <label class="form-label" for="adreca">Adreça</label>
+                <input class="form-control" type="text" id="adreca" name="adreca">
+                <div class="valid-feedback">Sembla correcte!</div>
+            </div>
 
-                <div class="mb-3">
-                    <label class="form-label" for="email">Email</label>
-                    <input class="form-control" type="email" id="email" name="proveidor[email]">
-                    <div class="valid-feedback">Sembla correcte!</div>
-                </div>
-              
-                <div class="mb-3">
-                    <button type="submit" class="btn btn-success">Afegeix Proveidor</button>
-                </div>
-            </form>
-            <a href="/proveidors">Tots els proveidors</a>
-        </div>
+            <div class="mb-3">
+                <label class="form-label" for="telefon">Telèfon</label>
+                <input class="form-control" type="text" id="telefon" name="telefon">
+                <div class="valid-feedback">Sembla correcte!</div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="email">Email</label>
+                <input class="form-control" type="email" id="email" name="email">
+                <div class="valid-feedback">Sembla correcte!</div>
+            </div>
+
+            <% if(autoclose) { %>
+                <input type="text" id="autoclose" name="autoclose" value="true" hidden>
+            <% } %>
+          
+            <div class="mb-3">
+                <button type="submit" class="btn btn-success">Afegeix Proveidor</button>
+            </div>
+        </form>
+        <a href="/proveidors">Tots els proveidors</a>
     </div>
-
-  <script>
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const tab = urlParams.get("tab");
-    
-    if (tab) {
-      const formEl = document.querySelector("form")
-      const actionAttr = formEl.getAttribute("action")
-      formEl.setAttribute("action", `${actionAttr}?tab=true`)
-    }
-  </script>  
-
-    <script>
-        const formEl = document.querySelector("form");
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
-        const tab = urlParams.get("tab");
-
-        const inputEls = document.querySelectorAll(
-            'input[type="text"], input[type="email"], input[type="radio"]:checked, select, textarea'
-        );
-
-        formEl.addEventListener("submit", async function (event) {
-            if (tab) {
-                event.preventDefault()
-                await formEl.submit()
-                debugger
-                window.close();
-            }
-        });
-    </script>
+</div>

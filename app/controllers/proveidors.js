@@ -1,4 +1,5 @@
 const Proveidor = require("../models/proveidor");
+const { renderNewForm, createItem } = require("./helpers");
 
 module.exports.index = async (req, res, next) => {
   try {
@@ -9,34 +10,36 @@ module.exports.index = async (req, res, next) => {
   }
 };
 
-module.exports.renderNewForm = (req, res, next) => {
-  try {
-    res.render("proveidors/new");
-  } catch (err) {
+module.exports.renderNewForm = renderNewForm("proveidors/new")
+
+module.exports.createProveidor = createItem(Proveidor, 'proveidor',
+  (req, res, err) => {
+    if (err.code == 11000) {
+      req.flash("error", "Un proveidor amb el mateix nom ja existeix.")
+      return res.redirect(`/proveidors/new${req.query.tab ? "?tab=true" : ""}`)
+    }
     next(err);
   }
-};
-
+)
 module.exports.createProveidor = async (req, res, next) => {
+  let proveidorBody = req.body;
   try {
-    let proveidorBody = req.body.proveidor;
     proveidorBody = { ...proveidorBody };
     const proveidor = new Proveidor(proveidorBody);
     proveidor.responsable = req.user._id;
     await proveidor.save();
 
-    if (req.query.tab) {
-      return res.status(201).send(`
-        <script>window.close()</script>
-      `)
-    }
-
     req.flash("success", "Proveidor creat correctament!");
-    res.status(201).redirect("/proveidors")
+
+    if (proveidorBody.autoclose) {
+      res.redirect("/autoclose");
+    } else {
+      res.redirect(`/proveidors/${proveidor._id}`);
+    }
   } catch (err) {
     if (err.code == 11000) {
       req.flash("error", "Un proveidor amb el mateix nom ja existeix.")
-      return res.redirect(`/proveidors/new${req.query.tab ? "?tab=true" : ""}`)
+      return res.redirect(`/proveidors/new${proveidorBody.autoclose ? "?tab=true" : ""}`)
     }
     next(err);
   }

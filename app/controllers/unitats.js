@@ -1,4 +1,5 @@
 const Unitat = require("../models/unitat");
+const { renderNewForm, createItem } = require("./helpers");
 
 module.exports.index = async (req, res, next) => {
   try {
@@ -9,38 +10,17 @@ module.exports.index = async (req, res, next) => {
   }
 };
 
-module.exports.renderNewForm = (req, res, next) => {
-  try {
-    res.render("unitats/new");
-  } catch (err) {
-    next(err);
-  }
-};
+module.exports.renderNewForm = renderNewForm("unitats/new")
 
-module.exports.createUnitat = async (req, res, next) => {
-  try {
-    let unitatBody = req.body.unitat;
-    unitatBody = { ...unitatBody };
-    const unitat = new Unitat(unitatBody);
-    unitat.responsable = req.user._id;
-    await unitat.save();
-
-    if (req.query.tab) {
-      return res.status(201).send(`
-        <script>window.close()</script>
-      `)
-    }
-
-    req.flash("success", "Unitat creada correctament!");
-    res.status(201).redirect("/unitats")
-  } catch (err) {
+module.exports.createUnitat = createItem(Unitat, 'unitat',
+  (req, res, err) => {
     if (err.code == 11000) {
       req.flash("error", "Una unitat amb el mateix nom ja existeix.")
       return res.redirect(`/unitats/new${req.query.tab ? "?tab=true" : ""}`)
     }
     next(err);
   }
-};
+)
 
 module.exports.showUnitat = async (req, res, next) => {
   try {
