@@ -1,118 +1,81 @@
 <% layout('layouts/boilerplate')%>
-    <%- include('../partials/title.ejs', { title: 'Nou Item' }) %>
+<%- include('../partials/title.ejs', { title: 'Nou Item' }) %>
 
-    <form action="/items" method="POST" class="validated-form">
+<form action="/items" method="POST" class="validated-form">
 
-      <div class="container">
+  <div class="container">
 
-        <div class="mb-3">
-          <label class="form-label" for="inventariable">Inventariable</label>
-          <select class="form-select" name="inventariable" id="inventariable">
-            <option value="true">
-              Inventariable
-            </option>
-            <option value="false">
-              No Inventariable
-            </option>
-          </select>
-        </div>
+    <div class="mb-3">
+      <label class="form-label" for="inventariable">Inventariable</label>
+      <select class="form-select" name="inventariable" id="inventariable">
+        <option value="true">
+          Inventariable
+        </option>
+        <option value="false">
+          No Inventariable
+        </option>
+      </select>
+    </div>
 
-            <div class="row">
-              <div class="col-sm">
-                <div class="mb-3">
-                  <label class="form-label" for="nom">Nom Item</label>
-                  <input
-                    class="form-control"
-                    type="text"
-                    id="nom"
-                    name="nom"
-                    required
-                  />
-                  <div class="valid-feedback">Sembla correcte!</div>
-                </div>
-    
-              </div>
-            </div>
-    
-            <div class="row">
-              <div class="col-sm">
-                <label class="form-label" for="tipus">Tipus</label>
-                <select
-                  class="form-select mb-3"
-                  aria-label="tipus"
-                  name="tipus"
-                  required
-                >
-                  <option value="" disabled selected>Escull un tipus d'article</option>
-                  <option value="maquinaria">Maquinària</option>
-                  <option value="moble">Moble</option>
-                  <option value="utillatge">Utillatge</option>
-                  <option value="Consumible">Consumible</option>
-                  <option value="construccio">Material de construcciò</option>
-                  <option value="lampisteria">Material elèctric i lampisteria</option>
-                  <option value="serveis">Serveis</option>
-                </select>
-    
-              </div>
-            </div>
-    
+        <div class="row">
+          <div class="col-sm">
             <div class="mb-3">
-              <label class="form-label" for="descripcio">Descripció</label>
-              <textarea
+              <label class="form-label" for="nom">Nom Item</label>
+              <input
                 class="form-control"
                 type="text"
-                id="descripcio"
-                name="descripcio"
-              ></textarea>
+                id="nom"
+                name="nom"
+                required
+              />
+              <div class="valid-feedback">Sembla correcte!</div>
             </div>
-    
-            <div class="mb-3">
-              <button class="btn btn-success">Afegeix Item</button>
-            </div>
+
           </div>
         </div>
 
+        <div class="row">
+          <div class="col-sm">
+            <label class="form-label" for="tipus">Tipus</label>
+            <select
+              class="form-select mb-3"
+              aria-label="tipus"
+              name="tipus"
+              required
+            >
+              <option value="" disabled selected>Escull un tipus d'article</option>
+              <option value="maquinaria">Maquinària</option>
+              <option value="moble">Moble</option>
+              <option value="utillatge">Utillatge</option>
+              <option value="Consumible">Consumible</option>
+              <option value="construccio">Material de construcciò</option>
+              <option value="lampisteria">Material elèctric i lampisteria</option>
+              <option value="serveis">Serveis</option>
+            </select>
 
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="descripcio">Descripció</label>
+          <textarea
+            class="form-control"
+            type="text"
+            id="descripcio"
+            name="descripcio"
+          ></textarea>
+        </div>
+
+        <% if(autoclose) { %>
+            <input type="text" id="autoclose" name="autoclose" value="true" hidden>
+        <% } %>
+
+        <div class="mb-3">
+          <button class="btn btn-success">Afegeix Item</button>
+        </div>
       </div>
-    </form>
-    <a href="/items">Tots els Items</a>
+    </div>
+  </div>
+</form>
 
-<script>
-  const formEl = document.querySelector("form");
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-  const tab = urlParams.get("tab");
-
-  const inputEls = document.querySelectorAll(
-    'input[type="text"], input[type="checkbox"], select, textarea'
-  );
-
-  formEl.addEventListener("submit", async function (event) {
-    event.preventDefault();
-    const formData = Array.prototype.reduce.call(
-      inputEls,
-      (acc, inputEl) => {
-        const key = inputEl.name;
-        const value = inputEl.checked || inputEl.value;
-        return { ...acc, [key]: value };
-      },
-      {}
-    );
-    console.log(formData);
-
-    const response = await fetch("/items", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ item: formData }),
-    });
-    const item = await response.json();
-
-    if (tab) {
-      window.close();
-    } else {
-      window.location.href = `/items/${item._id}`;
-    }
-  });
-</script>
+<a href="/items">Tots els Items</a>

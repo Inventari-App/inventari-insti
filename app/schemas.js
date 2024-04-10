@@ -54,12 +54,11 @@ module.exports.invoiceSchema = Joi.object({
 });
 
 module.exports.itemSchema = Joi.object({
-  item: Joi.object({
-    nom: Joi.string().required().escapeHTML(),
-    tipus: Joi.string().required().escapeHTML(),
-    inventariable: Joi.boolean().required(),
-    descripcio: Joi.string().empty("").escapeHTML(),
-  }).required(),
+  autoclose: Joi.string(),
+  nom: Joi.string().required().escapeHTML(),
+  tipus: Joi.string().required().escapeHTML(),
+  inventariable: Joi.boolean().required(),
+  descripcio: Joi.string().empty("").escapeHTML(),
 });
 
 module.exports.departmentSchema = Joi.object({

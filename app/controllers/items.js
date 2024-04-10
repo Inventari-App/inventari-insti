@@ -12,7 +12,8 @@ module.exports.index = async (req, res, next) => {
 
 module.exports.renderNewForm = (req, res, next) => {
   try {
-    res.render("items/new");
+    const { tab } = req.query;
+    res.render("items/new", { autoclose: tab });
   } catch (err) {
     next(err);
   }
@@ -20,13 +21,16 @@ module.exports.renderNewForm = (req, res, next) => {
 
 module.exports.createItem = async (req, res, next) => {
   try {
-    let itemBody = req.body.item;
-    itemBody = { ...itemBody };
+    const itemBody = req.body
     const item = new Item(itemBody);
     item.responsable = req.user._id;
     await item.save();
     req.flash("success", "Item creat correctament!");
-    res.status(201).json(item);
+    if (itemBody.autoclose) {
+      res.redirect("/autoclose");
+    } else {
+      res.redirect(`/items/${item._id}`);
+    }
   } catch (err) {
     next(err);
   }
