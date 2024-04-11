@@ -3,7 +3,7 @@ const Invoice = require("../models/invoice");
 const Item = require("../models/item");
 const autocomplete = require("autocompleter");
 const { useNodemailer } = require("../nodemailer/sendEmail");
-const { getProtocol, localizeBoolean } = require("../utils/helpers");
+const { getProtocol, localizeBoolean, twoDecimals } = require("../utils/helpers");
 const Department = require("../models/department");
 const Center = require("../models/center");
 const protocol = getProtocol();
@@ -120,6 +120,7 @@ module.exports.printInvoice = async (req, res, next) => {
       center,
       invoiceJSON: JSON.stringify(invoice),
       isResponsable: invoice.responsable._id.equals(req.user.id),
+      twoDecimals,
     },
   );
 };

@@ -16,6 +16,14 @@ function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }
 
+function twoDecimals(val) {
+  try {
+    return parseFloat(val).toFixed(2)
+  } catch {
+    return val
+  }
+}
+
 const isProduction = process.env.NODE_ENV === "production"
 
-module.exports = { getExpirationTs, getProtocol, isProduction, localizeBoolean, capitalize }
+module.exports = { getExpirationTs, getProtocol, isProduction, localizeBoolean, capitalize, twoDecimals }
