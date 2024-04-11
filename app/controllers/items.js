@@ -13,7 +13,15 @@ module.exports.index = async (req, res, next) => {
 
 module.exports.renderNewForm = renderNewForm("items/new")
 
-module.exports.createItem = createItem(Item, "item")
+module.exports.createItem = createItem(Item, "item",
+  (req, res, err) => {
+    if (err.code == 11000) {
+      req.flash("error", "Un item amb el mateix nom ja existeix.")
+      return res.redirect(`/items/new${req.query.tab ? "?tab=true" : ""}`)
+    }
+    next(err);
+  }
+)
 
 module.exports.showItem = async (req, res, next) => {
   try {

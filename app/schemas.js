@@ -64,130 +64,31 @@ module.exports.departmentSchema = Joi.object({
 });
 
 module.exports.unitatSchema = Joi.object({
-  //preu: Joi.number().required().min(0),
   nom: Joi.string().required().escapeHTML(),
-
-  //num_serie: Joi.string().required().escapeHTML(),
-  //unitats_integrants: Joi.number().required().min(0),
-  //estat: Joi.string().required().escapeHTML(),
-  //data_incorporacio: Joi.string().required(),
-  //data_canvi: Joi.string().required(),
-  //num_doc_procedencia: Joi.string().required().escapeHTML(),
-  //proveidor: Joi.string().required().escapeHTML(),
-  //objectiu: Joi.string().required().escapeHTML(),
-  //observacions: Joi.string().escapeHTML(),
-  //username: Joi.string().required().escapeHTML(),
-  //zona: Joi.string().required().escapeHTML(),
   planta: Joi.string().required().escapeHTML(),
   area: Joi.string().required().escapeHTML(),
   zona: Joi.string().required().escapeHTML(),
-  //tipus: Joi.string().required().escapeHTML(),
-  //proforma: Joi.number().required().min(1),
-  //comanda: Joi.number().required().min(1),
-  //albara: Joi.string().required(),
-  //factura: Joi.string().required()
-  //imatge: Joi.string().escapeHTML(),
-  //descripcio: Joi.string().escapeHTML()
   autoclose: Joi.string(),
 });
 
 module.exports.zonaSchema = Joi.object({
-  zona: Joi.object({
-    //preu: Joi.number().required().min(0),
-    nom: Joi.string().required().escapeHTML(),
-    autoclose: Joi.string(),
-  }).required(),
+  nom: Joi.string().required().escapeHTML(),
+  autoclose: Joi.string(),
 });
 
 module.exports.plantaSchema = Joi.object({
-  planta: Joi.object({
-    //preu: Joi.number().required().min(0),
-    nom: Joi.string().required().escapeHTML(),
-    autoclose: Joi.string(),
-
-    //num_serie: Joi.string().required().escapeHTML(),
-    //unitats_integrants: Joi.number().required().min(0),
-    //estat: Joi.string().required().escapeHTML(),
-    //data_incorporacio: Joi.string().required(),
-    //data_canvi: Joi.string().required(),
-    //num_doc_procedencia: Joi.string().required().escapeHTML(),
-    //proveidor: Joi.string().required().escapeHTML(),
-    //objectiu: Joi.string().required().escapeHTML(),
-    //observacions: Joi.string().escapeHTML(),
-    //username: Joi.string().required().escapeHTML(),
-    //zona: Joi.string().required().escapeHTML(),
-    //planta: Joi.string().required().escapeHTML(),
-    //area: Joi.string().required().escapeHTML(),
-    //tipus: Joi.string().required().escapeHTML(),
-    //inventariable: Joi.string().required().escapeHTML(),
-    //tipus: Joi.string().required().escapeHTML(),
-    //proforma: Joi.number().required().min(1),
-    //comanda: Joi.number().required().min(1),
-    //albara: Joi.string().required(),
-    //factura: Joi.string().required()
-    //imatge: Joi.string().escapeHTML(),
-    //descripcio: Joi.string().escapeHTML()
-  }).required(),
+  nom: Joi.string().required().escapeHTML(),
+  autoclose: Joi.string(),
 });
 
 module.exports.areaSchema = Joi.object({
-  area: Joi.object({
-    //preu: Joi.number().required().min(0),
-    nom: Joi.string().required().escapeHTML(),
-    autoclose: Joi.string(),
-
-    //num_serie: Joi.string().required().escapeHTML(),
-    //unitats_integrants: Joi.number().required().min(0),
-    //estat: Joi.string().required().escapeHTML(),
-    //data_incorporacio: Joi.string().required(),
-    //data_canvi: Joi.string().required(),
-    //num_doc_procedencia: Joi.string().required().escapeHTML(),
-    //proveidor: Joi.string().required().escapeHTML(),
-    //objectiu: Joi.string().required().escapeHTML(),
-    //observacions: Joi.string().escapeHTML(),
-    //username: Joi.string().required().escapeHTML(),
-    //zona: Joi.string().required().escapeHTML(),
-    //planta: Joi.string().required().escapeHTML(),
-    //area: Joi.string().required().escapeHTML(),
-    //tipus: Joi.string().required().escapeHTML(),
-    //inventariable: Joi.string().required().escapeHTML(),
-    //tipus: Joi.string().required().escapeHTML(),
-    //proforma: Joi.number().required().min(1),
-    //comanda: Joi.number().required().min(1),
-    //albara: Joi.string().required(),
-    //factura: Joi.string().required()
-    //imatge: Joi.string().escapeHTML(),
-    //descripcio: Joi.string().escapeHTML()
-  }).required(),
+  nom: Joi.string().required().escapeHTML(),
+  autoclose: Joi.string(),
 });
 
 module.exports.utilitatSchema = Joi.object({
   utilitat: Joi.object({
     autoclose: Joi.string(),
-    //preu: Joi.number().required().min(0),
-    //nom: Joi.string().required().escapeHTML(),
-    //num_serie: Joi.string().required().escapeHTML(),
-    //unitats_integrants: Joi.number().required().min(0),
-    //estat: Joi.string().required().escapeHTML(),
-    //data_incorporacio: Joi.string().required(),
-    //data_canvi: Joi.string().required(),
-    //num_doc_procedencia: Joi.string().required().escapeHTML(),
-    //proveidor: Joi.string().required().escapeHTML(),
-    //objectiu: Joi.string().required().escapeHTML(),
-    //observacions: Joi.string().escapeHTML(),
-    //username: Joi.string().required().escapeHTML(),
-    //zona: Joi.string().required().escapeHTML(),
-    //planta: Joi.string().required().escapeHTML(),
-    //area: Joi.string().required().escapeHTML(),
-    //tipus: Joi.string().required().escapeHTML(),
-    //inventariable: Joi.string().required().escapeHTML(),
-    //tipus: Joi.string().required().escapeHTML(),
-    //proforma: Joi.number().required().min(1),
-    //comanda: Joi.number().required().min(1),
-    //albara: Joi.string().required(),
-    //factura: Joi.string().required()
-    //imatge: Joi.string().escapeHTML(),
-    //descripcio: Joi.string().escapeHTML()
   }).required(),
 });
 
