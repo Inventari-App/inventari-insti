@@ -15,7 +15,6 @@
   const itemInputEl = addRowTable.querySelector('#item')
   const departmentInputEl = addRowTable.querySelector('#department')
   const unitatInputEl = addRowTable.querySelector('#unitat')
-  const proveidorInputEl = addRowTable.querySelector('#proveidor')
 
   const autocompleteInputs = addRowTable.querySelectorAll(".add-row-row input.autocomplete")
   Array.prototype.forEach.call(autocompleteInputs, inputEl => {
@@ -134,17 +133,15 @@
   }
 
   async function checkAutompleteInputs (addRowTable) {
-    const [itemInputs, departmentInputs, unitatInputs, proveidorInputs] = await Promise.all([
+    const [itemInputs, departmentInputs, unitatInputs] = await Promise.all([
       fetchInputs('../items/all'),
       fetchInputs('../departments/all'),
       fetchInputs('../unitats/all'),
-      fetchInputs('../proveidors/all')
     ])
     const itemInputIsValid = checkAutompleteInput(itemInputEl, itemInputs)
     const departmentInputIsValid = checkAutompleteInput(departmentInputEl, departmentInputs)
     const unitatInputIsValid = checkAutompleteInput(unitatInputEl, unitatInputs)
-    const proveidorInputIsValid = checkAutompleteInput(proveidorInputEl, proveidorInputs)
-    return itemInputIsValid && departmentInputIsValid && unitatInputIsValid && proveidorInputIsValid
+    return itemInputIsValid && departmentInputIsValid && unitatInputIsValid
   }
 
   function fetchInputs (route) {
@@ -161,7 +158,6 @@
   addAutocompletes([
     { autocompleteName: "item", filter: "inventariable" },
     { autocompleteName: "unitat" },
-    { autocompleteName: "proveidor" },
     { autocompleteName: "department" }
   ])
 </script>
