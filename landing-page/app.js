@@ -11,6 +11,7 @@ app.set('view engine', 'ejs');
 
 // Serve static files from the "public" directory
 app.use(express.static(path.join(__dirname, 'public')));
+
 // Routes
 app.get('/', mainController.index);
 
