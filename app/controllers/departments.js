@@ -12,7 +12,15 @@ module.exports.index = async (req, res, next) => {
 
 module.exports.renderNewForm = renderNewForm("departments/new")
 
-module.exports.createDepartment = createItem(Department, 'department')
+module.exports.createDepartment = createItem(Department, 'department',
+  (req, res, err) => {
+    if (err.code == 11000) {
+      req.flash("error", "Un departament amb el mateix nom ja existeix.")
+      return res.redirect(`/departments/new${req.query.tab ? "?tab=true" : ""}`)
+    }
+    next(err);
+  }
+)
 
 module.exports.showDepartment = async (req, res, next) => {
   try {

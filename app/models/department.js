@@ -19,4 +19,7 @@ DepartmentSchema.plugin(contextPlugin, {
 
 DepartmentSchema.plugin(addCenterFilter)
 
+// Allow same unitats in multiple centers
+DepartmentSchema.index({ nom: 1, center: 1 }, { unique: true })
+
 module.exports = mongoose.model("Department", DepartmentSchema);
