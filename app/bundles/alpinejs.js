@@ -1,4 +1,4 @@
-const Alpine = require("alpinejs")
+const { Alpine } = require("alpinejs")
 
 window.Alpine = Alpine
 
