@@ -8,11 +8,9 @@
         <strong>Num. Comanda: </strong><%= invoice.numInvoice %>
       </div>
       <div class="text-end">
-        <a
-        href="/invoices/<%=invoice._id%>/print"
-        >
+        <a @click="window.open('/invoices/<%=invoice._id%>/print', '_blank')">
           <button class="btn btn-primary print">Imprimeix</button>
-        </a
+        </a>
       </div>
     </div>
   </div>
