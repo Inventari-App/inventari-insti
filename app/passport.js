@@ -1,6 +1,7 @@
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user");
+const Center = require("./models/center");
 
 function configurePassport (app) {
   app.use(passport.initialize());
@@ -9,7 +10,8 @@ function configurePassport (app) {
   passport.serializeUser(User.serializeUser());
   passport.deserializeUser(User.deserializeUser());
 
-  app.use((req, res, next) => {
+  app.use(async (req, res, next) => {
+    res.locals.center = await Center.findById(req.user.center).exec()
     res.locals.currentUser = req.user;
     next()
   })

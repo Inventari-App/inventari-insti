@@ -58,7 +58,7 @@ UserSchema.plugin(contextPlugin, {
   contextObjectType: Schema.Types.ObjectId,
 });
 
-UserSchema.plugin(passportLocalMongoose);
+UserSchema.plugin(passportLocalMongoose, { populateFields: "center" });
 
 UserSchema.plugin(addCenterFilter)
 

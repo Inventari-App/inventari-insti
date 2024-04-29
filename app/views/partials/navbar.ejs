@@ -40,7 +40,9 @@
 
     <% if(currentUser) { %>
       <div class="navbar-text mx-4">
-        Hola, <%= currentUser.username %>
+        <%= center.name %>
+        <span>|</span>
+        <%= currentUser.username %>
       </div>
     <% } %>
     <div class="navbar-nav ml-auto">
