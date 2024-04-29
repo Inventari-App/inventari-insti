@@ -1,10 +1,11 @@
 const Proveidor = require("../models/proveidor");
+const { sortByKey } = require("../utils/helpers");
 const { renderNewForm, createItem } = require("./helpers");
 
 module.exports.index = async (req, res, next) => {
   try {
     const proveidors = await Proveidor.find({});
-    res.render("proveidors/index", { proveidors });
+    res.render("proveidors/index", { proveidors: sortByKey(proveidors, "nom") });
   } catch (err) {
     next(err);
   }

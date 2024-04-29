@@ -2,7 +2,7 @@
 
 <%- include('../partials/title.ejs', { title: 'Reports' }) %>
 
-<div class="container" x-data="{ departament: {}, unitat: {} }">
+<div class="container" x-data="{ departament: {}, unitat: {}, item: {} }">
   <div class="row">
     <div class="col-lg-2 col-4">
       <div class="dropdown">
@@ -34,6 +34,34 @@
   <div class="row my-4">
     <div class="col-lg-2 col-4">
       <div class="dropdown">
+          <button
+            class="btn dark dropdown-toggle w-100"
+            type="button"
+            id="item"
+            data-bs-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false">
+              Item
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="item">
+              <% items.forEach(item => { %>
+              <li><a class="dropdown-item" @click="item.nom = '<%= item.nom %>'; item.copy = '<%= item.nom %>';" href="#"><%= item.nom %></a></li>
+              <% }) %>
+              <li><a class="dropdown-item" @click="item.nom = '.*'; item.copy = 'Tots els items'" href="#">Tots els items</a></li>
+          </ul>
+      </div>
+    </div>
+
+    <div class="col-lg-4 col-6">
+      <div class="input-group my-lg-0">
+          <input type="text" class="form-control" :value="item.copy" disabled aria-label="Username" aria-describedby="basic-addon1" placeholder="Selecciona un item" />
+      </div>
+    </div>
+  </div>
+
+  <div class="row my-4">
+    <div class="col-lg-2 col-4">
+      <div class="dropdown">
           <button class="btn dark dropdown-toggle w-100" type="button" data-input="unitat-input" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Unitat
           </button>
@@ -55,7 +83,7 @@
 
   <div class="row my-4">
     <div class="col-lg-2 col-4">
-      <button class="btn btn-primary w-100" type="button" x-cloak x-show="departament.nom || unitat.nom" @click="() => createReport(departament, unitat)">
+      <button class="btn btn-primary w-100" type="button" x-cloak x-show="departament.nom || item.nom || unitat.nom" @click="() => createReport(departament, item, unitat)">
           Crea Report
       </button>
     </div>
@@ -63,8 +91,8 @@
 </div>
 
 <script>
-  function createReport(departament, unitat) {
-    const url = `/reports/show?departament=${departament.nom}&unitat=${unitat.nom}`
+  function createReport(departament, item, unitat) {
+    const url = `/reports/show?departament=${departament.nom}&item=${item.nom}&unitat=${unitat.nom}`
     window.location.href = url
   }
 </script>

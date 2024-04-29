@@ -16,7 +16,7 @@ const {
 } = require("../controllers/users");
 const { isAdmin, isSameUserOrAdmin, validateRecaptcha } = require("../middleware");
 const Center = require("../models/center");
-const { localizeBoolean } = require("../utils/helpers");
+const { localizeBoolean, sortByKey } = require("../utils/helpers");
 
 router.get("/register", (req, res) => {
   res.render("users/register");
@@ -32,7 +32,7 @@ router.get("/users",
   isAdmin,
   catchAsync(async (req, res) => {
     const users = await getAllUsers(req);
-    res.render("users/index", { users });
+    res.render("users/index", { users: sortByKey(users, "name") });
   }),
 );
 

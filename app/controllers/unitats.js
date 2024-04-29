@@ -1,10 +1,11 @@
 const Unitat = require("../models/unitat");
+const { sortByKey } = require("../utils/helpers");
 const { renderNewForm, createItem } = require("./helpers");
 
 module.exports.index = async (req, res, next) => {
   try {
     const unitats = await Unitat.find({});
-    res.render("unitats/index", { unitats });
+    res.render("unitats/index", { unitats: sortByKey(unitats, "nom") });
   } catch (err) {
     next(err);
   }

@@ -1,10 +1,11 @@
 const Zona = require("../models/zona");
+const { sortByKey } = require("../utils/helpers");
 const { renderNewForm, createItem } = require("./helpers");
 
 module.exports.index = async (req, res, next) => {
   try {
     const zonas = await Zona.find({});
-    res.render("zonas/index", { zonas });
+    res.render("zonas/index", { zonas: sortByKey(zonas, "nom") });
   } catch (err) {
     next(err);
   }

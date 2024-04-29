@@ -1,10 +1,11 @@
 const Department = require("../models/department");
+const { sortByKey } = require("../utils/helpers");
 const { renderNewForm, createItem } = require("./helpers");
 
 module.exports.index = async (req, res, next) => {
   try {
     const departments = await Department.find({});
-    res.render("departments/index", { departments });
+    res.render("departments/index", { departments: sortByKey(departments, "nom") });
   } catch (err) {
     next(err);
   }

@@ -1,10 +1,11 @@
 const Area = require("../models/area");
+const { sortByKey } = require("../utils/helpers");
 const { renderNewForm, createItem } = require("./helpers");
 
 module.exports.index = async (req, res, next) => {
   try {
     const areas = await Area.find({});
-    res.render("areas/index", { areas });
+    res.render("areas/index", { areas: sortByKey(areas, "nom") });
   } catch (err) {
     next(err);
   }

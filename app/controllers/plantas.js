@@ -1,10 +1,11 @@
 const Planta = require("../models/planta");
+const { sortByKey } = require("../utils/helpers");
 const { renderNewForm, createItem } = require("./helpers");
 
 module.exports.index = async (req, res, next) => {
   try {
     const plantas = await Planta.find({});
-    res.render("plantas/index", { plantas });
+    res.render("plantas/index", { plantas: sortByKey(plantas, "nom") });
   } catch (err) {
     next(err);
   }

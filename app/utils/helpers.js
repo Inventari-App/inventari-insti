@@ -29,7 +29,14 @@ function capitalizeFirstLetter(str) {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 }
 
+function sortByKey(items, key) {
+  try {
+    return items.sort((a, b) => a[key].toLowerCase() < b[key].toLowerCase() ? -1 : 1)
+  } catch (e) {
+    return items
+  }
+}
 
 const isProduction = process.env.NODE_ENV === "production"
 
-module.exports = { getExpirationTs, capitalizeFirstLetter, getProtocol, isProduction, localizeBoolean, capitalize, twoDecimals }
+module.exports = { getExpirationTs, capitalizeFirstLetter, getProtocol, isProduction, localizeBoolean, capitalize, twoDecimals, sortByKey }
