@@ -11,7 +11,7 @@ function configurePassport (app) {
   passport.deserializeUser(User.deserializeUser());
 
   app.use(async (req, res, next) => {
-    res.locals.center = await Center.findById(req.user.center).exec()
+    res.locals.center = await Center.findById(req.user?.center).exec()
     res.locals.currentUser = req.user;
     next()
   })
