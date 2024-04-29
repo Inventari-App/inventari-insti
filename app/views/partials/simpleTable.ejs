@@ -17,7 +17,8 @@
             </tr>
           </thead>
           <tbody>
-            <% for (let item of items){%>
+            <% const orderedItems = items.sort((a, b) => a.nom.toLowerCase() < b.nom.toLowerCase() ? -1 : 1) %>
+            <% for (let item of orderedItems){%>
             <tr>
               <td>
                 <%= item[keyToName] %>
