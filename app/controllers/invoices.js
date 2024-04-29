@@ -41,6 +41,10 @@ module.exports.renderNewForm = async (req, res, next) => {
 module.exports.createInvoice = async (req, res, next) => {
   try {
     const { invoiceItems } = req.body;
+    if (!invoiceItems.length) {
+      res.status(400).send('Bad request')
+    }
+
     const { _id: responsableId, email } = req.user;
     const department = await Department.findById(req.user.department);
 

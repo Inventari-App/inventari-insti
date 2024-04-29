@@ -94,11 +94,12 @@
   });
 
   sendInvoiceBtn.addEventListener("click", (e) => {
+    const invoiceData = getInvoiceData();
+    if (!invoiceData.length) return
+
     const confirmation = confirm("Estas segur que vols crear la comanda?")
     if (!confirmation) return
 
-    const invoiceData = getInvoiceData();
-    console.log(invoiceData);
     fetch("/invoices", {
       method: "POST",
       mode: "cors",
