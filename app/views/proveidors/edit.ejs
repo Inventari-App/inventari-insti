@@ -15,7 +15,7 @@
         class="form-control"
         type="text"
         id="nom"
-        name="proveidor[nom]"
+        name="nom"
         value="<%=proveidor.nom %>"
         required
       />
@@ -26,18 +26,16 @@
         class="form-control"
         type="email"
         id="email"
-        name="proveidor[email]"
+        name="email"
         value="<%= proveidor.email%>"
-        required
       />
     </div>
     <div class="mb-3">
       <label for="cif">CIF</label>
       <input
         class="form-control"
-        name="proveidor[cif]"
+        name="cif"
         value="<%= proveidor.cif %>"
-        required
         type="text"
         id="cif"
         <%= proveidor.cif %>
@@ -47,9 +45,8 @@
       <label for="adreca">Adreca</label>
       <input
         class="form-control"
-        name="proveidor[adreca]"
+        name="adreca"
         value="<%= proveidor.adreca %>"
-        required
         type="text"
         id="adreca"
         <%= proveidor.cif %>
@@ -59,9 +56,8 @@
       <label for="telefon">Telefon</label>
       <input
         class="form-control"
-        name="proveidor[telefon]"
+        name="telefon"
         value="<%= proveidor.telefon %>"
-        required
         type="text"
         id="telefon"
         <%= proveidor.telefon %>
