@@ -1,8 +1,7 @@
-const { addCenterFilter } = require("../db/middlewares");
+const { addCenterFilter, capitalizeFields } = require("../db/middlewares");
 const contextPlugin = require("mongoose-request-context");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const passportLocalMongoose = require("passport-local-mongoose");
 
 const ProveidorSchema = new Schema({
   nom: {
@@ -33,6 +32,8 @@ const ProveidorSchema = new Schema({
     ref: "Center"
   },
 });
+
+ProveidorSchema.pre('save', capitalizeFields(["nom"]))
 
 ProveidorSchema.plugin(contextPlugin, {
   contextPath: "request:user.center",

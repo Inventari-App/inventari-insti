@@ -1,4 +1,4 @@
-const { addCenterFilter } = require("../db/middlewares");
+const { addCenterFilter, capitalizeFields } = require("../db/middlewares");
 const contextPlugin = require("mongoose-request-context");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
@@ -24,7 +24,9 @@ const ItemSchema = new Schema(
   },
   { timestamps: true }
 );
-//
+
+ItemSchema.pre('save', capitalizeFields(["nom"]))
+
 // Allow same items in multiple centers
 ItemSchema.index({ nom: 1, center: 1 }, { unique: true })
 

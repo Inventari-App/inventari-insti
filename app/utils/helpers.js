@@ -24,6 +24,12 @@ function twoDecimals(val) {
   }
 }
 
+function capitalizeFirstLetter(str) {
+  if (str.length === 0) return '';
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
+
+
 const isProduction = process.env.NODE_ENV === "production"
 
-module.exports = { getExpirationTs, getProtocol, isProduction, localizeBoolean, capitalize, twoDecimals }
+module.exports = { getExpirationTs, capitalizeFirstLetter, getProtocol, isProduction, localizeBoolean, capitalize, twoDecimals }

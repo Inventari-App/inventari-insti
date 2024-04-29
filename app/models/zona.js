@@ -1,4 +1,4 @@
-const { addCenterFilter } = require("../db/middlewares");
+const { addCenterFilter, capitalizeFields } = require("../db/middlewares");
 const contextPlugin = require("mongoose-request-context");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
@@ -14,6 +14,8 @@ const ZonaSchema = new Schema({
     ref: "Center"
   },
 });
+
+ZonaSchema.pre('save', capitalizeFields(["nom"]))
 
 ZonaSchema.plugin(contextPlugin, {
   contextPath: "request:user.center",

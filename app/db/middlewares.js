@@ -1,4 +1,5 @@
 const contextService = require("request-context");
+const { capitalizeFirstLetter } = require("../utils/helpers");
 
 const addCenterFilter = (schema) => {
   schema.pre(/^find/, function (next) {
@@ -23,4 +24,14 @@ const addResponsable = (schema) => {
   });
 };
 
-module.exports = { addCenterFilter, addResponsable };
+const capitalizeFields = (fields) => {
+  return function(next) {
+    fields.forEach(field => {
+      if (!this[field]) return;
+      this[field] = capitalizeFirstLetter(this[field])
+    });
+    next();
+  };
+}
+
+module.exports = { addCenterFilter, addResponsable, capitalizeFields };
