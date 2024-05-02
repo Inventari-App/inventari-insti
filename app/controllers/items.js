@@ -75,7 +75,7 @@ module.exports.updateItem = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    const item = await Item.findByIdAndUpdate(id, { ...req.body.item });
+    const item = await Item.findByIdAndUpdate(id, { ...req.body });
     req.flash("success", "Item actualitzat correctament!");
     res.redirect(`/items/${item._id}`);
   } catch (err) {

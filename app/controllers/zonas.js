@@ -61,7 +61,7 @@ module.exports.updateZona = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    const zona = await Zona.findByIdAndUpdate(id, { ...req.body.zona });
+    const zona = await Zona.findByIdAndUpdate(id, { ...req.body });
     req.flash("success", "Zona actualitzada correctament!");
     res.redirect(`/zonas/${zona._id}`);
   } catch (err) {

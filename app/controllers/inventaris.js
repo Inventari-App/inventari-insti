@@ -101,7 +101,7 @@ module.exports.updateInventari = async (req, res, next) => {
   try {
     const { id } = req.params;
     const inventari = await Inventari.findByIdAndUpdate(id, {
-      ...req.body.inventari,
+      ...req.body,
     });
     req.flash("success", "Inventari actualitzat correctament!");
     res.redirect(`/inventaris/${inventari._id}`);

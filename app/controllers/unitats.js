@@ -74,7 +74,7 @@ module.exports.updateUnitat = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    const unitat = await Unitat.findByIdAndUpdate(id, { ...req.body.unitat });
+    const unitat = await Unitat.findByIdAndUpdate(id, { ...req.body });
     req.flash("success", "Unitat actualitzat correctament!");
     res.redirect(`/unitats/${unitat._id}`);
   } catch (err) {

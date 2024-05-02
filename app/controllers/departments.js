@@ -70,7 +70,7 @@ module.exports.updateDepartment = async (req, res, next) => {
     const { id } = req.params;
 
     const department = await Department.findByIdAndUpdate(id, {
-      ...req.body.department,
+      ...req.body,
     });
     req.flash("success", "Department actualitzat correctament!");
     res.redirect(`/departments/${department._id}`);

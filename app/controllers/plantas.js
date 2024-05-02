@@ -61,7 +61,7 @@ module.exports.updatePlanta = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    const planta = await Planta.findByIdAndUpdate(id, { ...req.body.planta });
+    const planta = await Planta.findByIdAndUpdate(id, { ...req.body });
     req.flash("success", "Planta actualitzada correctament!");
     res.redirect(`/plantas/${planta._id}`);
   } catch (err) {

@@ -60,7 +60,7 @@ module.exports.renderEditForm = async (req, res, next) => {
 module.exports.updateArea = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const area = await Area.findByIdAndUpdate(id, { ...req.body.area });
+    const area = await Area.findByIdAndUpdate(id, { ...req.body });
     req.flash("success", "Area actualitzada correctament!");
     res.redirect(`/areas/${area._id}`);
   } catch (err) {

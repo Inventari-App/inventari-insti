@@ -96,7 +96,7 @@ module.exports.updateProveidor = async (req, res, next) => {
     const { id } = req.params;
 
     const proveidor = await Proveidor.findByIdAndUpdate(id, {
-      ...req.body.proveidor,
+      ...req.body,
     });
     req.flash("success", "Proveidor actualitzat correctament!");
     res.redirect(`/proveidors/${proveidor._id}`);
