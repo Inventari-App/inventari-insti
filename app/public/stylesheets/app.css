@@ -182,3 +182,8 @@ input[id^="expand-rows-"]:checked ~ label {
   position: sticky;
   bottom: 0;
 }
+
+.dropdown-menu {
+  max-height: 300px;
+  overflow-y: scroll;
+}

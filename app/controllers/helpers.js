@@ -18,7 +18,7 @@ module.exports.createItem = (Model, modelName, errorHandler) =>
       model.responsable = req.user._id;
       await model.save();
 
-      req.flash("success", `${capitalize(modelName)} creat correctament!`);
+      req.flash("success", `${capitalize(modelName)} creat/da correctament!`);
 
       if (data.autoclose) {
         res.redirect("/autoclose");

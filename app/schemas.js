@@ -61,6 +61,7 @@ module.exports.itemSchema = Joi.object({
 
 module.exports.departmentSchema = Joi.object({
   nom: Joi.string().required().escapeHTML(),
+  autoclose: Joi.string(),
 });
 
 module.exports.unitatSchema = Joi.object({

@@ -2,7 +2,20 @@
 
 <%- include('../partials/title.ejs', { title: 'Reports' }) %>
 
-<div class="container" x-data="{ departament: {}, unitat: {}, item: {} }">
+<div class="container" x-data="{
+    departament: {
+      nom: '',
+      copy: '',
+    },
+    unitat: {
+      nom: '',
+      copy: '',
+    },
+    item: {
+      nom: '',
+      copy: '',
+    }
+  }">
   <div class="row">
     <div class="col-lg-2 col-4">
       <div class="dropdown">
@@ -17,7 +30,7 @@
           </button>
           <ul class="dropdown-menu" aria-labelledby="departament">
               <% departaments.forEach(departament => { %>
-              <li><a class="dropdown-item" @click="departament.nom = '<%= departament.nom %>'; departament.copy = '<%= departament.nom %>';" href="#"><%= departament.nom %></a></li>
+              <li><a class="dropdown-item" @click="departament.nom = `<%= departament.nom %>`; departament.copy = `<%= departament.nom %>`;" href="#"><%= departament.nom %></a></li>
               <% }) %>
               <li><a class="dropdown-item" @click="departament.nom = '.*'; departament.copy = 'Tots els departaments'" href="#">Tots els departaments</a></li>
           </ul>
@@ -45,7 +58,7 @@
           </button>
           <ul class="dropdown-menu" aria-labelledby="item">
               <% items.forEach(item => { %>
-              <li><a class="dropdown-item" @click="item.nom = '<%= item.nom %>'; item.copy = '<%= item.nom %>';" href="#"><%= item.nom %></a></li>
+              <li><a class="dropdown-item" @click="item.nom = `<%= item.nom %>`; item.copy = `<%= item.nom %>`;" href="#"><%= item.nom %></a></li>
               <% }) %>
               <li><a class="dropdown-item" @click="item.nom = '.*'; item.copy = 'Tots els items'" href="#">Tots els items</a></li>
           </ul>
@@ -67,7 +80,7 @@
           </button>
           <ul class="dropdown-menu" aria-labelledby="unitat">
               <% unitats.forEach(unitat => { %>
-              <li><a class="dropdown-item" @click="unitat.nom = '<%= unitat.nom %>'; unitat.copy = '<%= unitat.nom %>';" href="#"><%= unitat.nom %></a></li>
+              <li><a class="dropdown-item" @click="unitat.nom = `<%= unitat.nom %>`; unitat.copy = `<%= unitat.nom %>`;" href="#"><%= unitat.nom %></a></li>
               <% }) %>
               <li><a class="dropdown-item" @click="unitat.nom = '.*'; unitat.copy = 'Totes les unitats'" href="#">Totes les unitats</a></li>
           </ul>
@@ -92,7 +105,7 @@
 
 <script>
   function createReport(departament, item, unitat) {
-    const url = `/reports/show?departament=${departament.nom}&item=${item.nom}&unitat=${unitat.nom}`
+    const url = `/reports/show?departament=${departament.nom}&article=${item.nom}&unitat=${unitat.nom}`
     window.location.href = url
   }
 </script>
