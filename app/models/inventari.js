@@ -1,6 +1,6 @@
 const contextPlugin = require("mongoose-request-context");
 const mongoose = require("mongoose");
-const { addCenterFilter, addResponsable } = require("../db/middlewares");
+const { addCenterFilter, addResponsable, addDepartmentScope } = require("../db/middlewares");
 const Schema = mongoose.Schema;
 
 const InventariSchema = new Schema(
@@ -32,6 +32,8 @@ InventariSchema.plugin(contextPlugin, {
 });
 
 InventariSchema.plugin(addCenterFilter);
+
+InventariSchema.plugin(addDepartmentScope);
 
 InventariSchema.plugin(addResponsable);
 

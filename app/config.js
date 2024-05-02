@@ -12,7 +12,8 @@ const enforceHttps = require("./utils/enforceHttps");
 const configureFlash = require("./flash");
 const appRouter = require("./routers/appRouter");
 const contextService = require("request-context")
-const cors = require("cors")
+const cors = require("cors");
+const Department = require("./models/department");
 
 if (!isProduction) {
   require("dotenv").config();
@@ -54,9 +55,20 @@ function configureApp(sessionConfig) {
 
   // Save user info (centerId) on each db operation
   app.use(contextService.middleware('request'))
+  // Save user context
   app.use((req, res, next) => {
     contextService.set('request:user', req.user)
     next()
+  })
+  // Save department context
+  app.use(async (req, res, next) => {
+    try {
+      const department = await Department.findById(req.user.department).exec()
+      contextService.set('request:department', department?.nom)
+      next()
+    } catch (e) {
+      next()
+    }
   })
 
   app.use(appRouter())

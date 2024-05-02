@@ -1,9 +1,22 @@
 const contextService = require("request-context");
 const { capitalizeFirstLetter } = require("../utils/helpers");
 
+const addDepartmentScope = (schema) => {
+  schema.pre(/^find/, async function (next) {
+    const { isAdmin } = contextService.get("request:user") || {};
+    const department = contextService.get("request:department") || {};
+    if (!department) {
+      return next();
+    }
+
+    isAdmin ? this.find() : this.find({ department });
+    next();
+  });
+};
+
 const addCenterFilter = (schema) => {
   schema.pre(/^find/, function (next) {
-    const { center } = contextService.get("request:user") || {};
+    const { center } = contextService.get("request:user")|| {};
     if (!center) {
       return next();
     }
@@ -34,4 +47,4 @@ const capitalizeFields = (fields) => {
   };
 }
 
-module.exports = { addCenterFilter, addResponsable, capitalizeFields };
+module.exports = { addCenterFilter, addResponsable, capitalizeFields, addDepartmentScope };
