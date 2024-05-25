@@ -105,6 +105,11 @@ input[id^="expand-rows-"]:checked ~ label {
   white-space: nowrap;
 }
 
+.datatable-sorter {
+  margin-left: 0px !important;
+  padding-left: 0px !important;
+}
+
 .datatable-top {
   padding: 8px 0 !important;
 }
