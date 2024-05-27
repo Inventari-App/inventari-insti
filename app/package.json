@@ -54,6 +54,7 @@
   },
   "scripts": {
     "test": "jest --runInBand --detectOpenHandles",
+    "test-watch": "jest --watch --runInBand --detectOpenHandles",
     "start": "concurrently \"npm run build\" \"npm run start-server\"",
     "start-server": "NODE_ENV=prod node --inspect=0.0.0.0:9229 app.js",
     "dev-server": "NODE_ENV=dev nodemon --inspect=0.0.0.0:9229 app.js",
@@ -69,6 +70,7 @@
     "concurrently": "^8.2.2",
     "esbuild": "^0.19.8",
     "jest": "^29.7.0",
+    "supertest": "^7.0.0",
     "testcontainers": "^10.9.0"
   }
 }
