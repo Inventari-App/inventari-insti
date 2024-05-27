@@ -6,7 +6,7 @@
 
 <div class="d-flex justify-content-end">
     <button id="rebre-comanda-btn" type="button" class="me-2 btn btn-primary mb-2">Rebre inventaris</button>
-    <a @click="window.open('/invoices/<%=invoice._id%>/print', '_blank')">
+    <a href="/invoices/<%=invoice._id%>/print" target="_blank" rel="noopener noreferrer">
       <button class="btn btn-primary print">Imprimeix</button>
     </a>
 </div>
