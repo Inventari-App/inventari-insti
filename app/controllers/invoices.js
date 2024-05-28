@@ -40,7 +40,7 @@ module.exports.renderNewForm = async (req, res, next) => {
 
 module.exports.createInvoice = async (req, res, next) => {
   try {
-    const { invoiceItems } = req.body;
+    const { invoiceItems, comment } = req.body;
     if (!invoiceItems.length) {
       res.status(400).send('Bad request')
     }
@@ -51,6 +51,7 @@ module.exports.createInvoice = async (req, res, next) => {
     const invoice = new Invoice({
       responsable: responsableId,
       invoiceItems,
+      comment,
       department: department.nom,
     });
     await invoice.save();

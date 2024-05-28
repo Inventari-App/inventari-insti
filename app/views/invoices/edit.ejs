@@ -101,6 +101,7 @@
     const confirmation = confirm("Estas segur que vols modificar la comanda?")
     if (!confirmation) return
 
+    const commentTextAreaEl = document.querySelector("#comment");
     const invoiceData = getInvoiceData();
     const total = calculateTotals()
 
@@ -111,7 +112,7 @@
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ total, invoiceItems: [...invoiceData] }),
+      body: JSON.stringify({ total, invoiceItems: [...invoiceData], comment: commentTextAreaEl.value }),
     })
       .then(() => (window.location.href = '/invoices/<%= invoice.id %>'))
       .catch((e) => console.error(e));

@@ -77,6 +77,11 @@
     <span class="fw-bold fs-4 me-2 my-0">Total Iva inclos:</span>
     <span class="fs-4"><%= twoDecimals(invoice.total) %>€</span>
   </div>
+
+  <% if (invoice.comment) { %>
+      <h4>Comentaris:</h4>
+      <textarea name="comment" id="comment" class="form-control w-100 my-4" disabled rows="5" placeholder="Escriu el teu comentari"><%= invoice.comment %></textarea>
+  <% } %>
 </div>
 
 <style>

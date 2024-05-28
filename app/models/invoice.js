@@ -49,6 +49,7 @@ const InvoiceSchema = new Schema(
     },
     status: { type: String, default: "pendent" }, // pendent, aprovada, rebutjada, rebuda
     numInvoice: Number,
+    comment: { type: String, default: "", maxLength: 500 }
   },
   { timestamps: true }
 );

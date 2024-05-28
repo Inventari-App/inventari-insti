@@ -60,6 +60,10 @@
   </form>
 </table>
 
+<% if (invoice.comment) { %>
+    <textarea name="comment" id="comment" class="form-control w-100 my-4" disabled rows="5" placeholder="Escriu el teu comentari"><%= invoice.comment %></textarea>
+<% } %>
+
 <%
   const isAdmin = currentUser && currentUser.isAdmin
   if(isAdmin || isResponsable) {

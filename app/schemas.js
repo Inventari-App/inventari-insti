@@ -49,6 +49,7 @@ module.exports.invoiceSchema = Joi.object({
   invoiceItems: Joi.array(),
   status: Joi.string().valid("aprovada", "pendent", "rebuda", "rebutjada"),
   total: Joi.number(),
+  comment: Joi.string().empty("").escapeHTML(),
 });
 
 module.exports.itemSchema = Joi.object({

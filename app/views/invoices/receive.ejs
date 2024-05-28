@@ -146,6 +146,11 @@
   </p>
 </div>
 <% } %>
+
+<% if (invoice.comment) { %>
+    <textarea name="comment" id="comment" class="form-control w-100 my-4" disabled rows="5" placeholder="Escriu el teu comentari"><%= invoice.comment %></textarea>
+<% } %>
+
 <div class="card-footer text-muted">
   <a href="/invoices">Torna a les comandes</a>
 </div>

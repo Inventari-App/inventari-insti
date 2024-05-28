@@ -29,8 +29,28 @@
           type="email"
           id="email"
           name="user[email]"
-          value="<%= user.email%>"
+          value="<%= user.email %>"
           required
+          disabled
+        />
+      </div>
+      <div class="mb-3">
+        <label for="password">New Password</label>
+        <input
+          class="form-control"
+          type="password"
+          id="password"
+          name="user[password]"
+          value="<%=user.password %>"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="old-password">Old Password</label>
+        <input
+          class="form-control"
+          type="password"
+          value="12345678"
           disabled
         />
       </div>

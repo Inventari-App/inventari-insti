@@ -94,6 +94,7 @@
   });
 
   sendInvoiceBtn.addEventListener("click", (e) => {
+    const commentTextAreaEl = document.querySelector("#comment");
     const invoiceData = getInvoiceData();
     if (!invoiceData.length) return
 
@@ -106,7 +107,10 @@
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ invoiceItems: [...invoiceData] }),
+      body: JSON.stringify({
+        invoiceItems: [...invoiceData],
+        comment: commentTextAreaEl.value,
+      }),
     })
       .then((res) => res.json())
       .then(({ _id }) => (window.location.href = _id))

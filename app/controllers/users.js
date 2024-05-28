@@ -155,11 +155,17 @@ async function getUser(req, res, next) {
 async function updateUser(req, res, next) {
   try {
     const { id } = req.params;
-    const { isAdmin } = req.body.user;
+    const { isAdmin, password } = req.body.user;
     const user = await User.findByIdAndUpdate(id, {
       ...req.body.user,
       isAdmin: !!isAdmin,
     });
+
+    if (password) {
+      await user.setPassword(password);
+      await user.save();
+    }
+
     return user;
   } catch (err) {
     next(err);
@@ -171,8 +177,7 @@ async function deleteUser(req, res, next) {
     const { id } = req.params;
     await User.findByIdAndDelete(id);
     req.flash("success", "Usuari esborrat correctament");
-    res.sendStatus(200);
-    next();
+    res.redirect("/users");
   } catch (err) {
     req.flash("error", "L'usuari no s'ha pogut esborrar");
     res.sendStatus(400);
