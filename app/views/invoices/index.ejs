@@ -2,6 +2,13 @@
 
 <%- include('../partials/title.ejs', { title: 'Totes les Comandes' }) %>
 
+<%
+  const getItems = (invoice) => invoice.invoiceItems.reduce((acc, item) => {
+    if (!acc.includes(item.article)) acc.push(item.article)
+    return acc
+  }, []).join(', ')
+%>
+
 <div class="d-md-flex justify-content-between mt-4">
   <div class="d-grid gap-2 d-md-flex justify-content-md-start">
     <a class="btn light mb-3 filter-all" href="/invoices">Totes les comandes</a>
@@ -16,13 +23,29 @@
 <table id="invoices-table" class="table table-striped align-middle">
   <thead>
     <tr>
-      <th scope="col">Num.</th>
-      <th scope="col">Responsable</th>
-      <th scope="col">Items a Rebre</th>
-      <th scope="col">Items Rebuts</th>
-      <th scope="col">Items</th>
-      <th scope="col">Preu total</th>
-      <th scope="col">Ultima actualització</th>
+      <th scope="col">
+        <span>Num.</span>
+      </th>
+      <th scope="col">
+        <span>Responsable</span>
+      </th>
+      <th scope="col">
+        <span class="d-none d-xl-block">Items a Rebre</span>
+        <span class="d-xl-none">Rebre</span>
+      </th>
+      <th scope="col">
+        <span class="d-none d-xl-block">Items Rebuts</span>
+        <span class="d-xl-none">Rebuts</span>
+      </th>
+      <th scope="col">
+        <span>Items</span>
+      </th>
+      <th scope="col">
+        <span>Preu total</span>
+      </th>
+      <th scope="col">
+        <span>Ultima act.</span>
+      </th>
       <th scope="col"></th>
     </tr>
   </thead>
@@ -38,14 +61,8 @@
         <td><%= invoice.invoiceItems.reduce((acc, item) => acc += item.rebuts.filter(({ rebut }) => !rebut).length, 0) %></td>
         <td><%= invoice.invoiceItems.reduce((acc, item) => acc += item.rebuts.filter(({ rebut }) => rebut).length, 0) %></td>
         <td>
-          <span class="truncate">
-            <%= 
-              invoice.invoiceItems.reduce((acc, item) => {
-                if (!acc.includes(item.article)) acc.push(item.article)
-                return acc
-              }, []).join(', ')
-            %>
-          </span>
+          <span class="d-none d-xl-block truncate" style="max-width: 180px;"><%= getItems(invoice) %></span>
+          <span class="d-xl-none truncate" style="max-width: 100px;"><%= getItems(invoice) %></span>
         </td>
         <td><%= invoice.total.toFixed(2) %> €</td>
         <td>

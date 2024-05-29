@@ -22,7 +22,11 @@
         <% for (let item of items) { %>
         <tr>
             <th><%= item.nom %></th>
-            <td><%= item.descripcio %></td>
+            <td>
+              <span class="truncate">
+                <%= item.descripcio %>
+              </span>
+            </td>
             <td><%= localizeBoolean(item.inventariable) %></td>
             <td><%= item.tipus %></td>
             <td><%= item.responsable?.username || " - " %></td>
