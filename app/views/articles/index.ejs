@@ -1,11 +1,9 @@
 <% layout('layouts/boilerplate')%>
 
-<%- include('../partials/title.ejs', { title: 'Reports' }) %>
+<%- include('../partials/title.ejs', { title: 'Article del Centre' }) %>
 
-<div class="d-flex justify-content-end">
-  <h2 style="cursor: pointer">
-    <i class="bi bi-printer-fill" x-data @click="printTable()"></i>
-  </h2>
+<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+  <a class="btn btn-primary mb-3" href="/articles/new">Afegeix Article</a>
 </div>
 
 <table id="articles-table" class="table table-striped align-middle">
@@ -13,11 +11,11 @@
     <tr>
       <th scope="col">Num. Serie</th>
       <th scope="col">Nom</th>
-      <th scope="col">Proveidor</th>
       <th scope="col">Preu</th>
       <th scope="col">Unitat</th>
       <th scope="col">Departament</th>
       <th scope="col" data-type="date">Ultima modificacio</th>
+      <th scope="col" data-sortable="false"></th>
     </tr>
   </thead>
   <tbody>
@@ -25,25 +23,21 @@
       <tr>
         <td><%= article.numSerie || "n/a" %></td>
         <td><%= article.article %></td>
-        <td><%= article.proveidor %></td>
-        <td><%= article.preu %></td>
+        <td><%= article.preu %> €</td>
         <td><%= article.unitat %></td>
         <td><%= article.department || " - " %></td>
         <td><%= new Date(article.updatedAt).toLocaleString('es-es', { dateStyle: 'short', timeStyle: 'short' }) %></td>
+        <td>
+          <a href="/articles/<%= article._id %>" class="btn dark w-100">Veure</a>
+        </td>
       </tr>
     <% } %>
   </tbody>
 </table>
 
-<div class="d-flex justify-content-center">
-  <a href="/reports">Torna</a>
-</div>
-
 <script>
   const dataTable = new simpleDatatables.DataTable("#articles-table", {
-    searchable: false,
-    paging: false,
-    sortable: false,
+    searchable: true,
     fixedHeight: true,
     labels: {
       placeholder: "Busca...",
@@ -54,8 +48,6 @@
       noResults: "No s'han trobat articles",
     }
   })
-
-  function printTable () {
-    dataTable.print()
-  }
 </script>
+
+

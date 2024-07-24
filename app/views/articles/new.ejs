@@ -1,16 +1,16 @@
 <% layout('layouts/boilerplate')%>
 
-<h3 id="titol">Afegeix Inventaris</h3>
+<h3 id="titol">Afegeix Articles</h3>
 <p></p>
 <p></p>
-<%- include('../partials/inventariForm.ejs', { inventaris: [] }) %>
+<%- include('../partials/articleForm.ejs', { articles: [] }) %>
 
 <script>
-  const inventarisTable = document.querySelector("#inventaris");
+  const articlesTable = document.querySelector("#articles");
   const addRowTable = document.querySelector("#add-row-table");
   const addRowBtn = document.querySelector("#add-row-btn");
   const addRowForm = document.querySelector("#add-row-form");
-  const sendInventarisBtn = document.querySelector("#send-inventaris");
+  const sendArticlesBtn = document.querySelector("#send-articles");
 
   const itemInputEl = addRowTable.querySelector('#item')
   const departmentInputEl = addRowTable.querySelector('#department')
@@ -21,7 +21,7 @@
     inputEl.addEventListener('change', () => hideError(inputEl))
   })
 
-  // Add row to inventaris
+  // Add row to articles
   addRowForm.addEventListener("submit", async (e) => {
     e.preventDefault()
     // check autocompletes input
@@ -39,7 +39,7 @@
       };
     });
     const newRowHTML = `
-      <tr class="inventari">
+      <tr class="article">
         ${inputValues.reduce((acc, curr) =>
             (acc += `
               <td
@@ -54,14 +54,14 @@
             ""
         )}
         <td>
-          <button type="button" class="btn btn-danger delete-row-inventari">X</button>
+          <button type="button" class="btn btn-danger delete-row-article">X</button>
         </td>
       </tr>
     `;
-    inventarisTable.rows[0].insertAdjacentHTML("afterend", newRowHTML);
+    articlesTable.rows[0].insertAdjacentHTML("afterend", newRowHTML);
 
-    // display inventaris inventaris table
-    inventarisTable.style.display = "table";
+    // display articles articles table
+    articlesTable.style.display = "table";
 
     // Keep all input values but numSerie
     Array.prototype.map.call(addRowInputs, (inputEl) => {
@@ -71,37 +71,37 @@
     })
   });
 
-  inventarisTable.addEventListener("click", (e) => {
+  articlesTable.addEventListener("click", (e) => {
     const { target } = e;
-    const isDeleteRowEl = target.classList.contains('delete-row-inventari')
+    const isDeleteRowEl = target.classList.contains('delete-row-article')
     if (!isDeleteRowEl) return
-    const inventariRow = target.closest("tr.inventari");
-    if (!inventariRow) return;
-    inventariRow.remove();
+    const articleRow = target.closest("tr.article");
+    if (!articleRow) return;
+    articleRow.remove();
   });
 
-  sendInventarisBtn.addEventListener("click", (e) => {
-    const confirmation = confirm("Estas segur que vols afegir els inventaris?")
+  sendArticlesBtn.addEventListener("click", (e) => {
+    const confirmation = confirm("Estas segur que vols afegir els articles?")
     if (!confirmation) return
 
-    const inventarisData = getInventarisData();
+    const articlesData = getArticlesData();
 
-    fetch("/inventaris", {
+    fetch("/articles", {
       method: "POST",
       mode: "cors",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ inventaris: [...inventarisData] }),
+      body: JSON.stringify({ articles: [...articlesData] }),
     })
-      .then(() => (window.location.href = "/inventaris"))
+      .then(() => (window.location.href = "/articles"))
       .catch((e) => console.error(e));
   });
 
-  function getInventarisData() {
-    const rowEls = inventarisTable.querySelectorAll("tr.inventari");inventaris
+  function getArticlesData() {
+    const rowEls = articlesTable.querySelectorAll("tr.article");articles
     return Array.prototype.map.call(rowEls, (rowEl) => {
-      const rowInventarisValues = Array.prototype.reduce.call(
+      const rowArticlesValues = Array.prototype.reduce.call(
         rowEl.cells,
         (acc, cellEl) => {
           return {
@@ -111,7 +111,7 @@
         },
         {}
       );
-      return rowInventarisValues;
+      return rowArticlesValues;
     });
   }
   function showError (inputEl) {

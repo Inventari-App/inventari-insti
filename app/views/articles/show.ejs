@@ -1,0 +1,17 @@
+<% layout('layouts/boilerplate')%>
+
+<%- include('../partials/detail', {
+    type: 'article',
+    item: article,
+    features:
+    {
+        departament: article.department,
+        unitat: article.unitat,
+        'preu de cost': article.preu + ' €',
+        iva: article.iva + ' %',
+        'num serie': article.numSerie,
+        'descripcio': article.description,
+    },
+    backCopy: 'Tots els articles',
+}) %>
+

@@ -1,6 +1,6 @@
 const Departament = require("../models/department")
 const Unitat = require("../models/unitat")
-const Inventari = require("../models/inventari");
+const Article = require("../models/article");
 const Item = require("../models/item");
 const { sortByKey } = require("../utils/helpers");
 
@@ -29,8 +29,8 @@ module.exports.show = async (req, res, next) => {
       const filterRegex = new RegExp(filterVal, 'i')
       filters[filter] = filterRegex
     })
-    const inventaris = await Inventari.find({ ...filters }).exec()
-    res.render("reports/show", { inventaris });
+    const articles = await Article.find({ ...filters }).exec()
+    res.render("reports/show", { articles });
   } catch (err) {
     next(err);
   }

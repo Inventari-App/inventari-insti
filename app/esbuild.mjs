@@ -1,9 +1,9 @@
 import * as esbuild from 'esbuild'
 
 // await esbuild.build({
-//   entryPoints: ['./views/inventaris/autocompletes.js'],
+//   entryPoints: ['./views/articles/autocompletes.js'],
 //   bundle: true,
-//   outfile: 'inventari-autocompletes.js',
+//   outfile: 'article-autocompletes.js',
 // })
 await esbuild.build({
   entryPoints: ['./bundles/*.js'],

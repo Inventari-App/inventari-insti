@@ -1,7 +1,7 @@
 const express = require("express")
 const ExpressError = require("../utils/ExpressError");
 const userRoutes = require("./users");
-const inventariRoutes = require("./inventaris");
+const articleRoutes = require("./articles");
 const invoiceRoutes = require("./invoices");
 const itemRoutes = require("./items");
 const unitatRoutes = require("./unitats");
@@ -19,7 +19,7 @@ function appRouter () {
   const router = express.Router();
   router.use("/", userRoutes);
   router.use("/reports", requireLogin, reportRoutes);
-  router.use("/inventaris", requireLogin, inventariRoutes);
+  router.use("/articles", requireLogin, articleRoutes);
   router.use("/invoices", requireLogin, invoiceRoutes);
   router.use("/items", requireLogin, itemRoutes);
   router.use("/unitats", requireLogin, unitatRoutes);
