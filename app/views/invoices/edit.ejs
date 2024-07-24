@@ -105,7 +105,6 @@
     const invoiceData = getInvoiceData();
     const total = calculateTotals()
 
-    console.log(invoiceData);
     fetch("/invoices/<%= invoice.id %>", {
       method: "PUT",
       mode: "cors",

@@ -1,7 +1,6 @@
 
 const utilitat = require('../models/utilitat');
 module.exports.index = async (req, res) => {
-
     const utilitats = await utilitat.find({});
     res.render('utilitats/index', { utilitats })
 }
@@ -11,9 +10,7 @@ module.exports.renderNewForm = (req, res) => {
 }
 
 module.exports.createutilitat = async (req, res, next) => {
-    //console.log(req.body)
     let utilitatBody = req.body.utilitat
-    //const albaraArr = JSON.parse(utilitatBody.albara)
     utilitatBody = { ...utilitatBody }
     const utilitat = new utilitat(utilitatBody);
     utilitat.responsable = req.user._id;
@@ -22,9 +19,9 @@ module.exports.createutilitat = async (req, res, next) => {
     res.redirect(`/utilitats/${utilitat._id}`);
 }
 
-module.exports.showutilitat =  async (req, res, next) => {
+module.exports.showutilitat = async (req, res, next) => {
     const utilitat = await utilitat.findById(req.params.id).populate('responsable');
-    
+
     if (!utilitat) {
         req.flash('error', "No es pot trobar l'utilitat!");
         return res.redirect('/utilitats');
