@@ -100,9 +100,11 @@ module.exports.renderEditForm = async (req, res, next) => {
 module.exports.updateInventari = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const inventari = await Inventari.findByIdAndUpdate(id, {
-      ...req.body,
-    });
+    const inventari = await Inventari.findOneAndUpdate(
+      { id },
+      { ...req.body.inventari, },
+      { new: true }
+    );
     req.flash("success", "Inventari actualitzat correctament!");
     res.redirect(`/inventaris/${inventari._id}`);
   } catch (err) {
