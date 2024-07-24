@@ -2,7 +2,7 @@
 
 <div class="row">
   <div class="col-6 offset-3">
-    <%- include('../partials/title.ejs', { title: 'Editar User' }) %>
+    <%- include('../partials/title.ejs', { title: 'Editar Usuari' }) %>
 
     <form
       action="/users/<%=user._id%>?_method=PUT"
@@ -35,7 +35,7 @@
         />
       </div>
       <div class="mb-3">
-        <label for="password">New Password</label>
+        <label for="password">Contrasenya Nova</label>
         <input
           class="form-control"
           type="password"
@@ -46,7 +46,7 @@
         />
       </div>
       <div class="mb-3">
-        <label for="old-password">Old Password</label>
+        <label for="old-password">Contrasenya Actual</label>
         <input
           class="form-control"
           type="password"
@@ -99,7 +99,7 @@
         <button class="btn btn-primary" type="submit">Actualitzar User</button>
       </div>
     </form>
-    <a href="/users/<%= user._id%>">Tornar a l'User</a>
+    <a href="/users/<%= user._id%>">Tornar a l'Usuari</a>
   </div>
 </div>
 
