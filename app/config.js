@@ -1,52 +1,52 @@
-const express = require("express");
-const path = require("path");
-const bodyParser = require("body-parser");
-const methodOverride = require("method-override");
-const session = require("express-session");
-const mongoSanitize = require("express-mongo-sanitize");
-const { isProduction } = require("./utils/helpers")
-const ejsMate = require("ejs-mate");
-const configHelmet = require("./helmet");
-const configurePassport = require("./passport");
-const enforceHttps = require("./utils/enforceHttps");
-const configureFlash = require("./flash");
-const appRouter = require("./routers/appRouter");
-const contextService = require("request-context")
-const cors = require("cors");
-const Department = require("./models/department");
+const express = require('express')
+const path = require('path')
+const bodyParser = require('body-parser')
+const methodOverride = require('method-override')
+const session = require('express-session')
+const mongoSanitize = require('express-mongo-sanitize')
+const { isProduction } = require('./utils/helpers')
+const ejsMate = require('ejs-mate')
+const configHelmet = require('./helmet')
+const configurePassport = require('./passport')
+const enforceHttps = require('./utils/enforceHttps')
+const configureFlash = require('./flash')
+const appRouter = require('./routers/appRouter')
+const contextService = require('request-context')
+const cors = require('cors')
+const Department = require('./models/department')
 
 if (!isProduction) {
-  require("dotenv").config();
+  require('dotenv').config()
 }
 
-function configureApp(sessionConfig) {
-  const app = express();
+function configureApp (sessionConfig) {
+  const app = express()
 
   // Allow CORS
   const corsOptions = {
-    origin: ["http://localhost:3001", "https://controlamaterial.com"],
-    methods: "GET,POST",
-    credentials: true,
+    origin: ['http://localhost:3001', 'https://controlamaterial.com'],
+    methods: 'GET,POST',
+    credentials: true
   }
   app.use(cors(corsOptions))
 
   // App configuration
-  app.engine("ejs", ejsMate);
-  app.set("view engine", "ejs");
-  app.set("views", path.join(__dirname, "views"));
+  app.engine('ejs', ejsMate)
+  app.set('view engine', 'ejs')
+  app.set('views', path.join(__dirname, 'views'))
 
-  app.use(bodyParser.json());
-  app.use(express.urlencoded({ extended: true }));
-  app.use(methodOverride("_method"));
-  app.use(express.static(path.join(__dirname, "public")));
+  app.use(bodyParser.json())
+  app.use(express.urlencoded({ extended: true }))
+  app.use(methodOverride('_method'))
+  app.use(express.static(path.join(__dirname, 'public')))
   app.use(
     mongoSanitize({
-      replaceWith: " ",
+      replaceWith: ' '
     })
-  );
-  app.use(session(sessionConfig));
-  app.use("/utils", express.static(path.join(__dirname, "utils")));
-  app.use("/public", express.static(path.join(__dirname, "public")));
+  )
+  app.use(session(sessionConfig))
+  app.use('/utils', express.static(path.join(__dirname, 'utils')))
+  app.use('/public', express.static(path.join(__dirname, 'public')))
 
   enforceHttps(app)
   configHelmet(app)
@@ -79,7 +79,7 @@ function configureApp(sessionConfig) {
 
   // Error handling
 
-  return app;
+  return app
 }
 
-module.exports = configureApp;
+module.exports = configureApp

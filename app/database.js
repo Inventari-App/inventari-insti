@@ -1,44 +1,50 @@
-const session = require("express-session");
-const MongoDBStore = require("connect-mongo")(session);
-const mongoose = require("mongoose");
-const { isProduction } = require("./utils/helpers");
-const dbUrl = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.lvga5.mongodb.net/inventari-insti?retryWrites=true&w=majority`
-const secret = process.env.SECRET
-const db = mongoose.connection;
-const store = new MongoDBStore({
-  url: dbUrl,
-  secret,
-  touchAfter: 24 * 60 * 60,
-});
+const session = require('express-session')
+const mongoose = require('mongoose')
+const MongoDBStore = require('connect-mongo')(session)
+const { isProduction } = require('./utils/helpers')
 
-mongoose.connect(dbUrl, {
-  useNewUrlParser: true,
-  //useCreateIndex: true,
-  useUnifiedTopology: true,
-  //useFindAndModify: false
-});
+class Database {
+  constructor () {
+    this.secret = process.env.SECRET
+    this.dbUrl = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.lvga5.mongodb.net/inventari-insti?retryWrites=true&w=majority`
+    this.store = new MongoDBStore({
+      url: this.dbUrl,
+      secret: this.secret,
+      touchAfter: 24 * 60 * 60
+    })
+  }
 
-db.on("error", console.error.bind(console, "connection error:"));
-db.once("open", () => {
-  console.log("Database connected");
-});
+  connect () {
+    mongoose.connect(this.dbUrl, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    })
+  }
 
-store.on("error", function (e) {
-  console.log("ERROR GUARDANT SESSIÓ", e);
-});
+  setupDatabase (connection = mongoose.connection) {
+    connection.on('error', console.error.bind(console, 'connection error:'))
+    connection.once('open', () => {
+      console.log('Database connected')
+    })
 
-const sessionConfig = {
-  store,
-  name: "session",
-  secret,
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-    httpOnly: true,
-    expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
-    maxAge: 1000 * 60 * 60 * 24 * 7,
-    secure: isProduction,
-  },
-};
+    this.store.on('error', function (e) {
+      console.log('ERROR GUARDANT SESSIÓ', e)
+    })
 
-module.exports = sessionConfig
+    return {
+      store: this.store,
+      name: 'session',
+      secret: this.secret,
+      resave: false,
+      saveUninitialized: true,
+      cookie: {
+        httpOnly: true,
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+        maxAge: 1000 * 60 * 60 * 24 * 7,
+        secure: isProduction
+      }
+    }
+  }
+}
+
+module.exports = new Database()
