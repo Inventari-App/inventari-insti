@@ -87,7 +87,7 @@ async function createUser(req, res, next) {
     });
     req.flash(
       "info",
-      "Avisa a l'usuari, hem enviat un correu amb un link de verificacio que necessiten clicar per activar l'usuari.",
+      "Avisa el nou usuari, se li ha enviat un correu amb un link de verificacio que ha de clicar per validar el seu compte",
     );
     res.redirect("/users");
   } catch (e) {
