@@ -6,7 +6,7 @@ const { useNodemailer } = require('../nodemailer/sendEmail')
 const { getProtocol } = require('../utils/helpers')
 const protocol = getProtocol()
 
-async function createCenter(req, res, next) {
+async function createCenter (req, res, next) {
   try {
     const { center: centerName, name, surname, email, password, token } = req.body
     const center = await new Center({ name: centerName }).save()
@@ -54,7 +54,7 @@ async function createCenter(req, res, next) {
   }
 }
 
-async function createUser(req, res, next) {
+async function createUser (req, res, next) {
   try {
     const { email, password, centerId } = req.body
     const user = new User({
@@ -80,13 +80,17 @@ async function createUser(req, res, next) {
       model: 'user',
       reason: 'verify'
     })
-    await sendEmail({
-      subject: message.subject,
-      text: message.text.replace(
-        /{{url}}/,
-        `${protocol}://${req.headers.host}/verify?userId=${user.id}&token=${user.verificationHash}`
-      )
-    })
+
+    if (process.env.NODE_ENV !== 'test') {
+      await sendEmail({
+        subject: message.subject,
+        text: message.text.replace(
+          /{{url}}/,
+          `${protocol}://${req.headers.host}/verify?userId=${user.id}&token=${user.verificationHash}`
+        )
+      })
+    }
+
     req.flash(
       'info',
       "Avisa a l'usuari, hem enviat un correu amb un link de verificacio que necessiten clicar per activar l'usuari."
@@ -99,7 +103,7 @@ async function createUser(req, res, next) {
   }
 }
 
-async function sendPasswordReset(req, res, next) {
+async function sendPasswordReset (req, res, next) {
   const { username: email } = req.body
   // Validate the email and find the user in the database
   const user = await User.findOne({ email })
@@ -135,7 +139,7 @@ async function sendPasswordReset(req, res, next) {
   res.redirect('/reset-sent')
 }
 
-async function getAllUsers(req, res, next) {
+async function getAllUsers (req, res, next) {
   try {
     const users = await User.find({})
     return users
@@ -144,7 +148,7 @@ async function getAllUsers(req, res, next) {
   }
 }
 
-async function getUser(req, res, next) {
+async function getUser (req, res, next) {
   try {
     const user = await User.findById(req.params.id).populate('department')
     const center = await Center.findById(user.center).populate('users')
@@ -154,7 +158,7 @@ async function getUser(req, res, next) {
   }
 }
 
-async function updateUser(req, res, next) {
+async function updateUser (req, res, next) {
   try {
     const { id } = req.params
     const { isAdmin } = req.body.user
@@ -168,7 +172,7 @@ async function updateUser(req, res, next) {
   }
 }
 
-async function deleteUser(req, res, next) {
+async function deleteUser (req, res, next) {
   try {
     const { id } = req.params
     await User.findByIdAndDelete(id)
@@ -182,7 +186,7 @@ async function deleteUser(req, res, next) {
   }
 }
 
-async function verifyUser(req, res, next) {
+async function verifyUser (req, res, next) {
   try {
     const { token, userId } = req.query
     const user = await User.findById(userId)

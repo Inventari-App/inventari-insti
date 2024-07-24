@@ -1,33 +1,20 @@
-const { initMongoDb, closeMongoDb } = require('./setupTests')
-const appRouter = require('../routers/appRouter')
 const request = require('supertest')
-const db = require('../database')
-const configureApp = require('../config')
-const { handleRouteError, handleError } = require('../middleware')
 const Centre = require('../models/center')
 const User = require('../models/user')
+const { globalSetup, globalTeardown } = require('./globalSetup')
 
 describe('Users', () => {
   let container
-  let connection
   let app
 
   beforeAll(async () => {
-    process.env.NODE_ENV = 'test'
-    const setup = await initMongoDb({ container, connection })
+    const setup = await globalSetup()
+    app = setup.app
     container = setup.container
-    connection = setup.connection
-
-    const sessionConfig = db.setupDatabase(connection)
-    app = configureApp(sessionConfig)
-
-    app.use(appRouter())
-    app.use(handleRouteError)
-    app.use(handleError)
   })
 
   afterAll(async () => {
-    await closeMongoDb(container)
+    await globalTeardown(container)
   })
 
   test('should create a center and an Admin user', async () => {
@@ -50,5 +37,24 @@ describe('Users', () => {
     expect(user).not.toBeNull()
     expect(user.name).toBe('John')
     expect(user.isAdmin).toBe(true)
+  })
+
+  test('should create a non admin User', async () => {
+    const center = await Centre.findOne({ name: 'Center 1' })
+    await request(app)
+      .post('/register')
+      .send({
+        centerId: center.id,
+        email: 'normal@user.com',
+        username: 'normal@user.com',
+        name: 'John',
+        surname: 'Doe',
+        password: 'password'
+      })
+
+    const user = await User.findOne({ email: 'normal@user.com' })
+    expect(user).not.toBeNull()
+    expect(user.name).toBe('John')
+    expect(user.isAdmin).toBe(false)
   })
 })
