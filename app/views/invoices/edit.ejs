@@ -1,9 +1,12 @@
 <% layout('layouts/boilerplate')%>
 
-<h3 id="titol">Edit Comanda</h3>
+<h3 id="titol">Editar Comanda</h3>
 <p></p>
 <p></p>
 <%- include('../partials/invoiceForm.ejs', { invoiceItems: invoice.invoiceItems }) %>
+<div class="card-footer text-muted">
+  <a href="/invoices">Totes les comandes</a>
+</div>
 
 <script>
   const invoiceItemsTable = document.querySelector("#invoice-items");
