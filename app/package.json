@@ -5,8 +5,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "concurrently \"npm run build\" \"npm run start-server\"",
-    "start-server": "NODE_ENV=prod node app.js",
-    "dev-server": "NODE_ENV=dev nodemon --inspect=0.0.0.0:9229 app.js",
+    "start-server": "cross-env NODE_ENV=prod node app.js",
+    "dev-server": "cross-env NODE_ENV=dev nodemon --inspect=0.0.0.0:9229 app.js",
     "dev": "concurrently \"npm run build-watch\" \"npm run dev-server\"",
     "build": "esbuild ./bundles/*.js --bundle --outdir=./public/bundles",
     "build-watch": "esbuild ./bundles/*.js --bundle --watch --outdir=./public/bundles"
@@ -64,6 +64,7 @@
   "description": "",
   "devDependencies": {
     "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
     "esbuild": "^0.19.8"
   }
 }
