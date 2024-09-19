@@ -95,7 +95,7 @@
                             <div class="camps value" name="department" data-value="<%= invoice.responsable.department.nom %>" hidden></div>
                         </td>
                         <td width="10%">
-                            <div class="camps value" name="inventariable" data-value="<%= item.inventariable %>"><%= item.inventariable %></div>
+                            <div class="camps value" name="inventariable" data-value="<%= item.inventariable %>"><%= item.inventariable ? "Si" : "No" %></div>
                         </td>
                         <td width="10%">
                             <div class="camps value" name="tipus" data-value="<%= item.tipus %>"><%= item.tipus %></div>
@@ -185,10 +185,10 @@
 
     if (!articles.length) return
 
-    const articleableArticles = articles
-      .filter(article => article.articleable == "true") // filter only articleables
+    const inventariableArticles = articles
+      .filter(article => article.inventariable == "true") // filter only articleables
 
-    createArticles(articleableArticles)
+    createArticles(inventariableArticles )
       .then(updateRebuts)
       .then(() => {
         window.location.href = '/invoices'
