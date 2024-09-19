@@ -25,4 +25,7 @@ AreaSchema.plugin(contextPlugin, {
 
 AreaSchema.plugin(addCenterFilter)
 
+// Allow same plantas noms only across multiple centers
+AreaSchema.index({ nom: 1, center: 1 }, { unique: true })
+
 module.exports = mongoose.model("Area", AreaSchema);

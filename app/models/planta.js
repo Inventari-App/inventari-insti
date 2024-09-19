@@ -25,4 +25,7 @@ PlantaSchema.plugin(contextPlugin, {
 
 PlantaSchema.plugin(addCenterFilter)
 
+// Allow same plantas noms only across multiple centers
+PlantaSchema.index({ nom: 1, center: 1 }, { unique: true })
+
 module.exports = mongoose.model("Planta", PlantaSchema);

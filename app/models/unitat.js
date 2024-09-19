@@ -31,7 +31,7 @@ UnitatSchema.plugin(contextPlugin, {
 
 UnitatSchema.plugin(addCenterFilter)
 
-// Allow same unitats in multiple centers
+// Allow same unitat noms only across multiple centers
 UnitatSchema.index({ nom: 1, center: 1 }, { unique: true })
 
 module.exports = mongoose.model("Unitat", UnitatSchema);
