@@ -1,6 +1,6 @@
 const { capitalize } = require("../utils/helpers");
 
-module.exports.renderNewForm = path => 
+module.exports.renderNewForm = path =>
   (req, res, next) => {
     try {
       const { tab } = req.query;
@@ -26,6 +26,11 @@ module.exports.createItem = (Model, modelName, errorHandler) =>
         res.redirect(`/${modelName}s/${model._id}`);
       }
     } catch (err) {
+      if (err.code == 11000) {
+        req.flash("error", `Un/a ${modelName} amb el mateix nom ja existeix.`)
+        return res.redirect(`/${modelName}s/new${req.query.tab ? "?tab=true" : ""}`)
+      }
+
       if (errorHandler) {
         errorHandler(req, res, err)
       } else {

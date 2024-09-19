@@ -13,15 +13,7 @@ module.exports.index = async (req, res, next) => {
 
 module.exports.renderNewForm = renderNewForm("unitats/new")
 
-module.exports.createUnitat = createItem(Unitat, 'unitat',
-  (req, res, err) => {
-    if (err.code == 11000) {
-      req.flash("error", "Una unitat amb el mateix nom ja existeix.")
-      return res.redirect(`/unitats/new${req.query.tab ? "?tab=true" : ""}`)
-    }
-    next(err);
-  }
-)
+module.exports.createUnitat = createItem(Unitat, 'unitat')
 
 module.exports.showUnitat = async (req, res, next) => {
   try {
