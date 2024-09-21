@@ -1,0 +1,16 @@
+FROM alpine:latest
+
+# Install MongoDB tools
+RUN apk add --no-cache mongodb-tools bash curl aws-cli
+
+# Set working directory
+WORKDIR /backups
+
+# Copy the existing scripts into the container
+COPY ./backups /backups
+
+# Make sure the script is executable
+RUN chmod +x /backups/create_mongo_dump.sh
+
+# Start cron in foreground with logging
+CMD sh -c "echo '* * * * * sh /backups/create_mongo_dump.sh >> /backups/logs/backup.log 2>&1' > /etc/crontabs/root && crond -f -l 8"

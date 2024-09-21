@@ -26,18 +26,32 @@ services:
       - my_network
     restart: always
 
-  cron:
-    image: alpine
+  # cron_delete_rubbish:
+  #   image: alpine
+  #   volumes:
+  #     - ./app/scripts:/scripts
+  #   networks:
+  #     - my_network
+  #   working_dir: /scripts
+  #   command: "crond -f -d 8"
+  #
+  #   # Define the cron job to run the script every Sunday at midnight (0 0 * * 0)
+  #   environment:
+  #     - 'CRON_SCHEDULE=0 0 * * 0'
+  #     - 'CRON_COMMAND=node /scripts/deleteRubbish.js'
+  #   restart: always
+
+
+  cron_backup:
+    build:
+      context: ./app
+      dockerfile: Dockerfile-cron
     volumes:
-      - ./app/scripts:/scripts
+      - ./app/backups:/backups
+    env_file:
+      - ./app/.env
     networks:
       - my_network
-    working_dir: /scripts
-    command: "crond -f -d 8"
-
-    # Define the cron job to run the script every Sunday at midnight (0 0 * * 0)
-    environment:
-      - 'CRON_SCHEDULE=0 0 * * 0'
-      - 'CRON_COMMAND=node /scripts/deleteRubbish.js'
+    working_dir: /backups
     restart: always
 
