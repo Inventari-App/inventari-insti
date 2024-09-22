@@ -15,6 +15,8 @@ RUN chmod +x /backups/create_mongo_dump.sh
 # Ensure no existing cron jobs are running
 RUN pkill cron || true
 
-# Start cron in foreground with logging
+# Add the cron job
 RUN (crontab -l ; echo "0 0 * * * /scripts/create_mongo_dump.sh >> /backups/logs/backup.log 2>&1") | crontab -
-
+#
+# Start cron in the foreground (so the container stays running)
+CMD ["crond", "-f"]
