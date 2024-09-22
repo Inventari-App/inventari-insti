@@ -12,5 +12,9 @@ COPY ./backups /backups
 # Make sure the script is executable
 RUN chmod +x /backups/create_mongo_dump.sh
 
+# Ensure no existing cron jobs are running
+RUN pkill cron || true
+
 # Start cron in foreground with logging
-CMD sh -c "echo '* * * * * sh /backups/create_mongo_dump.sh >> /backups/logs/backup.log 2>&1' > /etc/crontabs/root && crond -f -l 8"
+RUN (crontab -l ; echo "0 0 * * * /scripts/create_mongo_dump.sh >> /backups/logs/backup.log 2>&1") | crontab -
+

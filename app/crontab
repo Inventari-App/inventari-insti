@@ -1,3 +1,0 @@
-# Run the backup script every minute
-0 0 * * * root /scripts/create_mongo_dump.sh >> /logs/backup.log 2>&1
-
