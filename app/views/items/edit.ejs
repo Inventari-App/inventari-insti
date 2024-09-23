@@ -12,7 +12,7 @@
 
       <div class="mb-3">
         <label class="form-label" for="inventariable">Inventariable</label>
-        <select class="form-select" name="item[inventariable]" id="inventariable">
+        <select class="form-select" name="inventariable" id="inventariable">
           <option value="true" <%= item.inventariable ? 'selected' : '' %>>
             Inventariable
           </option>
@@ -29,7 +29,7 @@
           class="form-control"
           type="text"
           id="nom"
-          name="item[nom]"
+          name="nom"
           value="<%=item.nom %>"
           required
         />
@@ -39,7 +39,7 @@
       <select
         class="form-select mb-3"
         aria-label="tipus"
-        name="item[tipus]"
+        name="tipus"
         required
       >
         <option selected>Escull un tipus d'article</option>
@@ -57,7 +57,7 @@
           class="form-control"
           type="text"
           id="descripcio"
-          name="item[descripcio]"
+          name="descripcio"
         >
 <%= item.descripcio%></textarea
         >

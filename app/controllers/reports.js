@@ -10,7 +10,7 @@ module.exports.index = async (req, res, next) => {
     const unitats = await Unitat.find()
     const items = await Item.find()
     res.render("reports/index", {
-      departaments: sortByKey(departaments, 'nom'),
+      departments: sortByKey(departaments, 'nom'),
       unitats: sortByKey(unitats, 'nom'),
       items: sortByKey(items, 'nom'),
     });
@@ -22,10 +22,11 @@ module.exports.index = async (req, res, next) => {
 module.exports.show = async (req, res, next) => {
   try {
     const filters = {}
-    const filterKeys = ["departament", "article", "unitat"]
+    const filterKeys = ["department", "article", "unitat"]
     filterKeys.forEach(filter => {
-      const filterVal = req.query[filter]
+      let filterVal = req.query[filter]
       if (!filterVal) return
+      if (filterVal === 'all') filterVal = '.*'
       const filterRegex = new RegExp(filterVal, 'i')
       filters[filter] = filterRegex
     })
