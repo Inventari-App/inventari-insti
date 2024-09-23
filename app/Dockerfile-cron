@@ -19,7 +19,7 @@ RUN pkill cron || true
 RUN mkdir -p /backups/logs
 
 # Add the cron job
-RUN (crontab -l ; echo "* * * * * /backups/create_mongo_dump.sh >> /backups/logs/backup.log 2>&1") | crontab -
+RUN (crontab -l ; echo "0 0 * * * /backups/create_mongo_dump.sh >> /backups/logs/backup.log 2>&1") | crontab -
 #
 # Start cron in the foreground (so the container stays running)
 CMD ["crond", "-f", "-l", "2"]
