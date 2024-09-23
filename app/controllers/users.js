@@ -17,7 +17,7 @@ async function createCenter(req, res, next) {
       surname,
       center: center._id,
       isAdmin: true,
-      verificationTs: getExpirationTs(),
+      verificationTs: getExpirationTs(24 * 60 * 60 * 1000), // 1day in ms
       verificationHash: generateHash({ length: 8 }),
     });
 
@@ -42,7 +42,7 @@ async function createCenter(req, res, next) {
 
     req.flash(
       "info",
-      "Tens 10 minuts per activar el teu usuari fent click al link que t'hem enviat per correu.",
+      "Tens 24 hores per activar el teu usuari fent click al link que t'hem enviat per correu.",
     );
     res.redirect("/login");
   } catch (e) {
