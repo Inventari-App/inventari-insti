@@ -1,8 +1,8 @@
-const Unitat = require("../models/unitat");
-const { sortByKey } = require("../utils/helpers");
-const { renderNewForm, createItem } = require("./helpers");
+import Unitat from "../models/unitat";
+import { sortByKey } from "../utils/helpers";
+import { renderNewForm, createItem } from "./helpers";
 
-module.exports.index = async (req, res, next) => {
+export const index = async (req, res, next) => {
   try {
     const unitats = await Unitat.find({});
     res.render("unitats/index", { unitats: sortByKey(unitats, "nom") });
@@ -11,11 +11,11 @@ module.exports.index = async (req, res, next) => {
   }
 };
 
-module.exports.renderNewForm = renderNewForm("unitats/new")
+export const renderNewForm = renderNewForm("unitats/new");
 
-module.exports.createUnitat = createItem(Unitat, 'unitat')
+export const createUnitat = createItem(Unitat, 'unitat');
 
-module.exports.showUnitat = async (req, res, next) => {
+export const showUnitat = async (req, res, next) => {
   try {
     const { user } = req;
     const unitat = await Unitat.findById(req.params.id).populate("responsable");
@@ -35,7 +35,7 @@ module.exports.showUnitat = async (req, res, next) => {
   }
 };
 
-module.exports.getUnitats = async (req, res, next) => {
+export const getUnitats = async (req, res, next) => {
   try {
     const unitats = await Unitat.find();
 
@@ -49,7 +49,7 @@ module.exports.getUnitats = async (req, res, next) => {
   }
 };
 
-module.exports.renderEditForm = async (req, res, next) => {
+export const renderEditForm = async (req, res, next) => {
   try {
     const unitat = await Unitat.findById(req.params.id);
     if (!unitat) {
@@ -62,7 +62,7 @@ module.exports.renderEditForm = async (req, res, next) => {
   }
 };
 
-module.exports.updateUnitat = async (req, res, next) => {
+export const updateUnitat = async (req, res, next) => {
   try {
     const { id } = req.params;
 
@@ -74,7 +74,7 @@ module.exports.updateUnitat = async (req, res, next) => {
   }
 };
 
-module.exports.deleteUnitat = async (req, res, next) => {
+export const deleteUnitat = async (req, res, next) => {
   try {
     const { id } = req.params;
     await Unitat.findByIdAndDelete(id);
@@ -84,3 +84,4 @@ module.exports.deleteUnitat = async (req, res, next) => {
     next(err);
   }
 };
+

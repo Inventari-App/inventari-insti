@@ -1,8 +1,8 @@
-const Area = require("../models/area");
-const { sortByKey } = require("../utils/helpers");
-const { renderNewForm, createItem } = require("./helpers");
+import Area from "../models/area";
+import { sortByKey } from "../utils/helpers";
+import { renderNewForm, createItem } from "./helpers";
 
-module.exports.index = async (req, res, next) => {
+export const index = async (req, res, next) => {
   try {
     const areas = await Area.find({});
     res.render("areas/index", { areas: sortByKey(areas, "nom") });
@@ -11,13 +11,13 @@ module.exports.index = async (req, res, next) => {
   }
 };
 
-module.exports.renderNewForm = renderNewForm("areas/new")
+export const renderNewForm = renderNewForm("areas/new");
 
-module.exports.createArea = createItem(Area, 'area')
+export const createArea = createItem(Area, 'area');
 
-module.exports.showArea = async (req, res, next) => {
+export const showArea = async (req, res, next) => {
   try {
-    const user = req.user
+    const user = req.user;
     const area = await Area.findById(req.params.id).populate("responsable");
 
     if (!area) {
@@ -30,7 +30,7 @@ module.exports.showArea = async (req, res, next) => {
   }
 };
 
-module.exports.getAreas = async (req, res, next) => {
+export const getAreas = async (req, res, next) => {
   try {
     const areas = await Area.find();
 
@@ -44,7 +44,7 @@ module.exports.getAreas = async (req, res, next) => {
   }
 };
 
-module.exports.renderEditForm = async (req, res, next) => {
+export const renderEditForm = async (req, res, next) => {
   try {
     const area = await Area.findById(req.params.id);
     if (!area) {
@@ -57,7 +57,7 @@ module.exports.renderEditForm = async (req, res, next) => {
   }
 };
 
-module.exports.updateArea = async (req, res, next) => {
+export const updateArea = async (req, res, next) => {
   try {
     const { id } = req.params;
     const area = await Area.findByIdAndUpdate(id, { ...req.body });
@@ -68,7 +68,7 @@ module.exports.updateArea = async (req, res, next) => {
   }
 };
 
-module.exports.deleteArea = async (req, res, next) => {
+export const deleteArea = async (req, res, next) => {
   try {
     const { id } = req.params;
     await Area.findByIdAndDelete(id);
@@ -78,3 +78,4 @@ module.exports.deleteArea = async (req, res, next) => {
     next(err);
   }
 };
+

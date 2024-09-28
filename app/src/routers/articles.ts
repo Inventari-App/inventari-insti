@@ -1,14 +1,15 @@
-const express = require("express");
-const router = express.Router();
-const catchAsync = require("../utils/catchAsync");
-const articles = require("../controllers/articles");
-const {
+import express from "express";
+import catchAsync from "../utils/catchAsync";
+import * as articles from "../controllers/articles";
+import {
   isLoggedIn,
   isResponsableOrAdmin,
   validateSchema,
-} = require("../middleware");
-const { articlesSchema, articleSchema } = require("../schemas");
-const article = require("../models/article");
+} from "../middleware";
+import { articlesSchema, articleSchema } from "../schemas";
+import article from "../models/article";
+
+const router = express.Router();
 
 const validateArticles = validateSchema(articlesSchema);
 const validateArticle = validateSchema(articleSchema);
@@ -46,4 +47,5 @@ router.get(
   catchAsync(articles.renderEditForm),
 );
 
-module.exports = router;
+export default router;
+

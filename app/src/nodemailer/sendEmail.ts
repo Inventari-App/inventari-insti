@@ -1,6 +1,6 @@
-const nodemailer = require("nodemailer");
+import nodemailer from "nodemailer";
+import { messages } from "./messages";
 require("dotenv").config();
-const { messages } = require("./messages");
 
 const transporter = nodemailer.createTransport({
   host: "smtp-es.securemail.pro",
@@ -40,4 +40,4 @@ const useNodemailer = ({ to, model, reason }) => {
   }
 };
 
-module.exports = { useNodemailer }
+export { useNodemailer }

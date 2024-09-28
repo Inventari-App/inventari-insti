@@ -1,14 +1,17 @@
-const User = require("../models/user");
-const Center = require("../models/center");
-const { generateHash } = require("random-hash");
-const { getExpirationTs } = require("../utils/helpers");
-const { useNodemailer } = require("../nodemailer/sendEmail");
-const { getProtocol } = require("../utils/helpers");
+import User from "../models/user";
+import Center from "../models/center";
+import { generateHash } from "random-hash";
+
+import { getExpirationTs } from "../utils/helpers";
+import { useNodemailer } from "../nodemailer/sendEmail";
+import { getProtocol } from "../utils/helpers";
+
 const protocol = getProtocol();
 
 async function createCenter(req, res, next) {
   try {
     const { center: centerName, name, surname, email, password, token } = req.body;
+
     const center = await new Center({ name: centerName }).save();
     const user = new User({
       email,
@@ -17,7 +20,7 @@ async function createCenter(req, res, next) {
       surname,
       center: center._id,
       isAdmin: true,
-      verificationTs: getExpirationTs(24 * 60 * 60 * 1000), // 1day in ms
+      verificationTs: getExpirationTs(24 * 60 * 60 * 1000), // 1 day in ms
       verificationHash: generateHash({ length: 8 }),
     });
 
@@ -29,6 +32,7 @@ async function createCenter(req, res, next) {
     const { sendEmail, message } = useNodemailer({
       to: user.email,
       model: "user",
+
       reason: "verify",
     });
 
@@ -44,11 +48,13 @@ async function createCenter(req, res, next) {
       "info",
       "Tens 24 hores per activar el teu usuari fent click al link que t'hem enviat per correu.",
     );
+
     res.redirect("/login");
   } catch (e) {
+
     req.flash("error", e.message);
     res.redirect("register");
-    next(e)
+    next(e);
   }
 }
 
@@ -60,11 +66,13 @@ async function createUser(req, res, next) {
       username: email,
       center: centerId,
       verificationTs: getExpirationTs(),
+
       verificationHash: generateHash({ length: 8 }),
-    })
+    });
 
     if (!user) {
-      throw new Error("Alguna cosa ha sortit malament al crear l'usuari")
+      throw new Error("Alguna cosa ha sortit malament al crear l'usuari");
+
     }
 
     const center = await Center.findById(centerId);
@@ -93,7 +101,7 @@ async function createUser(req, res, next) {
   } catch (e) {
     req.flash("error", e.message);
     res.redirect("/users");
-    next(e)
+    next(e);
   }
 }
 
@@ -115,17 +123,18 @@ async function sendPasswordReset(req, res, next) {
   await user.save();
 
   // Send an email to the user with the reset token
-  // You can use a library like Nodemailer to send emails
   const { sendEmail, message } = useNodemailer({
     to: user.email,
     model: "user",
     reason: "reset",
   });
 
+
   await sendEmail({
     subject: message.subject,
     text: message.text.replace(
       /{{url}}/,
+
       `${protocol}://${req.headers.host}/reset?userId=${user.id}&token=${resetPasswordHash}`,
     ),
   });
@@ -203,6 +212,7 @@ async function verifyUser(req, res, next) {
       res.redirect("/login");
     }
     const isTokenCorrect = token === verificationHash;
+
     const isTokenExpired = new Date().getTime() > verificationTs;
     if (!isTokenCorrect) {
       req.flash("error", "El token es invalid o ha expirat");
@@ -214,7 +224,7 @@ async function verifyUser(req, res, next) {
         model: "user",
         reason: "verify",
       });
-      const newExpirationTs = getExpirationTs(60 * 10 * 1000); // 10mins
+      const newExpirationTs = getExpirationTs(60 * 10 * 1000); // 10 mins
       const newHash = generateHash({ length: 8 });
       user.verificationTs = newExpirationTs;
       user.verificationHash = newHash;
@@ -240,7 +250,7 @@ async function verifyUser(req, res, next) {
   }
 }
 
-module.exports = {
+export {
   getAllUsers,
   getUser,
   updateUser,

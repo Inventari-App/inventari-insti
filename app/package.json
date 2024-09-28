@@ -1,16 +1,16 @@
 {
   "name": "inventari",
   "version": "1.0.0",
-  "exports": "app.js",
+  "exports": "./app.ts",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "concurrently \"npm run build\" \"npm run start-server\"",
-    "start-server": "cross-env NODE_ENV=prod node app.js",
-    "dev-server": "cross-env NODE_ENV=dev nodemon --inspect=0.0.0.0:9229 app.js",
+    "start-server": "cross-env NODE_ENV=prod ts-node ./src/app.ts",
+    "dev-server": "cross-env NODE_ENV=dev ts-node-esm ./src/app.ts",
     "dev": "concurrently \"npm run build-watch\" \"npm run dev-server\"",
-    "build": "esbuild ./bundles/*.js --bundle --outdir=./public/bundles",
-    "build-watch": "esbuild ./bundles/*.js --bundle --watch --outdir=./public/bundles"
+    "build": "esbuild ./src/bundles/*.ts --bundle --outdir=./src/public/bundles",
+    "build-watch": "esbuild ./src/bundles/*.ts --bundle --watch --outdir=./src/public/bundles"
   },
   "dependencies": {
     "@google-cloud/recaptcha-enterprise": "^5.1.0",
@@ -67,9 +67,11 @@
   "devDependencies": {
     "@types/express": "^5.0.0",
     "@types/node": "^22.7.4",
+    "@types/node-fetch": "^2.6.11",
     "concurrently": "^8.2.2",
     "cross-env": "^7.0.3",
     "esbuild": "^0.19.8",
+    "ts-node": "^10.9.2",
     "typescript": "^5.6.2"
   }
 }

@@ -1,9 +1,11 @@
-const express = require('express');
+import express from 'express';
+import catchAsync from '../utils/catchAsync';
+import * as centre from '../controllers/centre';
+
 const router = express.Router();
-const catchAsync = require('../utils/catchAsync');
-const centre = require('../controllers/centre');
 
 router.route('/')
-.get(catchAsync(centre.index))
+  .get(catchAsync(centre.index));
 
-module.exports = router;
+export default router;
+

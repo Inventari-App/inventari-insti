@@ -1,8 +1,8 @@
-const Zona = require("../models/zona");
-const { sortByKey } = require("../utils/helpers");
-const { renderNewForm, createItem } = require("./helpers");
+import Zona from "../models/zona";
+import { sortByKey } from "../utils/helpers";
+import { renderNewForm, createItem } from "./helpers";
 
-module.exports.index = async (req, res, next) => {
+export const index = async (req, res, next) => {
   try {
     const zonas = await Zona.find({});
     res.render("zonas/index", { zonas: sortByKey(zonas, "nom") });
@@ -11,13 +11,13 @@ module.exports.index = async (req, res, next) => {
   }
 };
 
-module.exports.renderNewForm = renderNewForm("zonas/new")
+export const renderNewForm = renderNewForm("zonas/new");
 
-module.exports.createZona = createItem(Zona, 'zona')
+export const createZona = createItem(Zona, 'zona');
 
-module.exports.showZona = async (req, res, next) => {
+export const showZona = async (req, res, next) => {
   try {
-    const user = req.user
+    const user = req.user;
     const zona = await Zona.findById(req.params.id).populate("responsable");
 
     if (!zona) {
@@ -30,7 +30,7 @@ module.exports.showZona = async (req, res, next) => {
   }
 };
 
-module.exports.getZonas = async (req, res, next) => {
+export const getZonas = async (req, res, next) => {
   try {
     const zonas = await Zona.find();
 
@@ -40,11 +40,12 @@ module.exports.getZonas = async (req, res, next) => {
     }
     res.json(zonas);
   } catch (err) {
+
     next(err);
   }
 };
 
-module.exports.renderEditForm = async (req, res, next) => {
+export const renderEditForm = async (req, res, next) => {
   try {
     const zona = await Zona.findById(req.params.id);
     if (!zona) {
@@ -57,7 +58,7 @@ module.exports.renderEditForm = async (req, res, next) => {
   }
 };
 
-module.exports.updateZona = async (req, res, next) => {
+export const updateZona = async (req, res, next) => {
   try {
     const { id } = req.params;
 
@@ -69,7 +70,7 @@ module.exports.updateZona = async (req, res, next) => {
   }
 };
 
-module.exports.deleteZona = async (req, res, next) => {
+export const deleteZona = async (req, res, next) => {
   try {
     const { id } = req.params;
     await Zona.findByIdAndDelete(id);

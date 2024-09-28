@@ -1,6 +1,7 @@
-const { isProduction } = require("./helpers")
+import { isProduction } from "./helpers";
+import url from "url";
 
-function enforceHttps (app) {
+function enforceHttps(app) {
   if (isProduction) {
     // Force HTTPS
     app.use((req, res, next) => {
@@ -11,13 +12,14 @@ function enforceHttps (app) {
           port: app.get('port'),
           pathname: req.url
         });
-    
+
         return res.redirect(secureUrl);
       }
-    
+
       next();
     });
   }
 }
 
-module.exports = enforceHttps
+export default enforceHttps;
+

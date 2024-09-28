@@ -1,7 +1,7 @@
-const { addCenterFilter, capitalizeFields } = require("../db/middlewares");
-const contextPlugin = require("mongoose-request-context");
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+import { addCenterFilter, capitalizeFields } from "../db/middlewares";
+import contextPlugin from "mongoose-request-context";
+import mongoose from "mongoose";
+const { Schema } = mongoose;
 
 const PlantaSchema = new Schema({
   nom: String,
@@ -15,17 +15,19 @@ const PlantaSchema = new Schema({
   },
 });
 
-PlantaSchema.pre('save', capitalizeFields(["nom"]))
+PlantaSchema.pre('save', capitalizeFields(["nom"]));
 
 PlantaSchema.plugin(contextPlugin, {
+
   contextPath: "request:user.center",
   propertyName: "center",
   contextObjectType: Schema.Types.ObjectId,
 });
 
-PlantaSchema.plugin(addCenterFilter)
+PlantaSchema.plugin(addCenterFilter);
 
 // Allow same plantas noms only across multiple centers
-PlantaSchema.index({ nom: 1, center: 1 }, { unique: true })
+PlantaSchema.index({ nom: 1, center: 1 }, { unique: true });
 
-module.exports = mongoose.model("Planta", PlantaSchema);
+export default mongoose.model("Planta", PlantaSchema);
+

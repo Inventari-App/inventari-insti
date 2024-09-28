@@ -1,10 +1,11 @@
-const { addCenterFilter, capitalizeFields } = require("../db/middlewares");
-const contextPlugin = require("mongoose-request-context");
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+import { addCenterFilter, capitalizeFields } from "../db/middlewares";
+import contextPlugin from "mongoose-request-context";
+import mongoose from "mongoose";
+const { Schema } = mongoose;
 
 const AreaSchema = new Schema({
   nom: String,
+
   responsable: {
     type: Schema.Types.ObjectId,
     ref: "User",
@@ -15,7 +16,8 @@ const AreaSchema = new Schema({
   },
 });
 
-AreaSchema.pre('save', capitalizeFields(["nom"]))
+AreaSchema.pre('save', capitalizeFields(["nom"]));
+
 
 AreaSchema.plugin(contextPlugin, {
   contextPath: "request:user.center",
@@ -23,9 +25,9 @@ AreaSchema.plugin(contextPlugin, {
   contextObjectType: Schema.Types.ObjectId,
 });
 
-AreaSchema.plugin(addCenterFilter)
+AreaSchema.plugin(addCenterFilter);
 
 // Allow same plantas noms only across multiple centers
-AreaSchema.index({ nom: 1, center: 1 }, { unique: true })
+AreaSchema.index({ nom: 1, center: 1 }, { unique: true });
 
-module.exports = mongoose.model("Area", AreaSchema);
+export default mongoose.model("Area", AreaSchema);

@@ -1,7 +1,8 @@
-const contextPlugin = require("mongoose-request-context");
-const mongoose = require("mongoose");
-const { addCenterFilter, addResponsable, addDepartmentScope } = require("../db/middlewares");
-const Schema = mongoose.Schema;
+import contextPlugin from "mongoose-request-context";
+import mongoose from "mongoose";
+import { addCenterFilter, addResponsable, addDepartmentScope } from "../db/middlewares";
+
+const { Schema } = mongoose;
 
 const ArticleSchema = new Schema(
   {
@@ -37,4 +38,4 @@ ArticleSchema.plugin(addDepartmentScope);
 
 ArticleSchema.plugin(addResponsable);
 
-module.exports = mongoose.model("Article", ArticleSchema);
+export default mongoose.model("Article", ArticleSchema);

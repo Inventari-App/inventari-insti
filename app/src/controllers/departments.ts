@@ -1,8 +1,8 @@
-const Department = require("../models/department");
-const { sortByKey } = require("../utils/helpers");
-const { renderNewForm, createItem } = require("./helpers");
+import Department from "../models/department";
+import { sortByKey } from "../utils/helpers";
+import { renderNewForm, createItem } from "./helpers";
 
-module.exports.index = async (req, res, next) => {
+export const index = async (req, res, next) => {
   try {
     const departments = await Department.find({});
     res.render("departments/index", { departments: sortByKey(departments, "nom") });
@@ -11,19 +11,17 @@ module.exports.index = async (req, res, next) => {
   }
 };
 
-module.exports.renderNewForm = renderNewForm("departments/new")
+export const renderNewForm = renderNewForm("departments/new");
 
-module.exports.createDepartment = createItem(Department, 'department',
-  (req, res, err) => {
-    if (err.code == 11000) {
-      req.flash("error", "Un departament amb el mateix nom ja existeix.")
-      return res.redirect(`/departments/new${req.query.tab ? "?tab=true" : ""}`)
-    }
-    next(err);
+export const createDepartment = createItem(Department, 'department', (req, res, err) => {
+  if (err.code == 11000) {
+    req.flash("error", "Un departament amb el mateix nom ja existeix.");
+    return res.redirect(`/departments/new${req.query.tab ? "?tab=true" : ""}`);
   }
-)
+  next(err);
+});
 
-module.exports.showDepartment = async (req, res, next) => {
+export const showDepartment = async (req, res, next) => {
   try {
     const { user } = req;
     const department = await Department.findById(req.params.id);
@@ -38,7 +36,7 @@ module.exports.showDepartment = async (req, res, next) => {
   }
 };
 
-module.exports.getDepartments = async (req, res, next) => {
+export const getDepartments = async (req, res, next) => {
   try {
     const departments = await Department.find();
 
@@ -52,7 +50,7 @@ module.exports.getDepartments = async (req, res, next) => {
   }
 };
 
-module.exports.renderEditForm = async (req, res, next) => {
+export const renderEditForm = async (req, res, next) => {
   try {
     const department = await Department.findById(req.params.id);
     if (!department) {
@@ -65,7 +63,7 @@ module.exports.renderEditForm = async (req, res, next) => {
   }
 };
 
-module.exports.updateDepartment = async (req, res, next) => {
+export const updateDepartment = async (req, res, next) => {
   try {
     const { id } = req.params;
 
@@ -79,7 +77,7 @@ module.exports.updateDepartment = async (req, res, next) => {
   }
 };
 
-module.exports.deleteDepartment = async (req, res, next) => {
+export const deleteDepartment = async (req, res, next) => {
   try {
     const { id } = req.params;
     await Department.findByIdAndDelete(id);
@@ -89,3 +87,4 @@ module.exports.deleteDepartment = async (req, res, next) => {
     next(err);
   }
 };
+

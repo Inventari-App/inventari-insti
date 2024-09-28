@@ -1,8 +1,8 @@
-const Planta = require("../models/planta");
-const { sortByKey } = require("../utils/helpers");
-const { renderNewForm, createItem } = require("./helpers");
+import Planta from "../models/planta";
+import { sortByKey } from "../utils/helpers";
+import { renderNewForm, createItem } from "./helpers";
 
-module.exports.index = async (req, res, next) => {
+export const index = async (req, res, next) => {
   try {
     const plantas = await Planta.find({});
     res.render("plantas/index", { plantas: sortByKey(plantas, "nom") });
@@ -11,13 +11,13 @@ module.exports.index = async (req, res, next) => {
   }
 };
 
-module.exports.renderNewForm = renderNewForm("plantas/new")
+export const renderNewForm = renderNewForm("plantas/new");
 
-module.exports.createPlanta = createItem(Planta, 'planta')
+export const createPlanta = createItem(Planta, 'planta');
 
-module.exports.showPlanta = async (req, res, next) => {
+export const showPlanta = async (req, res, next) => {
   try {
-    const user = req.user
+    const user = req.user;
     const planta = await Planta.findById(req.params.id).populate("responsable");
 
     if (!planta) {
@@ -30,7 +30,7 @@ module.exports.showPlanta = async (req, res, next) => {
   }
 };
 
-module.exports.getPlantas = async (req, res, next) => {
+export const getPlantas = async (req, res, next) => {
   try {
     const plantas = await Planta.find();
 
@@ -44,7 +44,7 @@ module.exports.getPlantas = async (req, res, next) => {
   }
 };
 
-module.exports.renderEditForm = async (req, res, next) => {
+export const renderEditForm = async (req, res, next) => {
   try {
     const planta = await Planta.findById(req.params.id);
     if (!planta) {
@@ -57,7 +57,7 @@ module.exports.renderEditForm = async (req, res, next) => {
   }
 };
 
-module.exports.updatePlanta = async (req, res, next) => {
+export const updatePlanta = async (req, res, next) => {
   try {
     const { id } = req.params;
 
@@ -69,7 +69,7 @@ module.exports.updatePlanta = async (req, res, next) => {
   }
 };
 
-module.exports.deletePlanta = async (req, res, next) => {
+export const deletePlanta = async (req, res, next) => {
   try {
     const { id } = req.params;
     await Planta.findByIdAndDelete(id);
@@ -79,3 +79,4 @@ module.exports.deletePlanta = async (req, res, next) => {
     next(err);
   }
 };
+

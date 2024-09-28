@@ -1,8 +1,8 @@
-const User = require("../models/user.js");
-const Invoice = require("../models/invoice.js");
-const fetch = require("node-fetch");
+import User from "../models/user.js";
+import Invoice from "../models/invoice.js";
+import fetch from "node-fetch";
 
-module.exports.validateSchema = (schema) => (req, res, next) => {
+export const validateSchema = (schema) => (req, res, next) => {
   const { error } = schema.validate(req.body);
   if (error) {
     console.error(error);
@@ -12,7 +12,7 @@ module.exports.validateSchema = (schema) => (req, res, next) => {
   }
 };
 
-module.exports.isLoggedIn = (req, res, next) => {
+export const isLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
     //res.session.returnTo = req.originalUrl;
     req.flash("error", "Has d'estar connectat/da");
@@ -21,7 +21,7 @@ module.exports.isLoggedIn = (req, res, next) => {
   next();
 };
 
-module.exports.isSameUser = async (req, res, next) => {
+export const isSameUser = async (req, res, next) => {
   const { id } = req.params;
   const user = await User.findById(id);
   if (!user._id.equals(req.user._id)) {
@@ -31,7 +31,7 @@ module.exports.isSameUser = async (req, res, next) => {
   next();
 };
 
-module.exports.isSameUserOrAdmin = async (req, res, next) => {
+export const isSameUserOrAdmin = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { id: userId, isAdmin } = req.user;
@@ -47,7 +47,7 @@ module.exports.isSameUserOrAdmin = async (req, res, next) => {
   }
 };
 
-module.exports.isResponsable = (Model) => async (req, res, next) => {
+export const isResponsable = (Model) => async (req, res, next) => {
   const { id } = req.params;
   const model = await Model.findById(id);
   if (!model.responsable.equals(req.user._id)) {
@@ -57,7 +57,7 @@ module.exports.isResponsable = (Model) => async (req, res, next) => {
   next();
 };
 
-module.exports.isResponsableOrAdmin = (Model) => async (req, res, next) => {
+export const isResponsableOrAdmin = (Model) => async (req, res, next) => {
   const { id } = req.params;
   const { id: userId, isAdmin } = req.user;
   const model = await Model.findById(id);
@@ -68,7 +68,7 @@ module.exports.isResponsableOrAdmin = (Model) => async (req, res, next) => {
   next();
 };
 
-module.exports.isAdmin = async (req, res, next) => {
+export const isAdmin = async (req, res, next) => {
   try {
     const { id: userId } = req.user;
     const user = await User.findById(userId);
@@ -83,7 +83,7 @@ module.exports.isAdmin = async (req, res, next) => {
   }
 };
 
-module.exports.isInvoiceAprovada = async (req, res, next) => {
+export const isInvoiceAprovada = async (req, res, next) => {
   const { id } = req.params;
   const invoice = await Invoice.findById(id);
   const isRebuda = invoice.status === "rebuda";
@@ -94,7 +94,7 @@ module.exports.isInvoiceAprovada = async (req, res, next) => {
   next();
 };
 
-module.exports.isInvoiceRebuda = async (req, res, next) => {
+export const isInvoiceRebuda = async (req, res, next) => {
   const { id } = req.params;
   const invoice = await Invoice.findById(id);
   const isRebuda = invoice.status === "rebuda";
@@ -105,7 +105,7 @@ module.exports.isInvoiceRebuda = async (req, res, next) => {
   next();
 };
 
-module.exports.requireLogin = async (req, res, next) => {
+export const requireLogin = async (req, res, next) => {
   if (req.user) {
     return next();
   } else {
@@ -114,7 +114,7 @@ module.exports.requireLogin = async (req, res, next) => {
   }
 };
 
-module.exports.handleRouteError = async (err, req, res, next) => {
+export const handleRouteError = async (err, req, res, next) => {
   const { statusCode } = err;
   if (statusCode === 404) {
     res.status(statusCode).render("404");
@@ -123,13 +123,13 @@ module.exports.handleRouteError = async (err, req, res, next) => {
   }
 };
 
-module.exports.handleError = async (err, req, res, next) => {
+export const handleError = async (err, req, res, next) => {
   res.render("error", { err });
   console.error(err)
   next(err);
 };
 
-module.exports.validateRecaptcha = async (req, res, next) => {
+export const validateRecaptcha = async (req, res, next) => {
   try {
     const gRecaptchaResponse = req.body["g-recaptcha-response"]
     const secret = '6LcDV44pAAAAACxZIgn9aMiGmiovr9sWWfcceTFm'
@@ -154,3 +154,4 @@ module.exports.validateRecaptcha = async (req, res, next) => {
     res.redirect(req.body.redirect)
   }
 }
+

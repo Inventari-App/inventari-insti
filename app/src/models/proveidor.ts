@@ -1,6 +1,6 @@
-const { addCenterFilter, capitalizeFields } = require("../db/middlewares");
-const contextPlugin = require("mongoose-request-context");
-const mongoose = require("mongoose");
+import { addCenterFilter, capitalizeFields } from "../db/middlewares";
+import contextPlugin from "mongoose-request-context";
+import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const ProveidorSchema = new Schema({
@@ -46,4 +46,4 @@ ProveidorSchema.plugin(addCenterFilter)
 // Allow same proveidors in multiple centers
 ProveidorSchema.index({ nom: 1, center: 1 }, { unique: true })
 
-module.exports = mongoose.model("Proveidor", ProveidorSchema);
+export default mongoose.model("Proveidor", ProveidorSchema);

@@ -1,6 +1,6 @@
-const { addCenterFilter } = require("../db/middlewares");
-const contextPlugin = require("mongoose-request-context");
-const mongoose = require("mongoose");
+import { addCenterFilter } from "../db/middlewares";
+import contextPlugin from "mongoose-request-context";
+import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const UtilitatSchema = new Schema({
@@ -23,4 +23,4 @@ UtilitatSchema.plugin(contextPlugin, {
 
 UtilitatSchema.plugin(addCenterFilter)
 
-module.exports = mongoose.model("Utilitat", UtilitatSchema);
+export default mongoose.model("Utilitat", UtilitatSchema);

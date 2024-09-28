@@ -1,55 +1,59 @@
+import utilitat from '../models/utilitat';
 
-const utilitat = require('../models/utilitat');
-module.exports.index = async (req, res) => {
+export const index = async (req, res) => {
     const utilitats = await utilitat.find({});
-    res.render('utilitats/index', { utilitats })
-}
+    res.render('utilitats/index', { utilitats });
+};
 
-module.exports.renderNewForm = (req, res) => {
+
+export const renderNewForm = (req, res) => {
     res.render('utilitats/new');
-}
+};
 
-module.exports.createutilitat = async (req, res, next) => {
-    let utilitatBody = req.body.utilitat
-    utilitatBody = { ...utilitatBody }
-    const utilitat = new utilitat(utilitatBody);
-    utilitat.responsable = req.user._id;
-    await utilitat.save();
+
+export const createUtilitat = async (req, res, next) => {
+    let utilitatBody = req.body.utilitat;
+    utilitatBody = { ...utilitatBody };
+    const newUtilitat = new utilitat(utilitatBody);
+    newUtilitat.responsable = req.user._id;
+    await newUtilitat.save();
     req.flash('success', 'Àrea creada correctament!');
-    res.redirect(`/utilitats/${utilitat._id}`);
-}
+    res.redirect(`/utilitats/${newUtilitat._id}`);
+};
 
-module.exports.showutilitat = async (req, res, next) => {
-    const utilitat = await utilitat.findById(req.params.id).populate('responsable');
+export const showUtilitat = async (req, res, next) => {
+    const utilitatDetail = await utilitat.findById(req.params.id).populate('responsable');
 
-    if (!utilitat) {
+    if (!utilitatDetail) {
         req.flash('error', "No es pot trobar l'utilitat!");
         return res.redirect('/utilitats');
-    }
-    res.render('utilitats/show', { utilitat });
-}
 
-module.exports.renderEditForm = async (req, res) => {
-    const utilitat = await utilitat.findById(req.params.id);
-    if (!utilitat) {
+    }
+    res.render('utilitats/show', { utilitat: utilitatDetail });
+};
+
+export const renderEditForm = async (req, res) => {
+    const utilitatDetail = await utilitat.findById(req.params.id);
+
+    if (!utilitatDetail) {
         req.flash('error', "No es pot trobar l'àrea!");
         return res.redirect('/utilitats');
     }
-    res.render('utilitats/edit', { utilitat });
-}
+    res.render('utilitats/edit', { utilitat: utilitatDetail });
+};
 
-module.exports.updateutilitat = async (req, res) => {
+export const updateUtilitat = async (req, res) => {
     const { id } = req.params;
 
-    const utilitat = await utilitat.findByIdAndUpdate(id, { ...req.body.utilitat });
-    req.flash('success', 'utilitat actualitzat correctament!')
-    res.redirect(`/utilitats/${utilitat._id}`);
-}
+    const updatedUtilitat = await utilitat.findByIdAndUpdate(id, { ...req.body.utilitat });
+    req.flash('success', 'utilitat actualitzat correctament!');
 
-module.exports.deleteutilitat = async (req, res) => {
+    res.redirect(`/utilitats/${updatedUtilitat._id}`);
+};
+
+export const deleteUtilitat = async (req, res) => {
     const { id } = req.params;
     await utilitat.findByIdAndDelete(id);
     req.flash('success', 'utilitat eliminat correctament!');
     res.redirect('/utilitats');
-}
-
+};

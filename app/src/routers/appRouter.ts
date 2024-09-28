@@ -1,21 +1,20 @@
-const express = require("express")
-const ExpressError = require("../utils/ExpressError");
-const userRoutes = require("./users");
-const articleRoutes = require("./articles");
-const invoiceRoutes = require("./invoices");
-const itemRoutes = require("./items");
-const unitatRoutes = require("./unitats");
-const departmentRoutes = require("./departments");
-const zonaRoutes = require("./zonas");
-const plantaRoutes = require("./plantas");
-const areaRoutes = require("./areas");
-const utilitatRoutes = require("./utilitats");
-const proveidorRoutes = require("./proveidors");
-const centreRoutes = require("./centre");
-const reportRoutes = require("./report");
-const { requireLogin } = require("../middleware");
+import express from "express";
+import userRoutes from "./users";
+import articleRoutes from "./articles";
+import invoiceRoutes from "./invoices";
+import itemRoutes from "./items";
+import unitatRoutes from "./unitats";
+import departmentRoutes from "./departments";
+import zonaRoutes from "./zonas";
+import plantaRoutes from "./plantas";
+import areaRoutes from "./areas";
+import utilitatRoutes from "./utilitats";
+import proveidorRoutes from "./proveidors";
+import centreRoutes from "./centre";
+import reportRoutes from "./report";
+import { requireLogin } from "../middleware";
 
-function appRouter () {
+function appRouter() {
   const router = express.Router();
   router.use("/", userRoutes);
   router.use("/reports", requireLogin, reportRoutes);
@@ -33,19 +32,20 @@ function appRouter () {
 
   router.get("/", (req, res) => {
     if (req.user) return res.redirect(301, "/invoices");
-    return res.redirect(301, '/login')
+    return res.redirect(301, '/login');
   });
 
   router.get("/autoclose", (req, res) => {
-    return res.render('autoclose')
+    return res.render('autoclose');
   });
 
   router.all("*", (req, res, next) => {
-    return res.render("404")
+    return res.render("404");
     // next(new ExpressError("Pàgina no trobada", 404));
   });
 
-  return router
+  return router;
 }
 
-module.exports = appRouter
+export default appRouter;
+

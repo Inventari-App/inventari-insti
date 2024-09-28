@@ -1,5 +1,5 @@
-const BaseJoi = require("joi");
-const sanitizeHtml = require("sanitize-html");
+import BaseJoi from "joi";
+import sanitizeHtml from "sanitize-html";
 
 const extension = (joi) => ({
   type: "string",
@@ -37,22 +37,22 @@ const article = Joi.object({
   department: Joi.string().allow("").escapeHTML(),
 });
 
-module.exports.articleSchema = Joi.object({
+export const articleSchema = Joi.object({
   article,
 });
 
-module.exports.articlesSchema = Joi.object({
+export const articlesSchema = Joi.object({
   articles: Joi.array().items(article),
 });
 
-module.exports.invoiceSchema = Joi.object({
+export const invoiceSchema = Joi.object({
   invoiceItems: Joi.array(),
   status: Joi.string().valid("aprovada", "pendent", "rebuda", "rebutjada"),
   total: Joi.number(),
   comment: Joi.string().empty("").escapeHTML(),
 });
 
-module.exports.itemSchema = Joi.object({
+export const itemSchema = Joi.object({
   autoclose: Joi.string(),
   nom: Joi.string().required().escapeHTML(),
   tipus: Joi.string().required().escapeHTML(),
@@ -60,12 +60,12 @@ module.exports.itemSchema = Joi.object({
   descripcio: Joi.string().empty("").escapeHTML(),
 });
 
-module.exports.departmentSchema = Joi.object({
+export const departmentSchema = Joi.object({
   nom: Joi.string().required().escapeHTML(),
   autoclose: Joi.string(),
 });
 
-module.exports.unitatSchema = Joi.object({
+export const unitatSchema = Joi.object({
   nom: Joi.string().required().escapeHTML(),
   planta: Joi.string().required().escapeHTML(),
   area: Joi.string().required().escapeHTML(),
@@ -73,28 +73,28 @@ module.exports.unitatSchema = Joi.object({
   autoclose: Joi.string(),
 });
 
-module.exports.zonaSchema = Joi.object({
+export const zonaSchema = Joi.object({
   nom: Joi.string().required().escapeHTML(),
   autoclose: Joi.string(),
 });
 
-module.exports.plantaSchema = Joi.object({
+export const plantaSchema = Joi.object({
   nom: Joi.string().required().escapeHTML(),
   autoclose: Joi.string(),
 });
 
-module.exports.areaSchema = Joi.object({
+export const areaSchema = Joi.object({
   nom: Joi.string().required().escapeHTML(),
   autoclose: Joi.string(),
 });
 
-module.exports.utilitatSchema = Joi.object({
+export const utilitatSchema = Joi.object({
   utilitat: Joi.object({
     autoclose: Joi.string(),
   }).required(),
 });
 
-module.exports.proveidorSchema = Joi.object({
+export const proveidorSchema = Joi.object({
   nom: Joi.string().required().escapeHTML(),
   cif: Joi.string().allow("").optional(),
   adreca: Joi.string().allow("").optional(),
@@ -102,3 +102,4 @@ module.exports.proveidorSchema = Joi.object({
   email: Joi.string().email().allow("").optional(),
   autoclose: Joi.string().allow("").empty(""),
 });
+

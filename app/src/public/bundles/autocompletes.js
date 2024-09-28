@@ -1,3 +1,4 @@
+"use strict";
 (() => {
   var __getOwnPropNames = Object.getOwnPropertyNames;
   var __commonJS = (cb, mod) => function __require() {
@@ -8,7 +9,7 @@
   var require_autocomplete = __commonJS({
     "node_modules/autocompleter/autocomplete.js"(exports, module) {
       (function(global, factory) {
-        typeof exports === "object" && typeof module !== "undefined" ? export factory() : typeof define === "function" && define.amd ? define(factory) : (global = typeof globalThis !== "undefined" ? globalThis : global || self, global.autocomplete = factory());
+        typeof exports === "object" && typeof module !== "undefined" ? module.exports = factory() : typeof define === "function" && define.amd ? define(factory) : (global = typeof globalThis !== "undefined" ? globalThis : global || self, global.autocomplete = factory());
       })(exports, function() {
         "use strict";
         function autocomplete2(settings) {
@@ -352,7 +353,7 @@
     }
   });
 
-  // bundles/autocompletes.js
+  // src/bundles/autocompletes.ts
   var autocomplete = require_autocomplete();
   var addAutocompletes = (autocompletes) => autocompletes.forEach(({ autocompleteName, filter }) => {
     const inputEl = document.querySelector(`#${autocompleteName}`);

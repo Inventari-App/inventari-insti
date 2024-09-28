@@ -1,5 +1,5 @@
-const contextService = require("request-context");
-const { capitalizeFirstLetter } = require("../utils/helpers");
+import contextService from "request-context";
+import { capitalizeFirstLetter } from "../utils/helpers";
 
 const addDepartmentScope = (schema) => {
   schema.pre(/^find/, async function (next) {
@@ -47,4 +47,4 @@ const capitalizeFields = (fields) => {
   };
 }
 
-module.exports = { addCenterFilter, addResponsable, capitalizeFields, addDepartmentScope };
+export { addCenterFilter, addResponsable, capitalizeFields, addDepartmentScope };

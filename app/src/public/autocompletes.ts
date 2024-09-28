@@ -8,7 +8,7 @@
   var require_autocomplete = __commonJS({
     "node_modules/autocompleter/autocomplete.js"(exports, module) {
       (function(global, factory) {
-        typeof exports === "object" && typeof module !== "undefined" ? module.exports = factory() : typeof define === "function" && define.amd ? define(factory) : (global = typeof globalThis !== "undefined" ? globalThis : global || self, global.autocomplete = factory());
+        typeof exports === "object" && typeof module !== "undefined" ? export factory() : typeof define === "function" && define.amd ? define(factory) : (global = typeof globalThis !== "undefined" ? globalThis : global || self, global.autocomplete = factory());
       })(exports, function() {
         "use strict";
         function autocomplete2(settings) {

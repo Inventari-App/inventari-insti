@@ -1,3 +1,4 @@
+"use strict";
 (() => {
   var __getOwnPropNames = Object.getOwnPropertyNames;
   var __commonJS = (cb, mod) => function __require() {
@@ -1409,7 +1410,7 @@
         Alpine: () => src_default,
         default: () => module_default
       });
-      export __toCommonJS(module_exports);
+      module.exports = __toCommonJS(module_exports);
       var flushPending = false;
       var flushing = false;
       var queue = [];
@@ -3968,7 +3969,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     }
   });
 
-  // bundles/alpinejs.js
+  // src/bundles/alpinejs.ts
   var { Alpine } = require_module_cjs();
   window.Alpine = Alpine;
   Alpine.start();

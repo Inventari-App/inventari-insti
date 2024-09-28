@@ -1,8 +1,8 @@
-const Item = require("../models/item");
-const { localizeBoolean } = require("../utils/helpers");
-const { renderNewForm, createItem } = require("./helpers");
+import Item from "../models/item";
+import { localizeBoolean } from "../utils/helpers";
+import { renderNewForm, createItem } from "./helpers";
 
-module.exports.index = async (req, res, next) => {
+export const index = async (req, res, next) => {
   try {
     const items = await Item.find({}).populate("responsable");
     res.render("items/index", { items, localizeBoolean });
@@ -11,19 +11,17 @@ module.exports.index = async (req, res, next) => {
   }
 };
 
-module.exports.renderNewForm = renderNewForm("items/new")
+export const renderNewForm = renderNewForm("items/new");
 
-module.exports.createItem = createItem(Item, "item",
-  (req, res, err) => {
-    if (err.code == 11000) {
-      req.flash("error", "Un item amb el mateix nom ja existeix.")
-      return res.redirect(`/items/new${req.query.tab ? "?tab=true" : ""}`)
-    }
-    next(err);
+export const createItem = createItem(Item, "item", (req, res, err) => {
+  if (err.code == 11000) {
+    req.flash("error", "Un item amb el mateix nom ja existeix.");
+    return res.redirect(`/items/new${req.query.tab ? "?tab=true" : ""}`);
   }
-)
+  next(err);
+});
 
-module.exports.showItem = async (req, res, next) => {
+export const showItem = async (req, res, next) => {
   try {
     const { user } = req;
     const item = await Item.findById(req.params.id).populate("responsable");
@@ -44,7 +42,7 @@ module.exports.showItem = async (req, res, next) => {
   }
 };
 
-module.exports.getItems = async (req, res, next) => {
+export const getItems = async (req, res, next) => {
   try {
     const items = await Item.find().populate("responsable");
 
@@ -58,7 +56,7 @@ module.exports.getItems = async (req, res, next) => {
   }
 };
 
-module.exports.renderEditForm = async (req, res, next) => {
+export const renderEditForm = async (req, res, next) => {
   try {
     const item = await Item.findById(req.params.id);
     if (!item) {
@@ -71,7 +69,7 @@ module.exports.renderEditForm = async (req, res, next) => {
   }
 };
 
-module.exports.updateItem = async (req, res, next) => {
+export const updateItem = async (req, res, next) => {
   try {
     const { id } = req.params;
 
@@ -83,7 +81,7 @@ module.exports.updateItem = async (req, res, next) => {
   }
 };
 
-module.exports.deleteItem = async (req, res, next) => {
+export const deleteItem = async (req, res, next) => {
   try {
     const { id } = req.params;
     await Item.findByIdAndDelete(id);
@@ -93,3 +91,4 @@ module.exports.deleteItem = async (req, res, next) => {
     next(err);
   }
 };
+

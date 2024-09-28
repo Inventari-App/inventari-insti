@@ -1,7 +1,7 @@
-const helmet = require("helmet");
-const { isProduction } = require("./utils/helpers")
+import helmet from "helmet";
+import { isProduction } from "./utils/helpers";
 
-function configHelmet (app) {
+function configHelmet(app) {
   if (isProduction) {
     const scriptSrcUrls = [
       "https://stackpath.bootstrapcdn.com/",
@@ -9,7 +9,6 @@ function configHelmet (app) {
       "https://cdnjs.cloudflare.com/",
       "https://cdn.jsdelivr.net",
     ];
-    //This is the array that needs added to
     const styleSrcUrls = [
       "https://stackpath.bootstrapcdn.com/",
       "https://kit-free.fontawesome.com/",
@@ -39,7 +38,7 @@ function configHelmet (app) {
             "'self'",
             "blob:",
             "data:",
-            "https://res.cloudinary.com/YOURACCOUNT/", //SHOULD MATCH YOUR CLOUDINARY ACCOUNT!
+            "https://res.cloudinary.com/YOURACCOUNT/", // SHOULD MATCH YOUR CLOUDINARY ACCOUNT!
             "https://images.unsplash.com/",
             "https://unsplash.com/es/s/fotos/",
             "fakeimg.pl"
@@ -51,4 +50,5 @@ function configHelmet (app) {
   }
 }
 
-module.exports = configHelmet
+export default configHelmet;
+

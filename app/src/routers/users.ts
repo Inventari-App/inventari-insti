@@ -1,10 +1,9 @@
-const express = require("express");
-const router = express.Router();
-const passport = require("passport");
-const catchAsync = require("../utils/catchAsync");
-const User = require("../models/user");
-const Department = require("../models/department");
-const {
+import express from "express";
+import passport from "passport";
+import catchAsync from "../utils/catchAsync";
+import User from "../models/user";
+import Department from "../models/department";
+import {
   getAllUsers,
   getUser,
   updateUser,
@@ -13,20 +12,22 @@ const {
   verifyUser,
   createCenter,
   sendPasswordReset,
-} = require("../controllers/users");
-const { isAdmin, isSameUserOrAdmin, validateRecaptcha } = require("../middleware");
-const Center = require("../models/center");
-const { localizeBoolean, sortByKey } = require("../utils/helpers");
+} from "../controllers/users";
+import { isAdmin, isSameUserOrAdmin, validateRecaptcha } from "../middleware";
+import Center from "../models/center";
+import { localizeBoolean, sortByKey } from "../utils/helpers";
+
+const router = express.Router();
 
 router.get("/register", (req, res) => {
   res.render("users/register");
 });
 
-router.get("/verify", catchAsync(verifyUser))
+router.get("/verify", catchAsync(verifyUser));
 
-router.post("/register-center", catchAsync(validateRecaptcha), catchAsync(createCenter))
+router.post("/register-center", catchAsync(validateRecaptcha), catchAsync(createCenter));
 
-router.post("/register", catchAsync(createUser))
+router.post("/register", catchAsync(createUser));
 
 router.get("/users",
   isAdmin,
@@ -182,4 +183,5 @@ router.post("/logout", (req, res, next) => {
   })
 });
 
-module.exports = router;
+export default router;
+

@@ -1,10 +1,13 @@
-const session = require("express-session");
-const MongoDBStore = require("connect-mongo")(session);
-const mongoose = require("mongoose");
-const { isProduction } = require("./utils/helpers");
-const dbUrl = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.lvga5.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`
-const secret = process.env.SECRET
+import session from "express-session";
+import connectMongo from "connect-mongo";
+import mongoose from "mongoose";
+import { isProduction } from "./utils/helpers";
+
+const MongoDBStore = connectMongo(session);
+const dbUrl = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.lvga5.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
+const secret = process.env.SECRET;
 const db = mongoose.connection;
+
 const store = new MongoDBStore({
   url: dbUrl,
   secret,
@@ -13,9 +16,7 @@ const store = new MongoDBStore({
 
 mongoose.connect(dbUrl, {
   useNewUrlParser: true,
-  //useCreateIndex: true,
   useUnifiedTopology: true,
-  //useFindAndModify: false
 });
 
 db.on("error", console.error.bind(console, "connection error:"));
@@ -41,4 +42,5 @@ const sessionConfig = {
   },
 };
 
-module.exports = sessionConfig
+export default sessionConfig;
+

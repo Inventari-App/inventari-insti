@@ -1,7 +1,8 @@
-const { addCenterFilter, capitalizeFields } = require("../db/middlewares");
-const contextPlugin = require("mongoose-request-context");
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+import { addCenterFilter, capitalizeFields } from "../db/middlewares";
+import contextPlugin from "mongoose-request-context";
+import mongoose from "mongoose";
+
+const { Schema } = mongoose;
 
 const DepartmentSchema = new Schema({
   nom: String,
@@ -11,7 +12,7 @@ const DepartmentSchema = new Schema({
   },
 });
 
-DepartmentSchema.pre('save', capitalizeFields(["nom"]))
+DepartmentSchema.pre('save', capitalizeFields(["nom"]));
 
 DepartmentSchema.plugin(contextPlugin, {
   contextPath: "request:user.center",
@@ -19,9 +20,10 @@ DepartmentSchema.plugin(contextPlugin, {
   contextObjectType: Schema.Types.ObjectId,
 });
 
-DepartmentSchema.plugin(addCenterFilter)
+DepartmentSchema.plugin(addCenterFilter);
 
 // Allow same unitats in multiple centers
-DepartmentSchema.index({ nom: 1, center: 1 }, { unique: true })
+DepartmentSchema.index({ nom: 1, center: 1 }, { unique: true });
 
-module.exports = mongoose.model("Department", DepartmentSchema);
+export default mongoose.model("Department", DepartmentSchema);
+

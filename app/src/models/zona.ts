@@ -1,6 +1,6 @@
-const { addCenterFilter, capitalizeFields } = require("../db/middlewares");
-const contextPlugin = require("mongoose-request-context");
-const mongoose = require("mongoose");
+import { addCenterFilter, capitalizeFields } from "../db/middlewares";
+import contextPlugin from "mongoose-request-context";
+import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const ZonaSchema = new Schema({
@@ -28,4 +28,4 @@ ZonaSchema.plugin(addCenterFilter)
 // Allow same zonas noms only across multiple centers
 ZonaSchema.index({ nom: 1, center: 1 }, { unique: true })
 
-module.exports = mongoose.model("Zona", ZonaSchema);
+export default mongoose.model("Zona", ZonaSchema);

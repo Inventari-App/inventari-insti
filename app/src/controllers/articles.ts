@@ -1,8 +1,8 @@
-const Article = require("../models/article");
-const Department = require("../models/department");
-const Unitat = require("../models/unitat");
+import Article from "../models/article";
+import Department from "../models/department";
+import Unitat from "../models/unitat";
 
-module.exports.index = async (req, res, next) => {
+export const index = async (req, res, next) => {
   try {
     const articles = await Article.find({})
       .populate({
@@ -17,7 +17,7 @@ module.exports.index = async (req, res, next) => {
   }
 };
 
-module.exports.renderNewForm = async (req, res, next) => {
+export const renderNewForm = async (req, res, next) => {
   try {
     const unitats = await Unitat.find();
     res.render("articles/new", { unitats });
@@ -26,7 +26,7 @@ module.exports.renderNewForm = async (req, res, next) => {
   }
 };
 
-module.exports.createArticle = async (req, res, next) => {
+export const createArticle = async (req, res, next) => {
   try {
     let articleBody = req.body.article;
     const user = req.user;
@@ -39,27 +39,23 @@ module.exports.createArticle = async (req, res, next) => {
     req.flash("success", "Article creat correctament!");
     res.redirect("/articles");
   } catch (err) {
-    // req.flash("error", "Alguna cosa no ha anat be al crear l'article.");
-    // res.redirect("/articles");
     next(err);
   }
 };
 
-module.exports.createArticles = async (req, res, next) => {
+export const createArticles = async (req, res, next) => {
   try {
     const articles = req.body.articles;
     await Article.create(articles);
     req.flash("success", "Articles creats correctament!");
     res.status(201);
     next();
-  } catch (error) {
-    // req.flash("error", "Alguna cosa no ha anat be al crear els articles.");
-    // res.status(400);
+  } catch (err) {
     next(err);
   }
 };
 
-module.exports.showArticle = async (req, res, next) => {
+export const showArticle = async (req, res, next) => {
   try {
     const { user } = req;
     const article = await Article.findById(req.params.id).populate(
@@ -82,7 +78,7 @@ module.exports.showArticle = async (req, res, next) => {
   }
 };
 
-module.exports.renderEditForm = async (req, res, next) => {
+export const renderEditForm = async (req, res, next) => {
   try {
     const article = await Article.findById(req.params.id);
     const unitats = await Unitat.find();
@@ -97,12 +93,12 @@ module.exports.renderEditForm = async (req, res, next) => {
   }
 };
 
-module.exports.updateArticle = async (req, res, next) => {
+export const updateArticle = async (req, res, next) => {
   try {
     const { id } = req.params;
     const article = await Article.findOneAndUpdate(
       { id },
-      { ...req.body.article, },
+      { ...req.body.article },
       { new: true }
     );
     req.flash("success", "Article actualitzat correctament!");
@@ -112,7 +108,7 @@ module.exports.updateArticle = async (req, res, next) => {
   }
 };
 
-module.exports.deleteArticle = async (req, res, next) => {
+export const deleteArticle = async (req, res, next) => {
   try {
     const { id } = req.params;
     await Article.findByIdAndDelete(id);
@@ -122,3 +118,4 @@ module.exports.deleteArticle = async (req, res, next) => {
     next(err);
   }
 };
+

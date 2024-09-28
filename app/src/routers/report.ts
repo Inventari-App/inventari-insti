@@ -1,12 +1,14 @@
-const express = require("express");
-const router = express.Router();
-const catchAsync = require("../utils/catchAsync");
-const report = require("../controllers/reports");
+import express from 'express';
+import catchAsync from '../utils/catchAsync';
+import * as report from '../controllers/reports';
 
-router.route("/")
+const router = express.Router();
+
+router.route('/')
   .get(catchAsync(report.index));
 
-router.route("/show")
+router.route('/show')
   .get(catchAsync(report.show));
 
-module.exports = router;
+export default router;
+

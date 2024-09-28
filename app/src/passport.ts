@@ -1,9 +1,9 @@
-const passport = require("passport");
-const LocalStrategy = require("passport-local");
-const User = require("./models/user");
-const Center = require("./models/center");
+import passport from "passport";
+import LocalStrategy from "passport-local";
+import User from "./models/user";
+import Center from "./models/center";
 
-function configurePassport (app) {
+function configurePassport(app) {
   app.use(passport.initialize());
   app.use(passport.session());
   passport.use(new LocalStrategy(User.authenticate()));
@@ -11,10 +11,11 @@ function configurePassport (app) {
   passport.deserializeUser(User.deserializeUser());
 
   app.use(async (req, res, next) => {
-    res.locals.center = await Center.findById(req.user?.center).exec()
+    res.locals.center = await Center.findById(req.user?.center).exec();
     res.locals.currentUser = req.user;
-    next()
-  })
+    next();
+  });
 }
 
-module.exports = configurePassport
+export default configurePassport;
+

@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const { capitalizeFields } = require("../db/middlewares");
+import mongoose from "mongoose";
+import { capitalizeFields } from "../db/middlewares";
 const Schema = mongoose.Schema;
 
 const CenterSchema = new Schema({
@@ -12,4 +12,4 @@ const CenterSchema = new Schema({
 
 CenterSchema.pre('save', capitalizeFields(["name"]))
 
-module.exports = mongoose.model("Center", CenterSchema);
+export default mongoose.model("Center", CenterSchema);

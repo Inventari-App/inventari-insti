@@ -1,7 +1,8 @@
-const { addCenterFilter, capitalizeFields } = require("../db/middlewares");
-const contextPlugin = require("mongoose-request-context");
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+import { addCenterFilter, capitalizeFields } from "../db/middlewares";
+import contextPlugin from "mongoose-request-context";
+import mongoose from "mongoose";
+
+const { Schema } = mongoose;
 
 const ItemSchema = new Schema(
   {
@@ -25,10 +26,10 @@ const ItemSchema = new Schema(
   { timestamps: true }
 );
 
-ItemSchema.pre('save', capitalizeFields(["nom"]))
+ItemSchema.pre('save', capitalizeFields(["nom"]));
 
 // Allow same items in multiple centers
-ItemSchema.index({ nom: 1, center: 1 }, { unique: true })
+ItemSchema.index({ nom: 1, center: 1 }, { unique: true });
 
 ItemSchema.plugin(contextPlugin, {
   contextPath: "request:user.center",
@@ -36,6 +37,7 @@ ItemSchema.plugin(contextPlugin, {
   contextObjectType: Schema.Types.ObjectId,
 });
 
-ItemSchema.plugin(addCenterFilter)
+ItemSchema.plugin(addCenterFilter);
 
-module.exports = mongoose.model("Item", ItemSchema);
+export default mongoose.model("Item", ItemSchema);
+

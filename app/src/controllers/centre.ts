@@ -1,3 +1,4 @@
-module.exports.index = async (req, res) => {
-  res.render("centre")
+export const index = async (req, res) => {
+  res.render("centre");
 };
+

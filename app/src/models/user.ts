@@ -1,10 +1,9 @@
-const { addCenterFilter } = require("../db/middlewares");
-const contextPlugin = require("mongoose-request-context");
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
-const passportLocalMongoose = require("passport-local-mongoose");
-const { generateHash } = require('random-hash');
-const { getExpirationTs } = require('../utils/helpers')
+import { addCenterFilter } from "../db/middlewares";
+import contextPlugin from "mongoose-request-context";
+import mongoose from "mongoose";
+import passportLocalMongoose from "passport-local-mongoose";
+
+const { Schema } = mongoose;
 
 const UserSchema = new Schema({
   email: {
@@ -60,6 +59,7 @@ UserSchema.plugin(contextPlugin, {
 
 UserSchema.plugin(passportLocalMongoose, { populateFields: "center" });
 
-UserSchema.plugin(addCenterFilter)
+UserSchema.plugin(addCenterFilter);
 
-module.exports = mongoose.model("User", UserSchema);
+export default mongoose.model("User", UserSchema);
+

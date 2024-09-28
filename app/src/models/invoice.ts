@@ -1,8 +1,11 @@
-const contextPlugin = require("mongoose-request-context");
-const mongoose = require("mongoose");
-const { addCenterFilter } = require("../db/middlewares");
-const Schema = mongoose.Schema;
-const AutoIncrement = require("mongoose-sequence")(mongoose);
+import contextPlugin from "mongoose-request-context";
+import mongoose from "mongoose";
+import { addCenterFilter } from "../db/middlewares";
+import AutoIncrementFactory from "mongoose-sequence";
+
+const { Schema } = mongoose;
+const AutoIncrement = AutoIncrementFactory(mongoose);
+
 const InvoiceSchema = new Schema(
   {
     invoiceItems: [
@@ -67,6 +70,7 @@ InvoiceSchema.plugin(AutoIncrement, {
   reference_fields: ['center'],
 });
 
-InvoiceSchema.plugin(addCenterFilter)
+InvoiceSchema.plugin(addCenterFilter);
 
-module.exports = mongoose.model("Invoice", InvoiceSchema);
+export default mongoose.model("Invoice", InvoiceSchema);
+

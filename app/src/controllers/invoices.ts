@@ -1,14 +1,15 @@
-const User = require("../models/user");
-const Invoice = require("../models/invoice");
-const Item = require("../models/item");
-const autocomplete = require("autocompleter");
-const { useNodemailer } = require("../nodemailer/sendEmail");
-const { getProtocol, localizeBoolean, twoDecimals } = require("../utils/helpers");
-const Department = require("../models/department");
-const Center = require("../models/center");
+import User from "../models/user";
+import Invoice from "../models/invoice";
+import Item from "../models/item";
+import autocomplete from "autocompleter";
+import { useNodemailer } from "../nodemailer/sendEmail";
+import { getProtocol, localizeBoolean, twoDecimals } from "../utils/helpers";
+import Department from "../models/department";
+import Center from "../models/center";
+
 const protocol = getProtocol();
 
-module.exports.index = async (req, res, next) => {
+export const index = async (req, res, next) => {
   try {
     const { isAdmin, id: userId } = req.user;
     const { status } = req.query;
@@ -32,17 +33,17 @@ module.exports.index = async (req, res, next) => {
   }
 };
 
-module.exports.renderNewForm = async (req, res, next) => {
+export const renderNewForm = async (req, res, next) => {
   res.render("invoices/new", {
     autocomplete,
   });
 };
 
-module.exports.createInvoice = async (req, res, next) => {
+export const createInvoice = async (req, res, next) => {
   try {
     const { invoiceItems, comment } = req.body;
     if (!invoiceItems.length) {
-      res.status(400).send('Bad request')
+      res.status(400).send('Bad request');
     }
 
     const { _id: responsableId, email } = req.user;
@@ -59,11 +60,11 @@ module.exports.createInvoice = async (req, res, next) => {
     req.flash("success", "Comanda creada correctament!");
     res.json(invoice);
   } catch (err) {
-    next(err)
+    next(err);
   }
 };
 
-module.exports.showInvoice = async (req, res, next) => {
+export const showInvoice = async (req, res, next) => {
   const invoice = await Invoice.findById(req.params.id)
     .populate("responsable")
     .populate({
@@ -95,7 +96,7 @@ module.exports.showInvoice = async (req, res, next) => {
   );
 };
 
-module.exports.printInvoice = async (req, res, next) => {
+export const printInvoice = async (req, res, next) => {
   const invoice = await Invoice.findById(req.params.id)
     .populate("responsable")
     .populate({
@@ -115,7 +116,7 @@ module.exports.printInvoice = async (req, res, next) => {
     },
   });
 
-  const center = await Center.findById(invoice.center)
+  const center = await Center.findById(invoice.center);
 
   res.render(
     "invoices/print",
@@ -130,7 +131,7 @@ module.exports.printInvoice = async (req, res, next) => {
   );
 };
 
-module.exports.renderEditForm = async (req, res, next) => {
+export const renderEditForm = async (req, res, next) => {
   const invoice = await Invoice.findById(req.params.id).populate("responsable");
 
   if (!invoice) {
@@ -141,7 +142,7 @@ module.exports.renderEditForm = async (req, res, next) => {
   res.render("invoices/edit", { invoice, autocomplete });
 };
 
-module.exports.updateInvoiceStatus = async (req, res, next) => {
+export const updateInvoiceStatus = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
@@ -162,7 +163,7 @@ module.exports.updateInvoiceStatus = async (req, res, next) => {
   }
 };
 
-module.exports.updateInvoice = async (req, res, next) => {
+export const updateInvoice = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { redirect } = req.query;
@@ -189,7 +190,7 @@ module.exports.updateInvoice = async (req, res, next) => {
   }
 };
 
-module.exports.deleteInvoice = async (req, res, next) => {
+export const deleteInvoice = async (req, res, next) => {
   const { id } = req.params;
 
   await Invoice.findByIdAndDelete(id);
@@ -284,3 +285,4 @@ async function emailReceived(invoice, host) {
       .replace(/{{url}}/, `${protocol}://${host}/invoices`),
   });
 }
+
