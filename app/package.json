@@ -1,7 +1,8 @@
 {
   "name": "inventari",
   "version": "1.0.0",
-  "main": "app.js",
+  "exports": "app.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "concurrently \"npm run build\" \"npm run start-server\"",
