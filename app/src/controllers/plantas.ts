@@ -1,8 +1,16 @@
+import { NextFunction, Request, Response } from "express";
 import Planta from "../models/planta";
 import { sortByKey } from "../utils/helpers";
-import { renderNewForm, createItem } from "./helpers";
+import {
+  renderNewForm as _renderNewForm,
+  createItem as _createItem,
+} from "./helpers";
 
-export const index = async (req, res, next) => {
+export const index = async (
+  _req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const plantas = await Planta.find({});
     res.render("plantas/index", { plantas: sortByKey(plantas, "nom") });
@@ -11,11 +19,15 @@ export const index = async (req, res, next) => {
   }
 };
 
-export const renderNewForm = renderNewForm("plantas/new");
+export const renderNewForm = _renderNewForm("plantas/new");
 
-export const createPlanta = createItem(Planta, 'planta');
+export const createPlanta = _createItem(Planta, "planta");
 
-export const showPlanta = async (req, res, next) => {
+export const showPlanta = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const user = req.user;
     const planta = await Planta.findById(req.params.id).populate("responsable");
@@ -24,13 +36,17 @@ export const showPlanta = async (req, res, next) => {
       req.flash("error", "No es pot trobar la planta!");
       return res.redirect("/plantas");
     }
-    res.render("plantas/show", { planta, isAdmin: user.isAdmin });
+    res.render("plantas/show", { planta, isAdmin: user?.isAdmin });
   } catch (err) {
     next(err);
   }
 };
 
-export const getPlantas = async (req, res, next) => {
+export const getPlantas = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const plantas = await Planta.find();
 
@@ -44,7 +60,11 @@ export const getPlantas = async (req, res, next) => {
   }
 };
 
-export const renderEditForm = async (req, res, next) => {
+export const renderEditForm = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const planta = await Planta.findById(req.params.id);
     if (!planta) {
@@ -57,7 +77,11 @@ export const renderEditForm = async (req, res, next) => {
   }
 };
 
-export const updatePlanta = async (req, res, next) => {
+export const updatePlanta = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { id } = req.params;
 
@@ -69,7 +93,11 @@ export const updatePlanta = async (req, res, next) => {
   }
 };
 
-export const deletePlanta = async (req, res, next) => {
+export const deletePlanta = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { id } = req.params;
     await Planta.findByIdAndDelete(id);
@@ -79,4 +107,3 @@ export const deletePlanta = async (req, res, next) => {
     next(err);
   }
 };
-

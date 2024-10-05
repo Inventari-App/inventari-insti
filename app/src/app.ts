@@ -1,12 +1,14 @@
-import dotenv from 'dotenv';
+import { load } from 'ts-dotenv';
 import { handleRouteError, handleError } from './middleware';
 import sessionConfig from './database';
 import configureApp from './config';
 
-dotenv.config();
+const env = load({
+  PORT: Number,
+})
 
 const app = configureApp(sessionConfig);
-const port = process.env.PORT || 3000;
+const port = env.PORT || 3000;
 
 app.use(handleRouteError);
 app.use(handleError);

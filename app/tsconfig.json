@@ -6,22 +6,26 @@
       "@/*": ["src/*"]
     },
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "node",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "target": "ESNext",
+    "target": "ES6",
     "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
     "resolveJsonModule": true,
     "skipLibCheck": true
   },
+  "compilerOptions: {
+    "baseUrl": ".",
+    "typeRoots": ["node_modules/@types", "src/types"],
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
   "include": [
     "src/**/*.ts"
-, "src/bundles/alpinejs.js"  ],
-  "exclude": [
-    "node_modules",
-    "src/public/**/*"
-  ]
+  ],
+  "exclude": ["node_modules"]
 }
 

@@ -3,8 +3,9 @@ import Unitat from "../models/unitat";
 import Article from "../models/article";
 import Item from "../models/item";
 import { sortByKey } from "../utils/helpers";
+import { NextFunction, Request, Response } from "express";
 
-export const index = async (req, res, next) => {
+export const index = async (_req: Request, res: Response, next: NextFunction) => {
   try {
     const departaments = await Departament.find();
     const unitats = await Unitat.find();
@@ -19,15 +20,15 @@ export const index = async (req, res, next) => {
   }
 };
 
-export const show = async (req, res, next) => {
+export const show = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const filters = {};
+    const filters: { [key: string]: RegExp } = {};
     const filterKeys = ["department", "article", "unitat"];
     filterKeys.forEach(filter => {
       let filterVal = req.query[filter];
       if (!filterVal) return;
       if (filterVal === 'all') filterVal = '.*';
-      const filterRegex = new RegExp(filterVal, 'i');
+      const filterRegex = new RegExp(filterVal as string, 'i');
       filters[filter] = filterRegex;
     });
     const articles = await Article.find({ ...filters }).exec();

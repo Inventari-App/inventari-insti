@@ -1,22 +1,24 @@
-function getExpirationTs(expiresInMs = 10 * 60 * 1000) { // 10 mins
+import { DocumentWithFields } from "../db/middlewares"
+
+export function getExpirationTs(expiresInMs = 10 * 60 * 1000) { // 10 mins
   const nowMs = new Date().getTime()
   const expirationMs = nowMs + expiresInMs
   return expirationMs
 }
 
-function getProtocol() {
+export function getProtocol() {
   return process.env.NODE_ENV === 'prod' ? 'https' : 'http'
 }
 
-function localizeBoolean(val) {
+export function localizeBoolean(val: boolean) {
   return val ? "Si" : "No"
 }
 
-function capitalize(str) {
+export function capitalize(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }
 
-function twoDecimals(val) {
+export function twoDecimals(val: string) {
   try {
     return parseFloat(val).toFixed(2)
   } catch {
@@ -24,19 +26,18 @@ function twoDecimals(val) {
   }
 }
 
-function capitalizeFirstLetter(str) {
+export function capitalizeFirstLetter(str: string) {
   if (str.length === 0) return '';
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 }
 
-function sortByKey(items, key) {
+export function sortByKey(items: DocumentWithFields[], key: string) {
   try {
     return items.sort((a, b) => a[key].toLowerCase() < b[key].toLowerCase() ? -1 : 1)
-  } catch (e) {
+  } catch  {
     return items
   }
 }
 
-const isProduction = process.env.NODE_ENV === "production"
+export const isProduction = process.env.NODE_ENV === "production"
 
-module.exports = { getExpirationTs, capitalizeFirstLetter, getProtocol, isProduction, localizeBoolean, capitalize, twoDecimals, sortByKey }

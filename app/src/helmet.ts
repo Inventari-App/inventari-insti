@@ -1,7 +1,8 @@
 import helmet from "helmet";
 import { isProduction } from "./utils/helpers";
+import { Express } from "express";
 
-function configHelmet(app) {
+function configHelmet(app: Express) {
   if (isProduction) {
     const scriptSrcUrls = [
       "https://stackpath.bootstrapcdn.com/",

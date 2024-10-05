@@ -1,6 +1,7 @@
 import flash from "connect-flash";
+import { Express } from "express";
 
-function configureFlash(app) {
+function configureFlash(app: Express) {
   app.use(flash());
   app.use((req, res, next) => {
     res.locals.success = req.flash("success");

@@ -1,8 +1,16 @@
+import { NextFunction, Request, Response } from "express";
 import Unitat from "../models/unitat";
 import { sortByKey } from "../utils/helpers";
-import { renderNewForm, createItem } from "./helpers";
+import {
+  renderNewForm as _renderNewForm,
+  createItem as _createItem,
+} from "./helpers";
 
-export const index = async (req, res, next) => {
+export const index = async (
+  _req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const unitats = await Unitat.find({});
     res.render("unitats/index", { unitats: sortByKey(unitats, "nom") });
@@ -11,11 +19,15 @@ export const index = async (req, res, next) => {
   }
 };
 
-export const renderNewForm = renderNewForm("unitats/new");
+export const renderNewForm = _renderNewForm("unitats/new");
 
-export const createUnitat = createItem(Unitat, 'unitat');
+export const createUnitat = _createItem(Unitat, "unitat");
 
-export const showUnitat = async (req, res, next) => {
+export const showUnitat = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { user } = req;
     const unitat = await Unitat.findById(req.params.id).populate("responsable");
@@ -27,15 +39,19 @@ export const showUnitat = async (req, res, next) => {
     }
     res.render("unitats/show", {
       unitat,
-      isAdmin: user.isAdmin,
-      isOwner: responsable && responsable._id.equals(user.id),
+      isAdmin: user?.isAdmin,
+      isOwner: responsable && responsable._id.equals(user?.id),
     });
   } catch (err) {
     next(err);
   }
 };
 
-export const getUnitats = async (req, res, next) => {
+export const getUnitats = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const unitats = await Unitat.find();
 
@@ -49,7 +65,11 @@ export const getUnitats = async (req, res, next) => {
   }
 };
 
-export const renderEditForm = async (req, res, next) => {
+export const renderEditForm = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const unitat = await Unitat.findById(req.params.id);
     if (!unitat) {
@@ -62,7 +82,11 @@ export const renderEditForm = async (req, res, next) => {
   }
 };
 
-export const updateUnitat = async (req, res, next) => {
+export const updateUnitat = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { id } = req.params;
 
@@ -74,7 +98,11 @@ export const updateUnitat = async (req, res, next) => {
   }
 };
 
-export const deleteUnitat = async (req, res, next) => {
+export const deleteUnitat = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { id } = req.params;
     await Unitat.findByIdAndDelete(id);
@@ -84,4 +112,3 @@ export const deleteUnitat = async (req, res, next) => {
     next(err);
   }
 };
-

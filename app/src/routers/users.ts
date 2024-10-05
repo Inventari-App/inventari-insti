@@ -1,4 +1,4 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import passport from "passport";
 import catchAsync from "../utils/catchAsync";
 import User from "../models/user";
@@ -19,29 +19,34 @@ import { localizeBoolean, sortByKey } from "../utils/helpers";
 
 const router = express.Router();
 
-router.get("/register", (req, res) => {
+router.get("/register", (_req: Request, res: Response) => {
   res.render("users/register");
 });
 
 router.get("/verify", catchAsync(verifyUser));
 
-router.post("/register-center", catchAsync(validateRecaptcha), catchAsync(createCenter));
+router.post(
+  "/register-center",
+  catchAsync(validateRecaptcha),
+  catchAsync(createCenter),
+);
 
 router.post("/register", catchAsync(createUser));
 
-router.get("/users",
+router.get(
+  "/users",
   isAdmin,
-  catchAsync(async (req, res) => {
-    const users = await getAllUsers(req);
-    res.render("users/index", { users: sortByKey(users, "name") });
+  catchAsync(async (_req: Request, res: Response, next: NextFunction) => {
+    const users = await getAllUsers(next);
+    res.render("users/index", { users: users ? sortByKey(users, "name") : [] });
   }),
 );
 
 router.get(
   "/users/new",
   isAdmin,
-  catchAsync(async (req, res, next) => {
-    const center = await Center.findById(req.user.center);
+  catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const center = await Center.findById(req.user?.center);
     if (!center) return next();
 
     res.render("users/new", { center });
@@ -51,13 +56,15 @@ router.get(
 router.get(
   "/users/:id",
   isSameUserOrAdmin,
-  catchAsync(async (req, res) => {
-    const { user, center } = await getUser(req);
+  catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const getUserResp = await getUser(req, next);
+    if (!getUserResp) return;
+    const { user, center } = getUserResp;
     res.render("users/show", {
       user,
       center,
-      isAdmin: req.user.isAdmin,
-      isOwner: user.id == req.user.id,
+      isAdmin: req.user?.isAdmin,
+      isOwner: user.id == req.user?.id,
       localizeBoolean,
     });
   }),
@@ -66,8 +73,8 @@ router.get(
 router.get(
   "/users/:id/edit",
   isSameUserOrAdmin,
-  catchAsync(async (req, res) => {
-    const user = await getUser(req);
+  catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const user = await getUser(req, next);
     const departments = await Department.find();
     res.render("users/edit", { ...user, departments, localizeBoolean });
   }),
@@ -76,8 +83,8 @@ router.get(
 router.put(
   "/users/:id",
   isSameUserOrAdmin,
-  catchAsync(async (req, res) => {
-    const user = await updateUser(req);
+  catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const user = await updateUser(req, res, next);
     res.redirect(301, `/users/${user._id}`);
   }),
 );
@@ -86,41 +93,46 @@ router.delete("/users/:id", isAdmin, catchAsync(deleteUser));
 
 router.get("/users");
 
-router.get("/login",
-  (req, res, next) => {
+router.get(
+  "/login",
+  (_req: Request, res: Response, next: NextFunction) => {
     if (res.locals?.currentUser) {
-      return res.redirect("/")
+      return res.redirect("/");
     }
-    next()
+    next();
   },
-  (req, res) => {
+  (_req: Request, res: Response) => {
     res.render("users/login");
-  });
+  },
+);
 
-router.get("/account-recovery", (req, res) => {
+router.get("/account-recovery", (_req: Request, res: Response) => {
   res.render("users/account-recovery");
 });
 
-router.get("/reset-sent", (req, res) => {
+router.get("/reset-sent", (_req: Request, res: Response) => {
   res.render("users/reset-sent");
 });
 
-router.get("/reset-error", (req, res) => {
+router.get("/reset-error", (_req: Request, res: Response) => {
   res.render("users/reset-error");
 });
 
 router.post(
   "/login",
-  async (req, res, next) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { isVerified } = await User.findByUsername(req.body.username);
+      const { isVerified } = await User.findByUsername(
+        req.body.username,
+        false,
+      );
       if (!isVerified) {
         req.flash("error", "Has de verificar el teu correu electronic");
         res.redirect(301, "/login");
       } else {
         next();
       }
-    } catch (error) {
+    } catch {
       req.flash("error", "L'usuari o el password son incorrectes");
       res.redirect(301, "/login");
     }
@@ -177,11 +189,10 @@ router.post("/reset", async (req, res) => {
 });
 
 router.post("/logout", (req, res, next) => {
-  req.logout(function(err) {
+  req.logout(function (err) {
     if (err) return next(err);
     res.redirect(301, "/login");
-  })
+  });
 });
 
 export default router;
-

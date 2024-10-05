@@ -1,8 +1,16 @@
+import { NextFunction, Request, Response } from "express";
 import Item from "../models/item";
 import { localizeBoolean } from "../utils/helpers";
-import { renderNewForm, createItem } from "./helpers";
+import {
+  renderNewForm as _renderNewForm,
+  createItem as _createItem,
+} from "./helpers";
 
-export const index = async (req, res, next) => {
+export const index = async (
+  _req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const items = await Item.find({}).populate("responsable");
     res.render("items/index", { items, localizeBoolean });
@@ -11,17 +19,15 @@ export const index = async (req, res, next) => {
   }
 };
 
-export const renderNewForm = renderNewForm("items/new");
+export const renderNewForm = _renderNewForm("items/new");
 
-export const createItem = createItem(Item, "item", (req, res, err) => {
-  if (err.code == 11000) {
-    req.flash("error", "Un item amb el mateix nom ja existeix.");
-    return res.redirect(`/items/new${req.query.tab ? "?tab=true" : ""}`);
-  }
-  next(err);
-});
+export const createItem = _createItem(Item, "item");
 
-export const showItem = async (req, res, next) => {
+export const showItem = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { user } = req;
     const item = await Item.findById(req.params.id).populate("responsable");
@@ -33,8 +39,8 @@ export const showItem = async (req, res, next) => {
     }
     res.render("items/show", {
       item,
-      isAdmin: user.isAdmin,
-      isOwner: responsable && responsable._id.equals(user.id),
+      isAdmin: user?.isAdmin,
+      isOwner: responsable && responsable._id.equals(user?.id),
       localizeBoolean,
     });
   } catch (err) {
@@ -42,7 +48,11 @@ export const showItem = async (req, res, next) => {
   }
 };
 
-export const getItems = async (req, res, next) => {
+export const getItems = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const items = await Item.find().populate("responsable");
 
@@ -56,7 +66,11 @@ export const getItems = async (req, res, next) => {
   }
 };
 
-export const renderEditForm = async (req, res, next) => {
+export const renderEditForm = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const item = await Item.findById(req.params.id);
     if (!item) {
@@ -69,7 +83,11 @@ export const renderEditForm = async (req, res, next) => {
   }
 };
 
-export const updateItem = async (req, res, next) => {
+export const updateItem = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { id } = req.params;
 
@@ -81,7 +99,11 @@ export const updateItem = async (req, res, next) => {
   }
 };
 
-export const deleteItem = async (req, res, next) => {
+export const deleteItem = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { id } = req.params;
     await Item.findByIdAndDelete(id);
@@ -91,4 +113,3 @@ export const deleteItem = async (req, res, next) => {
     next(err);
   }
 };
-

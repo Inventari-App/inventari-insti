@@ -1,6 +1,7 @@
 import User from "../models/user";
 import Center from "../models/center";
 import { generateHash } from "random-hash";
+import { NextFunction, Request, Response } from "express";
 
 import { getExpirationTs } from "../utils/helpers";
 import { useNodemailer } from "../nodemailer/sendEmail";
@@ -8,9 +9,9 @@ import { getProtocol } from "../utils/helpers";
 
 const protocol = getProtocol();
 
-async function createCenter(req, res, next) {
+async function createCenter(req: Request, res: Response, next: NextFunction) {
   try {
-    const { center: centerName, name, surname, email, password, token } = req.body;
+    const { center: centerName, name, surname, email, password } = req.body;
 
     const center = await new Center({ name: centerName }).save();
     const user = new User({
@@ -36,13 +37,14 @@ async function createCenter(req, res, next) {
       reason: "verify",
     });
 
-    await sendEmail({
-      subject: message.subject,
-      text: message.text.replace(
-        /{{url}}/,
-        `${protocol}://${req.headers.host}/verify?userId=${user.id}&token=${user.verificationHash}`,
-      ),
-    });
+    if (sendEmail)
+      await sendEmail({
+        subject: message.subject,
+        text: message.text.replace(
+          /{{url}}/,
+          `${protocol}://${req.headers.host}/verify?userId=${user.id}&token=${user.verificationHash}`,
+        ),
+      });
 
     req.flash(
       "info",
@@ -50,15 +52,19 @@ async function createCenter(req, res, next) {
     );
 
     res.redirect("/login");
-  } catch (e) {
 
-    req.flash("error", e.message);
+  } catch (e: unknown) {
+    if (e instanceof Error) {
+      req.flash("error", e.message);
+    } else {
+      req.flash("error", "An unknown error occurred.");
+    }
     res.redirect("register");
     next(e);
   }
 }
 
-async function createUser(req, res, next) {
+async function createUser(req: Request, res: Response, next: NextFunction) {
   try {
     const { email, password, centerId } = req.body;
     const user = new User({
@@ -72,7 +78,6 @@ async function createUser(req, res, next) {
 
     if (!user) {
       throw new Error("Alguna cosa ha sortit malament al crear l'usuari");
-
     }
 
     const center = await Center.findById(centerId);
@@ -86,7 +91,7 @@ async function createUser(req, res, next) {
       model: "user",
       reason: "verify",
     });
-    await sendEmail({
+    if (sendEmail) await sendEmail({
       subject: message.subject,
       text: message.text.replace(
         /{{url}}/,
@@ -98,14 +103,19 @@ async function createUser(req, res, next) {
       "Avisa el nou usuari, se li ha enviat un correu amb un link de verificacio que ha de clicar per validar el seu compte",
     );
     res.redirect("/users");
-  } catch (e) {
-    req.flash("error", e.message);
+
+  } catch (e: unknown) {
+    if (e instanceof Error) {
+      req.flash("error", e.message);
+    } else {
+      req.flash("error", "An unknown error occurred.");
+    }
     res.redirect("/users");
     next(e);
   }
 }
 
-async function sendPasswordReset(req, res, next) {
+async function sendPasswordReset(req: Request, res: Response) {
   const { username: email } = req.body;
   // Validate the email and find the user in the database
   const user = await User.findOne({ email });
@@ -129,8 +139,7 @@ async function sendPasswordReset(req, res, next) {
     reason: "reset",
   });
 
-
-  await sendEmail({
+  if (sendEmail) await sendEmail({
     subject: message.subject,
     text: message.text.replace(
       /{{url}}/,
@@ -142,7 +151,7 @@ async function sendPasswordReset(req, res, next) {
   res.redirect("/reset-sent");
 }
 
-async function getAllUsers(req, res, next) {
+async function getAllUsers(next: NextFunction) {
   try {
     const users = await User.find({});
     return users;
@@ -151,7 +160,7 @@ async function getAllUsers(req, res, next) {
   }
 }
 
-async function getUser(req, res, next) {
+async function getUser(req: Request, next: NextFunction) {
   try {
     const user = await User.findById(req.params.id).populate("department");
     const center = await Center.findById(user.center).populate("users");
@@ -161,7 +170,7 @@ async function getUser(req, res, next) {
   }
 }
 
-async function updateUser(req, res, next) {
+async function updateUser(req: Request, _res: Response, next: NextFunction) {
   try {
     const { id } = req.params;
     const { isAdmin, password } = req.body.user;
@@ -181,7 +190,7 @@ async function updateUser(req, res, next) {
   }
 }
 
-async function deleteUser(req, res, next) {
+async function deleteUser(req: Request, res: Response, next: NextFunction) {
   try {
     const { id } = req.params;
     await User.findByIdAndDelete(id);
@@ -194,7 +203,7 @@ async function deleteUser(req, res, next) {
   }
 }
 
-async function verifyUser(req, res, next) {
+async function verifyUser(req: Request, res: Response, next: NextFunction) {
   try {
     const { token, userId } = req.query;
     const user = await User.findById(userId);
@@ -229,7 +238,7 @@ async function verifyUser(req, res, next) {
       user.verificationTs = newExpirationTs;
       user.verificationHash = newHash;
       await user.save();
-      await sendEmail({
+      if (sendEmail) await sendEmail({
         subject: message.subject,
         text: message.text.replace(
           /{{url}}/,

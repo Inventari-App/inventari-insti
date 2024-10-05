@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import userRoutes from "./users";
 import articleRoutes from "./articles";
 import invoiceRoutes from "./invoices";
@@ -30,16 +30,16 @@ function appRouter() {
   router.use("/proveidors", requireLogin, proveidorRoutes);
   router.use("/centre", requireLogin, centreRoutes);
 
-  router.get("/", (req, res) => {
+  router.get("/", (req: Request, res: Response) => {
     if (req.user) return res.redirect(301, "/invoices");
     return res.redirect(301, '/login');
   });
 
-  router.get("/autoclose", (req, res) => {
+  router.get("/autoclose", (_req: Request, res: Response) => {
     return res.render('autoclose');
   });
 
-  router.all("*", (req, res, next) => {
+  router.all("*", (_req: Request, res: Response) => {
     return res.render("404");
     // next(new ExpressError("Pàgina no trobada", 404));
   });

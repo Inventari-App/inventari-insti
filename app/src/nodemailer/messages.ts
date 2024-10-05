@@ -1,4 +1,15 @@
-const messages = {
+export interface Message {
+  subject: string;
+  text: string;
+}
+
+export interface Messages {
+  [key: string]: {
+    [value: string]: Message;
+  };
+}
+
+const messages: Messages = {
   user: {
     verify: {
       subject: 'Activa el teu usuari.',

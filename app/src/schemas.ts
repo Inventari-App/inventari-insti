@@ -1,7 +1,7 @@
-import BaseJoi from "joi";
+import * as Joi from "joi";
 import sanitizeHtml from "sanitize-html";
 
-const extension = (joi) => ({
+const extension = (joi: typeof Joi): Joi.Extension => ({
   type: "string",
   base: joi.string(),
   messages: {
@@ -9,97 +9,98 @@ const extension = (joi) => ({
   },
   rules: {
     escapeHTML: {
-      validate(value, helpers) {
+      validate(value: string, helpers: Joi.CustomHelpers): string | Joi.ErrorReport {
         const clean = sanitizeHtml(value, {
           allowedTags: [],
           allowedAttributes: {},
         });
-        if (clean !== value)
+        if (clean !== value) {
           return helpers.error("string.escapeHTML", { value });
+        }
         return clean;
       },
     },
   },
 });
 
-const Joi = BaseJoi.extend(extension);
+const BaseJoi = Joi.extend(extension);
 
-const article = Joi.object({
-  preu: Joi.number().min(0),
-  article: Joi.string().required().escapeHTML(),
-  iva: Joi.number().min(0),
-  inventariable: Joi.string().allow("").escapeHTML(),
-  proveidor: Joi.string().allow("").escapeHTML(),
-  tipus: Joi.string().allow("").escapeHTML(),
-  unitat: Joi.string().required().escapeHTML(),
-  descripcio: Joi.string().allow("").escapeHTML(),
-  numSerie: Joi.string().allow("").escapeHTML(),
-  department: Joi.string().allow("").escapeHTML(),
+const article = BaseJoi.object({
+  preu: BaseJoi.number().min(0),
+  article: BaseJoi.string().required().escapeHTML(),
+  iva: BaseJoi.number().min(0),
+  inventariable: BaseJoi.string().allow("").escapeHTML(),
+  proveidor: BaseJoi.string().allow("").escapeHTML(),
+  tipus: BaseJoi.string().allow("").escapeHTML(),
+  unitat: BaseJoi.string().required().escapeHTML(),
+  descripcio: BaseJoi.string().allow("").escapeHTML(),
+  numSerie: BaseJoi.string().allow("").escapeHTML(),
+  department: BaseJoi.string().allow("").escapeHTML(),
 });
 
-export const articleSchema = Joi.object({
+export const articleSchema = BaseJoi.object({
   article,
 });
 
-export const articlesSchema = Joi.object({
-  articles: Joi.array().items(article),
+export const articlesSchema = BaseJoi.object({
+  articles: BaseJoi.array().items(article),
 });
 
-export const invoiceSchema = Joi.object({
-  invoiceItems: Joi.array(),
-  status: Joi.string().valid("aprovada", "pendent", "rebuda", "rebutjada"),
-  total: Joi.number(),
-  comment: Joi.string().empty("").escapeHTML(),
+export const invoiceSchema = BaseJoi.object({
+  invoiceItems: BaseJoi.array(),
+  status: BaseJoi.string().valid("aprovada", "pendent", "rebuda", "rebutjada"),
+  total: BaseJoi.number(),
+  comment: BaseJoi.string().empty("").escapeHTML(),
 });
 
-export const itemSchema = Joi.object({
-  autoclose: Joi.string(),
-  nom: Joi.string().required().escapeHTML(),
-  tipus: Joi.string().required().escapeHTML(),
-  inventariable: Joi.boolean().required(),
-  descripcio: Joi.string().empty("").escapeHTML(),
+export const itemSchema = BaseJoi.object({
+  autoclose: BaseJoi.string(),
+  nom: BaseJoi.string().required().escapeHTML(),
+  tipus: BaseJoi.string().required().escapeHTML(),
+  inventariable: BaseJoi.boolean().required(),
+  descripcio: BaseJoi.string().empty("").escapeHTML(),
 });
 
-export const departmentSchema = Joi.object({
-  nom: Joi.string().required().escapeHTML(),
-  autoclose: Joi.string(),
+export const departmentSchema = BaseJoi.object({
+  nom: BaseJoi.string().required().escapeHTML(),
+  autoclose: BaseJoi.string(),
 });
 
-export const unitatSchema = Joi.object({
-  nom: Joi.string().required().escapeHTML(),
-  planta: Joi.string().required().escapeHTML(),
-  area: Joi.string().required().escapeHTML(),
-  zona: Joi.string().required().escapeHTML(),
-  autoclose: Joi.string(),
+export const unitatSchema = BaseJoi.object({
+  nom: BaseJoi.string().required().escapeHTML(),
+  planta: BaseJoi.string().required().escapeHTML(),
+  area: BaseJoi.string().required().escapeHTML(),
+  zona: BaseJoi.string().required().escapeHTML(),
+  autoclose: BaseJoi.string(),
 });
 
-export const zonaSchema = Joi.object({
-  nom: Joi.string().required().escapeHTML(),
-  autoclose: Joi.string(),
+export const zonaSchema = BaseJoi.object({
+  nom: BaseJoi.string().required().escapeHTML(),
+  autoclose: BaseJoi.string(),
 });
 
-export const plantaSchema = Joi.object({
-  nom: Joi.string().required().escapeHTML(),
-  autoclose: Joi.string(),
+export const plantaSchema = BaseJoi.object({
+  nom: BaseJoi.string().required().escapeHTML(),
+  autoclose: BaseJoi.string(),
 });
 
-export const areaSchema = Joi.object({
-  nom: Joi.string().required().escapeHTML(),
-  autoclose: Joi.string(),
+export const areaSchema = BaseJoi.object({
+  nom: BaseJoi.string().required().escapeHTML(),
+  autoclose: BaseJoi.string(),
 });
 
-export const utilitatSchema = Joi.object({
-  utilitat: Joi.object({
-    autoclose: Joi.string(),
+export const utilitatSchema = BaseJoi.object({
+  utilitat: BaseJoi.object({
+    autoclose: BaseJoi.string(),
   }).required(),
 });
 
-export const proveidorSchema = Joi.object({
-  nom: Joi.string().required().escapeHTML(),
-  cif: Joi.string().allow("").optional(),
-  adreca: Joi.string().allow("").optional(),
-  telefon: Joi.number().allow("").optional(),
-  email: Joi.string().email().allow("").optional(),
-  autoclose: Joi.string().allow("").empty(""),
+export const proveidorSchema = BaseJoi.object({
+  nom: BaseJoi.string().required().escapeHTML(),
+  cif: BaseJoi.string().allow("").optional(),
+  adreca: BaseJoi.string().allow("").optional(),
+  telefon: BaseJoi.number().allow("").optional(),
+  email: BaseJoi.string().email().allow("").optional(),
+  autoclose: BaseJoi.string().allow("").empty(""),
 });
 

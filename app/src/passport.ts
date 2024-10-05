@@ -1,9 +1,10 @@
 import passport from "passport";
-import LocalStrategy from "passport-local";
+import { Strategy as LocalStrategy } from "passport-local";
 import User from "./models/user";
 import Center from "./models/center";
+import { Express } from "express";
 
-function configurePassport(app) {
+function configurePassport(app: Express) {
   app.use(passport.initialize());
   app.use(passport.session());
   passport.use(new LocalStrategy(User.authenticate()));
@@ -18,4 +19,3 @@ function configurePassport(app) {
 }
 
 export default configurePassport;
-

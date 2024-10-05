@@ -1,8 +1,13 @@
+import { NextFunction, Request, Response } from "express";
 import Article from "../models/article";
 import Department from "../models/department";
 import Unitat from "../models/unitat";
 
-export const index = async (req, res, next) => {
+export const index = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const articles = await Article.find({})
       .populate({
@@ -17,7 +22,11 @@ export const index = async (req, res, next) => {
   }
 };
 
-export const renderNewForm = async (req, res, next) => {
+export const renderNewForm = async (
+  _req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const unitats = await Unitat.find();
     res.render("articles/new", { unitats });
@@ -26,11 +35,15 @@ export const renderNewForm = async (req, res, next) => {
   }
 };
 
-export const createArticle = async (req, res, next) => {
+export const createArticle = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
-    let articleBody = req.body.article;
+    const articleBody = req.body.article;
     const user = req.user;
-    const department = await Department.findById(user.department);
+    const department = await Department.findById(user?.department);
     const article = new Article({
       ...articleBody,
       departament: department,
@@ -43,7 +56,11 @@ export const createArticle = async (req, res, next) => {
   }
 };
 
-export const createArticles = async (req, res, next) => {
+export const createArticles = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const articles = req.body.articles;
     await Article.create(articles);
@@ -55,7 +72,11 @@ export const createArticles = async (req, res, next) => {
   }
 };
 
-export const showArticle = async (req, res, next) => {
+export const showArticle = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { user } = req;
     const article = await Article.findById(req.params.id).populate(
@@ -70,15 +91,19 @@ export const showArticle = async (req, res, next) => {
 
     res.render("articles/show", {
       article,
-      isAdmin: req.user.isAdmin,
-      isOwner: responsable && responsable._id.equals(user.id),
+      isAdmin: req.user?.isAdmin,
+      isOwner: responsable && responsable._id.equals(user?.id),
     });
   } catch (err) {
     next(err);
   }
 };
 
-export const renderEditForm = async (req, res, next) => {
+export const renderEditForm = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const article = await Article.findById(req.params.id);
     const unitats = await Unitat.find();
@@ -93,13 +118,17 @@ export const renderEditForm = async (req, res, next) => {
   }
 };
 
-export const updateArticle = async (req, res, next) => {
+export const updateArticle = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { id } = req.params;
     const article = await Article.findOneAndUpdate(
       { id },
       { ...req.body.article },
-      { new: true }
+      { new: true },
     );
     req.flash("success", "Article actualitzat correctament!");
     res.redirect(`/articles/${article._id}`);
@@ -108,7 +137,11 @@ export const updateArticle = async (req, res, next) => {
   }
 };
 
-export const deleteArticle = async (req, res, next) => {
+export const deleteArticle = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { id } = req.params;
     await Article.findByIdAndDelete(id);
@@ -118,4 +151,3 @@ export const deleteArticle = async (req, res, next) => {
     next(err);
   }
 };
-

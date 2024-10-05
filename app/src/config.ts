@@ -4,7 +4,6 @@ import bodyParser from "body-parser";
 import methodOverride from "method-override";
 import session from "express-session";
 import mongoSanitize from "express-mongo-sanitize";
-import { isProduction } from "./utils/helpers";
 import ejsMate from "ejs-mate";
 import configHelmet from "./helmet";
 import configurePassport from "./passport";
@@ -14,12 +13,9 @@ import appRouter from "./routers/appRouter";
 import contextService from "request-context";
 import cors from "cors";
 import Department from "./models/department";
+import { SessionConfig } from "./database";
 
-if (!isProduction) {
-  require("dotenv").config();
-}
-
-export default function configureApp(sessionConfig) {
+export default function configureApp(sessionConfig: SessionConfig) {
   const app = express();
 
   // Allow CORS
@@ -56,17 +52,17 @@ export default function configureApp(sessionConfig) {
   // Save user info (centerId) on each db operation
   app.use(contextService.middleware("request"));
   // Save user context
-  app.use((req, res, next) => {
+  app.use((req, _res, next) => {
     contextService.set("request:user", req.user);
     next();
   });
   // Save department context
-  app.use(async (req, res, next) => {
+  app.use(async (req, _res, next) => {
     try {
       const department = await Department.findById(req.user?.department).exec();
       contextService.set("request:department", department?.nom);
       next();
-    } catch (e) {
+    } catch {
       next();
     }
   });

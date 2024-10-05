@@ -1,4 +1,6 @@
-export const index = async (req, res) => {
+import { Request, Response } from "express";
+
+export const index = async (_req: Request, res: Response) => {
   res.render("centre");
 };
 

@@ -1,27 +1,32 @@
+import { NextFunction, Request, Response } from "express";
 import Department from "../models/department";
 import { sortByKey } from "../utils/helpers";
-import { renderNewForm, createItem } from "./helpers";
+import { renderNewForm as _renderNewForm, createItem } from "./helpers";
 
-export const index = async (req, res, next) => {
+export const index = async (
+  _req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const departments = await Department.find({});
-    res.render("departments/index", { departments: sortByKey(departments, "nom") });
+    res.render("departments/index", {
+      departments: sortByKey(departments, "nom"),
+    });
   } catch (err) {
     next(err);
   }
 };
 
-export const renderNewForm = renderNewForm("departments/new");
+export const renderNewForm = _renderNewForm("departments/new");
 
-export const createDepartment = createItem(Department, 'department', (req, res, err) => {
-  if (err.code == 11000) {
-    req.flash("error", "Un departament amb el mateix nom ja existeix.");
-    return res.redirect(`/departments/new${req.query.tab ? "?tab=true" : ""}`);
-  }
-  next(err);
-});
+export const createDepartment = createItem(Department, "department");
 
-export const showDepartment = async (req, res, next) => {
+export const showDepartment = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { user } = req;
     const department = await Department.findById(req.params.id);
@@ -30,13 +35,17 @@ export const showDepartment = async (req, res, next) => {
       req.flash("error", "No es pot trobar el department!");
       return res.redirect("/departments");
     }
-    res.render("departments/show", { department, isAdmin: user.isAdmin });
+    res.render("departments/show", { department, isAdmin: user?.isAdmin });
   } catch (err) {
     next(err);
   }
 };
 
-export const getDepartments = async (req, res, next) => {
+export const getDepartments = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const departments = await Department.find();
 
@@ -50,7 +59,11 @@ export const getDepartments = async (req, res, next) => {
   }
 };
 
-export const renderEditForm = async (req, res, next) => {
+export const renderEditForm = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const department = await Department.findById(req.params.id);
     if (!department) {
@@ -63,7 +76,11 @@ export const renderEditForm = async (req, res, next) => {
   }
 };
 
-export const updateDepartment = async (req, res, next) => {
+export const updateDepartment = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { id } = req.params;
 
@@ -77,7 +94,11 @@ export const updateDepartment = async (req, res, next) => {
   }
 };
 
-export const deleteDepartment = async (req, res, next) => {
+export const deleteDepartment = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { id } = req.params;
     await Department.findByIdAndDelete(id);
@@ -87,4 +108,3 @@ export const deleteDepartment = async (req, res, next) => {
     next(err);
   }
 };
-

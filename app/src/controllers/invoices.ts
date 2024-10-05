@@ -1,27 +1,43 @@
 import Invoice, { Invoice as InvoiceI, InvoiceItem } from "../models/invoice";
+import Invoice, {
+  Invoice as InvoiceI,
+  InvoiceItem,
+} from "../models/invoice";
 import Item from "../models/item";
 import autocomplete from "autocompleter";
 import { useNodemailer } from "../nodemailer/sendEmail";
 import { getProtocol, localizeBoolean, twoDecimals } from "../utils/helpers";
 import Department from "../models/department";
 import Center from "../models/center";
+import { NextFunction, Request, Response } from "express";
+import { Document } from "mongoose";
+import { User } from "../types/models";
 
 const protocol = getProtocol();
 
-export const index = async (req, res, next) => {
+export const index = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
-    const { isAdmin, id: userId } = req.user;
+    const { user } = req;
     const { status } = req.query;
 
     // Filter by invoice status if provided
-    const filter = {};
-    if (status && ["pendent", "aprovada", "rebuda"].includes(status)) {
-      filter.status = status;
+    const filter: { status?: string } = {};
+    if (
+      status &&
+      ["pendent", "aprovada", "rebuda"].includes(status as string)
+    ) {
+      filter.status = status as string;
     }
 
     // Show only user/admin invoices based on filter
     const invoices = await Invoice.find(
-      !isAdmin ? { ...filter, responsable: { _id: userId } } : filter,
+      !user?.isAdmin
+        ? { ...filter, responsable: { _id: user?.userId } }
+        : filter,
     )
       .populate("responsable")
       .sort({ createdAt: -1 });
@@ -32,30 +48,34 @@ export const index = async (req, res, next) => {
   }
 };
 
-export const renderNewForm = async (req, res, next) => {
+export const renderNewForm = async (_req: Request, res: Response) => {
   res.render("invoices/new", {
     autocomplete,
   });
 };
 
-export const createInvoice = async (req, res, next) => {
+export const createInvoice = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { invoiceItems, comment } = req.body;
     if (!invoiceItems.length) {
-      res.status(400).send('Bad request');
+      res.status(400).send("Bad request");
     }
 
-    const { _id: responsableId, email } = req.user;
-    const department = await Department.findById(req.user.department);
+    const { user } = req;
+    const department = await Department.findById(user?.department);
 
     const invoice = new Invoice({
-      responsable: responsableId,
+      responsable: user?.responsableId,
       invoiceItems,
       comment,
       department: department.nom,
     });
     await invoice.save();
-    await emailCreated(invoice, email, req.headers.host);
+    await emailCreated(invoice, user!.email, req.headers.host!);
     req.flash("success", "Comanda creada correctament!");
     res.json(invoice);
   } catch (err) {
@@ -63,7 +83,7 @@ export const createInvoice = async (req, res, next) => {
   }
 };
 
-export const showInvoice = async (req, res, next) => {
+export const showInvoice = async (req: Request, res: Response) => {
   const invoice = await Invoice.findById(req.params.id)
     .populate("responsable")
     .populate({
@@ -79,7 +99,7 @@ export const showInvoice = async (req, res, next) => {
 
   const items = await Item.find({
     nom: {
-      $in: invoice.invoiceItems.map((item) => item.article),
+      $in: invoice.invoiceItems.map((item: InvoiceItem) => item.article),
     },
   });
 
@@ -89,13 +109,13 @@ export const showInvoice = async (req, res, next) => {
       invoice,
       items,
       invoiceJSON: JSON.stringify(invoice),
-      isResponsable: invoice.responsable._id.equals(req.user.id),
+      isResponsable: invoice.responsable._id.equals(req.user?.id),
       localizeBoolean,
     },
   );
 };
 
-export const printInvoice = async (req, res, next) => {
+export const printInvoice = async (req: Request, res: Response) => {
   const invoice = await Invoice.findById(req.params.id)
     .populate("responsable")
     .populate({
@@ -111,26 +131,23 @@ export const printInvoice = async (req, res, next) => {
 
   const items = await Item.find({
     nom: {
-      $in: invoice.invoiceItems.map((item) => item.article),
+      $in: invoice.invoiceItems.map((item: InvoiceItem) => item.article),
     },
   });
 
   const center = await Center.findById(invoice.center);
 
-  res.render(
-    "invoices/print",
-    {
-      invoice,
-      items,
-      center,
-      invoiceJSON: JSON.stringify(invoice),
-      isResponsable: invoice.responsable._id.equals(req.user.id),
-      twoDecimals,
-    },
-  );
+  res.render("invoices/print", {
+    invoice,
+    items,
+    center,
+    invoiceJSON: JSON.stringify(invoice),
+    isResponsable: invoice.responsable._id.equals(req.user?.id),
+    twoDecimals,
+  });
 };
 
-export const renderEditForm = async (req, res, next) => {
+export const renderEditForm = async (req: Request, res: Response) => {
   const invoice = await Invoice.findById(req.params.id).populate("responsable");
 
   if (!invoice) {
@@ -141,7 +158,7 @@ export const renderEditForm = async (req, res, next) => {
   res.render("invoices/edit", { invoice, autocomplete });
 };
 
-export const updateInvoiceStatus = async (req, res, next) => {
+export const updateInvoiceStatus = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
@@ -155,17 +172,21 @@ export const updateInvoiceStatus = async (req, res, next) => {
     if (status === "rebuda" && req.headers.host) await emailReceived(invoice, req.headers.host);
     if (status !== "rebuda" && req.headers.host)
       await emailStatusChange(invoice, status, req.headers.host);
+    if (status === "rebuda") await emailReceived(invoice, req.headers.host);
+    if (status !== "rebuda")
+      await emailStatusChange(invoice, status, req.headers.host);
+
     res.redirect("/invoices");
   } catch (error) {
     console.error(error);
   }
 };
 
-export const updateInvoice = async (req, res, next) => {
+export const updateInvoice = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const { redirect } = req.query;
-    const { isAdmin } = req.user;
+    const { user } = req;
 
     const invoice = await Invoice.findByIdAndUpdate(
       id,
@@ -180,7 +201,7 @@ export const updateInvoice = async (req, res, next) => {
     req.flash("success", "Comanda actualitzada correctament!");
 
     if (redirect)
-      return isAdmin
+      return user?.isAdmin
         ? res.redirect(`/invoices`)
         : res.redirect(`/invoices/${id}`);
 
@@ -190,7 +211,7 @@ export const updateInvoice = async (req, res, next) => {
   }
 };
 
-export const deleteInvoice = async (req, res, next) => {
+export const deleteInvoice = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   await Invoice.findByIdAndDelete(id);
@@ -205,7 +226,7 @@ async function getAdminEmails() {
   return adminEmails;
 }
 
-async function emailCreated(invoice, email, host) {
+async function emailCreated(invoice: Document, email: string, host: string) {
   const adminEmails = await getAdminEmails();
   if (!adminEmails) return console.error("No admin emails?");
 
@@ -214,16 +235,27 @@ async function emailCreated(invoice, email, host) {
     model: "invoice",
     reason: "created",
   });
-  return sendEmail({
-    subject: message.subject.replace(/{{user}}/, email),
-    text: message.text.replace(
-      /{{url}}/,
-      `${protocol}://${host}/invoices/${invoice._id}`,
-    ),
-  });
+  return (
+    sendEmail &&
+    sendEmail({
+      subject: message.subject.replace(/{{user}}/, email),
+      text: message.text.replace(
+        /{{url}}/,
+        `${protocol}://${host}/invoices/${invoice._id}`,
+      ),
+    })
+  );
 }
 
-async function emailModified({ invoice, user, host }) {
+async function emailModified({
+  invoice,
+  user,
+  host,
+}: {
+  invoice: InvoiceI;
+  user: User;
+  host: string;
+}) {
   const adminEmails = await getAdminEmails();
   if (!adminEmails) return console.error("No admin emails?");
 
@@ -250,6 +282,12 @@ async function emailModified({ invoice, user, host }) {
         .replace(/{{url}}/, `${protocol}://${host}/invoices/${invoice._id}`),
     })
   );
+  return sendEmail && sendEmail({
+    subject: message.subject,
+    text: message.text
+      .replace(/{{user}}/, invoice.responsable.email)
+      .replace(/{{url}}/, `${protocol}://${host}/invoices/${invoice._id}`),
+  });
 }
 
 async function emailStatusChange(
@@ -292,4 +330,3 @@ async function emailReceived(invoice: InvoiceI, host: string) {
       .replace(/{{url}}/, `${protocol}://${host}/invoices`),
   });
 }
-

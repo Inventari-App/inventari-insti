@@ -1,8 +1,13 @@
+import { NextFunction, Request, Response } from "express";
 import Area from "../models/area";
 import { sortByKey } from "../utils/helpers";
-import { renderNewForm, createItem } from "./helpers";
+import { renderNewForm as _renderNewForm, createItem } from "./helpers";
 
-export const index = async (req, res, next) => {
+export const index = async (
+  _req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const areas = await Area.find({});
     res.render("areas/index", { areas: sortByKey(areas, "nom") });
@@ -11,11 +16,11 @@ export const index = async (req, res, next) => {
   }
 };
 
-export const renderNewForm = renderNewForm("areas/new");
+export const renderNewForm = _renderNewForm("areas/new");
 
-export const createArea = createItem(Area, 'area');
+export const createArea = createItem(Area, "area");
 
-export const showArea = async (req, res, next) => {
+export const showArea = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = req.user;
     const area = await Area.findById(req.params.id).populate("responsable");
@@ -24,13 +29,13 @@ export const showArea = async (req, res, next) => {
       req.flash("error", "No es pot trobar la area!");
       return res.redirect("/areas");
     }
-    res.render("areas/show", { area, isAdmin: user.isAdmin });
+    res.render("areas/show", { area, isAdmin: user?.isAdmin });
   } catch (err) {
     next(err);
   }
 };
 
-export const getAreas = async (req, res, next) => {
+export const getAreas = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const areas = await Area.find();
 
@@ -44,7 +49,7 @@ export const getAreas = async (req, res, next) => {
   }
 };
 
-export const renderEditForm = async (req, res, next) => {
+export const renderEditForm = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const area = await Area.findById(req.params.id);
     if (!area) {
@@ -57,7 +62,7 @@ export const renderEditForm = async (req, res, next) => {
   }
 };
 
-export const updateArea = async (req, res, next) => {
+export const updateArea = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
     const area = await Area.findByIdAndUpdate(id, { ...req.body });
@@ -68,7 +73,7 @@ export const updateArea = async (req, res, next) => {
   }
 };
 
-export const deleteArea = async (req, res, next) => {
+export const deleteArea = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
     await Area.findByIdAndDelete(id);
@@ -78,4 +83,3 @@ export const deleteArea = async (req, res, next) => {
     next(err);
   }
 };
-

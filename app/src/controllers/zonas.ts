@@ -1,8 +1,16 @@
+import { NextFunction, Request, Response } from "express";
 import Zona from "../models/zona";
 import { sortByKey } from "../utils/helpers";
-import { renderNewForm, createItem } from "./helpers";
+import {
+  renderNewForm as _renderNewForm,
+  createItem as _createItem,
+} from "./helpers";
 
-export const index = async (req, res, next) => {
+export const index = async (
+  _req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const zonas = await Zona.find({});
     res.render("zonas/index", { zonas: sortByKey(zonas, "nom") });
@@ -11,11 +19,15 @@ export const index = async (req, res, next) => {
   }
 };
 
-export const renderNewForm = renderNewForm("zonas/new");
+export const renderNewForm = _renderNewForm("zonas/new");
 
-export const createZona = createItem(Zona, 'zona');
+export const createZona = _createItem(Zona, "zona");
 
-export const showZona = async (req, res, next) => {
+export const showZona = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const user = req.user;
     const zona = await Zona.findById(req.params.id).populate("responsable");
@@ -24,13 +36,17 @@ export const showZona = async (req, res, next) => {
       req.flash("error", "No es pot trobar la zona!");
       return res.redirect("/zonas");
     }
-    res.render("zonas/show", { zona, isAdmin: user.isAdmin });
+    res.render("zonas/show", { zona, isAdmin: user?.isAdmin });
   } catch (err) {
     next(err);
   }
 };
 
-export const getZonas = async (req, res, next) => {
+export const getZonas = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const zonas = await Zona.find();
 
@@ -40,12 +56,15 @@ export const getZonas = async (req, res, next) => {
     }
     res.json(zonas);
   } catch (err) {
-
     next(err);
   }
 };
 
-export const renderEditForm = async (req, res, next) => {
+export const renderEditForm = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const zona = await Zona.findById(req.params.id);
     if (!zona) {
@@ -58,7 +77,11 @@ export const renderEditForm = async (req, res, next) => {
   }
 };
 
-export const updateZona = async (req, res, next) => {
+export const updateZona = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { id } = req.params;
 
@@ -70,7 +93,11 @@ export const updateZona = async (req, res, next) => {
   }
 };
 
-export const deleteZona = async (req, res, next) => {
+export const deleteZona = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { id } = req.params;
     await Zona.findByIdAndDelete(id);

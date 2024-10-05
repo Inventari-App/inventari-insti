@@ -3,6 +3,8 @@ import mongoose, { Document } from "mongoose";
 import { addCenterFilter } from "../db/middlewares";
 // @ts-expect-error mongoose-sequence is not typed
 import AutoIncrementFactory from "mongoose-sequence";
+import { ObjectId } from 'mongoose';
+import { User } from "../types/models";
 
 const { Schema } = mongoose;
 const AutoIncrement = AutoIncrementFactory(mongoose);
@@ -29,6 +31,7 @@ export interface InvoiceItem {
 }
 
 export interface Invoice extends Document {
+export interface Invoice {
   invoiceItems: InvoiceItem[];
   total: number;
   responsable: User;
@@ -58,7 +61,7 @@ const InvoiceSchema = new Schema(
         subtotal: Number,
         rebuts: {
           type: Array,
-          default: function () {
+          default: function (this: InvoiceItem): Rebut[] {
             return [...Array(this.quantitat).keys()].map(() => ({
               numSerie: "",
               rebut: false,
@@ -69,7 +72,7 @@ const InvoiceSchema = new Schema(
     ],
     total: {
       type: Number,
-      default: function () {
+      default: function (this: Invoice) {
         return this.invoiceItems.reduce(
           (acc, { subtotal }) => (acc += subtotal),
           0

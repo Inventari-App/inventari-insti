@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import catchAsync from '../utils/catchAsync';
 import * as invoices from '../controllers/invoices';
 import { isLoggedIn, isResponsableOrAdmin, validateSchema, isInvoiceAprovada, isInvoiceRebuda } from '../middleware';
@@ -11,9 +11,9 @@ const router = express.Router();
 const validateInvoice = validateSchema(invoiceSchema);
 const isInvoiceResponsableOrAdmin = isResponsableOrAdmin(Invoice);
 
-const checkUserHasDepartment = async (req, res, next) => {
+const checkUserHasDepartment = async (req: Request, res: Response, next: NextFunction) => {
   const user = req.user;
-  const department = await Department.findById(user.department);
+  const department = await Department.findById(user?.department);
   if (!department) {
     req.flash("error", "Usuari no vinculat a departament.");
     return res.redirect("/invoices");

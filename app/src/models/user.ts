@@ -26,11 +26,11 @@ const UserSchema = new Schema({
   },
   department: {
     type: Schema.Types.ObjectId,
-    ref: "Department"
+    ref: "Department",
   },
   center: {
     type: Schema.Types.ObjectId,
-    ref: "Center"
+    ref: "Center",
   },
   isAdmin: { type: Boolean, default: false },
   isVerified: { type: Boolean, default: false },
@@ -41,9 +41,9 @@ const UserSchema = new Schema({
 });
 
 // This logic is to replace username by email for loging in the app
-UserSchema.pre('save', function (next) {
+UserSchema.pre("save", function (next) {
   // Check if username is not set or is an empty string
-  if (!this.username || this.username.trim() === '') {
+  if (!this.username || this.username.trim() === "") {
     this.username = this.email; // Copy email to username
   }
 
@@ -62,4 +62,3 @@ UserSchema.plugin(passportLocalMongoose, { populateFields: "center" });
 UserSchema.plugin(addCenterFilter);
 
 export default mongoose.model("User", UserSchema);
-
