@@ -14,6 +14,7 @@ import { useNodemailer } from "../nodemailer/sendEmail";
 import { getProtocol, localizeBoolean, twoDecimals } from "../utils/helpers";
 import Department from "../models/department";
 import Center from "../models/center";
+import User from "@/models/user";
 const protocol = getProtocol();
 export const index = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {

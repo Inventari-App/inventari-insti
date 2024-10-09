@@ -7,7 +7,8 @@ import Department from "../models/department";
 import Center from "../models/center";
 import { NextFunction, Request, Response } from "express";
 import { Document } from "mongoose";
-import { User } from "../types/models";
+import { User as UserI } from "../types/models";
+import User from "@/models/user";
 
 const protocol = getProtocol();
 
@@ -214,7 +215,7 @@ export const deleteInvoice = async (req: Request, res: Response) => {
 async function getAdminEmails() {
   const admins = await User.find({ isAdmin: true }).exec();
   const adminEmails =
-    admins.length && admins.map((admin: User) => admin.email).join("; ");
+    admins.length && admins.map((admin: UserI) => admin.email).join("; ");
   return adminEmails;
 }
 
@@ -245,7 +246,7 @@ async function emailModified({
   host,
 }: {
   invoice: InvoiceI;
-  user: User;
+  user: UserI;
   host: string;
 }) {
   const adminEmails = await getAdminEmails();
