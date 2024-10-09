@@ -1,4 +1,4 @@
-function localizeBoolean(val) {
+function localizeBoolean(val: boolean) {
   return val ? "Si" : "No"
 }
 

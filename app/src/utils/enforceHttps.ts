@@ -1,7 +1,8 @@
+import { Express } from "express";
 import { isProduction } from "./helpers";
 import url from "url";
 
-function enforceHttps(app) {
+function enforceHttps(app: Express) {
   if (isProduction) {
     // Force HTTPS
     app.use((req, res, next) => {

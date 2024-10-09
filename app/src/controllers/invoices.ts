@@ -1,5 +1,4 @@
-import User from "../models/user";
-import Invoice from "../models/invoice";
+import Invoice, { Invoice as InvoiceI, InvoiceItem } from "../models/invoice";
 import Item from "../models/item";
 import autocomplete from "autocompleter";
 import { useNodemailer } from "../nodemailer/sendEmail";
@@ -153,10 +152,9 @@ export const updateInvoiceStatus = async (req, res, next) => {
       { new: true },
     ).populate("responsable");
 
-    status === "rebuda"
-      ? await emailReceived(invoice, req.headers.host)
-      : await emailStatusChange(invoice, status, req.headers.host);
-
+    if (status === "rebuda" && req.headers.host) await emailReceived(invoice, req.headers.host);
+    if (status !== "rebuda" && req.headers.host)
+      await emailStatusChange(invoice, status, req.headers.host);
     res.redirect("/invoices");
   } catch (error) {
     console.error(error);
@@ -175,7 +173,9 @@ export const updateInvoice = async (req, res, next) => {
       { new: true },
     ).populate("responsable");
 
-    await emailModified({ invoice, user: req.user, host: req.headers.host });
+    if (req.user && req.headers.host) {
+      await emailModified({ invoice, user: req.user, host: req.headers.host });
+    }
 
     req.flash("success", "Comanda actualitzada correctament!");
 
@@ -201,7 +201,7 @@ export const deleteInvoice = async (req, res, next) => {
 async function getAdminEmails() {
   const admins = await User.find({ isAdmin: true }).exec();
   const adminEmails =
-    admins.length && admins.map((admin) => admin.email).join("; ");
+    admins.length && admins.map((admin: User) => admin.email).join("; ");
   return adminEmails;
 }
 
@@ -241,15 +241,22 @@ async function emailModified({ invoice, user, host }) {
     model: "invoice",
     reason: "modified",
   });
-  return sendEmail({
-    subject: message.subject,
-    text: message.text
-      .replace(/{{user}}/, invoice.responsable.email)
-      .replace(/{{url}}/, `${protocol}://${host}/invoices/${invoice._id}`),
-  });
+  return (
+    sendEmail &&
+    sendEmail({
+      subject: message.subject,
+      text: message.text
+        .replace(/{{user}}/, invoice.responsable.email)
+        .replace(/{{url}}/, `${protocol}://${host}/invoices/${invoice._id}`),
+    })
+  );
 }
 
-async function emailStatusChange(invoice, status, host) {
+async function emailStatusChange(
+  invoice: InvoiceI,
+  status: string,
+  host: string,
+) {
   const adminEmails = await getAdminEmails();
   if (!adminEmails) return console.error("No admin emails?");
 
@@ -259,7 +266,7 @@ async function emailStatusChange(invoice, status, host) {
     model: "invoice",
     reason: "status",
   });
-  return sendEmail({
+  return message && sendEmail({
     subject: message.subject.replace(/{{status}}/, status),
     text: message.text
       .replace(/{{user}}/, invoice.responsable.email)
@@ -268,7 +275,7 @@ async function emailStatusChange(invoice, status, host) {
   });
 }
 
-async function emailReceived(invoice, host) {
+async function emailReceived(invoice: InvoiceI, host: string) {
   const adminEmails = await getAdminEmails();
   if (!adminEmails) return console.error("No admin emails?");
 
@@ -278,7 +285,7 @@ async function emailReceived(invoice, host) {
     model: "invoice",
     reason: "received",
   });
-  return sendEmail({
+  return message && sendEmail({
     subject: message.subject,
     text: message.text
       .replace(/{{user}}/, responsableEmail)

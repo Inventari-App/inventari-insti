@@ -1,10 +1,44 @@
 import contextPlugin from "mongoose-request-context";
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
 import { addCenterFilter } from "../db/middlewares";
+// @ts-expect-error mongoose-sequence is not typed
 import AutoIncrementFactory from "mongoose-sequence";
 
 const { Schema } = mongoose;
 const AutoIncrement = AutoIncrementFactory(mongoose);
+
+export interface Rebut {
+  numSerie: string;
+  rebut: boolean;
+}
+
+export interface InvoiceItem {
+  inventariable: boolean;
+  tipus: string;
+  article: string;
+  quantitat: number;
+  preu: number;
+  iva: number;
+  unitat: string;
+  zona: string;
+  planta: string;
+  area: string;
+  proveidor: string;
+  subtotal: number;
+  rebuts: Rebut[];
+}
+
+export interface Invoice extends Document {
+  invoiceItems: InvoiceItem[];
+  total: number;
+  responsable: User;
+  center: ObjectId;
+  status: string; // pendent, aprovada, rebutjada, rebuda
+  numInvoice: number;
+  comment: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
 
 const InvoiceSchema = new Schema(
   {

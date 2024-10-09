@@ -63,7 +63,7 @@ export default function configureApp(sessionConfig) {
   // Save department context
   app.use(async (req, res, next) => {
     try {
-      const department = await Department.findById(req.user.department).exec();
+      const department = await Department.findById(req.user?.department).exec();
       contextService.set("request:department", department?.nom);
       next();
     } catch (e) {

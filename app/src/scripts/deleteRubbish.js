@@ -1,9 +1,16 @@
-require("dotenv").config({ path: __dirname + "/../.env" });
+import { load } from 'ts-dotenv';
 
-const mongoose = require("mongoose");
-const dbUrl = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.lvga5.mongodb.net/inventari-insti?retryWrites=true&w=majority`;
-const User = require("../models/user");
-const Center = require("../models/center");
+import mongoose from "mongoose";
+import User from "../models/user";
+import Center from "../models/center";
+
+const env = load({
+  DB_USER: String,
+  DB_PASS: String,
+  DB_NAME: String,
+})
+
+const dbUrl = `mongodb+srv://${env.DB_USER}:${env.DB_PASS}@cluster0.lvga5.mongodb.net/${env.DB_NAME}?retryWrites=true&w=majority`;
 
 mongoose.connect(dbUrl, {
   useNewUrlParser: true,
@@ -52,3 +59,4 @@ db.once("open", async () => {
   mongoose.connection.close();
   console.log("MongoDB connection closed.");
 });
+
