@@ -16,16 +16,12 @@
     "resolveJsonModule": true,
     "skipLibCheck": true
   },
-  "compilerOptions: {
-    "baseUrl": ".",
-    "typeRoots": ["node_modules/@types", "src/types"],
-    "paths": {
-      "@/*": ["src/*"]
-    }
-  },
   "include": [
     "src/**/*.ts"
-  ],
-  "exclude": ["node_modules"]
+, "src/bundles/alpinejs.js"  ],
+  "exclude": [
+    "node_modules",
+    "src/public/**/*"
+  ]
 }
 

@@ -31,7 +31,6 @@ export interface InvoiceItem {
 }
 
 export interface Invoice extends Document {
-export interface Invoice {
   invoiceItems: InvoiceItem[];
   total: number;
   responsable: User;

@@ -1,8 +1,4 @@
 import Invoice, { Invoice as InvoiceI, InvoiceItem } from "../models/invoice";
-import Invoice, {
-  Invoice as InvoiceI,
-  InvoiceItem,
-} from "../models/invoice";
 import Item from "../models/item";
 import autocomplete from "autocompleter";
 import { useNodemailer } from "../nodemailer/sendEmail";
@@ -172,10 +168,6 @@ export const updateInvoiceStatus = async (req: Request, res: Response) => {
     if (status === "rebuda" && req.headers.host) await emailReceived(invoice, req.headers.host);
     if (status !== "rebuda" && req.headers.host)
       await emailStatusChange(invoice, status, req.headers.host);
-    if (status === "rebuda") await emailReceived(invoice, req.headers.host);
-    if (status !== "rebuda")
-      await emailStatusChange(invoice, status, req.headers.host);
-
     res.redirect("/invoices");
   } catch (error) {
     console.error(error);
@@ -282,12 +274,6 @@ async function emailModified({
         .replace(/{{url}}/, `${protocol}://${host}/invoices/${invoice._id}`),
     })
   );
-  return sendEmail && sendEmail({
-    subject: message.subject,
-    text: message.text
-      .replace(/{{user}}/, invoice.responsable.email)
-      .replace(/{{url}}/, `${protocol}://${host}/invoices/${invoice._id}`),
-  });
 }
 
 async function emailStatusChange(
