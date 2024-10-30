@@ -21,7 +21,7 @@ const UnitatSchema = new Schema({
   },
 });
 
-UnitatSchema.pre('save', capitalizeFields(["nom"]))
+// UnitatSchema.pre('save', capitalizeFields(["nom"]))
 
 UnitatSchema.plugin(contextPlugin, {
   contextPath: "request:user.center",

@@ -15,7 +15,7 @@ const AreaSchema = new Schema({
   },
 });
 
-AreaSchema.pre('save', capitalizeFields(["nom"]))
+// AreaSchema.pre('save', capitalizeFields(["nom"]))
 
 AreaSchema.plugin(contextPlugin, {
   contextPath: "request:user.center",

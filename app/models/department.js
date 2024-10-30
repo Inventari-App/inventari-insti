@@ -11,7 +11,7 @@ const DepartmentSchema = new Schema({
   },
 });
 
-DepartmentSchema.pre('save', capitalizeFields(["nom"]))
+// DepartmentSchema.pre('save', capitalizeFields(["nom"]))
 
 DepartmentSchema.plugin(contextPlugin, {
   contextPath: "request:user.center",

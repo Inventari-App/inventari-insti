@@ -10,6 +10,6 @@ const CenterSchema = new Schema({
   users: [{ type: Schema.Types.ObjectId, ref: 'User' }]
 });
 
-CenterSchema.pre('save', capitalizeFields(["name"]))
+// CenterSchema.pre('save', capitalizeFields(["name"]))
 
 module.exports = mongoose.model("Center", CenterSchema);

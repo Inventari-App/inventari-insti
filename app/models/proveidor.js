@@ -33,7 +33,7 @@ const ProveidorSchema = new Schema({
   },
 });
 
-ProveidorSchema.pre('save', capitalizeFields(["nom"]))
+// ProveidorSchema.pre('save', capitalizeFields(["nom"]))
 
 ProveidorSchema.plugin(contextPlugin, {
   contextPath: "request:user.center",

@@ -15,7 +15,7 @@ const PlantaSchema = new Schema({
   },
 });
 
-PlantaSchema.pre('save', capitalizeFields(["nom"]))
+// PlantaSchema.pre('save', capitalizeFields(["nom"]))
 
 PlantaSchema.plugin(contextPlugin, {
   contextPath: "request:user.center",

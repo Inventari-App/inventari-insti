@@ -15,7 +15,7 @@ const ZonaSchema = new Schema({
   },
 });
 
-ZonaSchema.pre('save', capitalizeFields(["nom"]))
+// ZonaSchema.pre('save', capitalizeFields(["nom"]))
 
 ZonaSchema.plugin(contextPlugin, {
   contextPath: "request:user.center",

@@ -25,7 +25,7 @@ const ItemSchema = new Schema(
   { timestamps: true }
 );
 
-ItemSchema.pre('save', capitalizeFields(["nom"]))
+// ItemSchema.pre('save', capitalizeFields(["nom"]))
 
 // Allow same items in multiple centers
 ItemSchema.index({ nom: 1, center: 1 }, { unique: true })
