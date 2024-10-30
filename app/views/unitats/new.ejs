@@ -22,6 +22,11 @@
           <option value="default" selected>Selecciona una àrea</option>
           <option id="new" class="text-danger" value="new">Crea una nova àrea</option>
         </select>
+
+        <% if(autoclose) { %>
+            <input type="text" id="autoclose" name="autoclose" value="true" hidden>
+        <% } %>
+
         <button type="submit" class="btn btn-success">Afegeix Unitat</button>
       </form>
     </div>
