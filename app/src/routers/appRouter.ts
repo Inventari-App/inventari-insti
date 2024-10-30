@@ -31,7 +31,7 @@ function appRouter() {
   router.use("/centre", requireLogin, centreRoutes);
 
   router.get("/", (req: Request, res: Response) => {
-    if (req.user) return res.redirect(301, "/invoices");
+    if (req.currentUser) return res.redirect(301, "/invoices");
     return res.redirect(301, '/login');
   });
 

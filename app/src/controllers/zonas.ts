@@ -29,7 +29,7 @@ export const showZona = async (
   next: NextFunction,
 ) => {
   try {
-    const user = req.user;
+    const user = req.currentUser;
     const zona = await Zona.findById(req.params.id).populate("responsable");
 
     if (!zona) {

@@ -16,7 +16,7 @@ export const createUtilitat = async (req: Request, res: Response) => {
     let utilitatBody = req.body.utilitat;
     utilitatBody = { ...utilitatBody };
     const newUtilitat = new utilitat(utilitatBody);
-    newUtilitat.responsable = req.user?._id;
+    newUtilitat.responsable = req.currentUser?._id;
     await newUtilitat.save();
     req.flash('success', 'Àrea creada correctament!');
     res.redirect(`/utilitats/${newUtilitat._id}`);

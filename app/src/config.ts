@@ -14,6 +14,7 @@ import contextService from "request-context";
 import cors from "cors";
 import Department from "./models/department";
 import { SessionConfig } from "./database";
+import { User } from "types/models";
 
 export default function configureApp(sessionConfig: SessionConfig) {
   const app = express();
@@ -53,13 +54,14 @@ export default function configureApp(sessionConfig: SessionConfig) {
   app.use(contextService.middleware("request"));
   // Save user context
   app.use((req, _res, next) => {
-    contextService.set("request:user", req.user);
+    contextService.set("request:user", req.currentUser);
     next();
   });
   // Save department context
   app.use(async (req, _res, next) => {
+    const user: User = req.currentUser
     try {
-      const department = await Department.findById(req.user?.department).exec();
+      const department = await Department.findById(user?.department).exec();
       contextService.set("request:department", department?.nom);
       next();
     } catch {

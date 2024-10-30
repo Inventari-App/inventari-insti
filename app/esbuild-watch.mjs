@@ -13,6 +13,7 @@ await esbuild.build({
   entryPoints: ['./src/bundles/*.ts'],
   bundle: true,
   outfile: 'bundles.js',
-  platform: true,
+  watch: true,
+  platform: 'browser',
   alias: aliases,
 }).catch(() => process.exit(1))

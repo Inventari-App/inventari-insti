@@ -22,7 +22,7 @@ export const createArea = createItem(Area, "area");
 
 export const showArea = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const user = req.user;
+    const user = req.currentUser;
     const area = await Area.findById(req.params.id).populate("responsable");
 
     if (!area) {

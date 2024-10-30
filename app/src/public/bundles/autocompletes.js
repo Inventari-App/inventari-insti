@@ -1,9 +1,30 @@
 "use strict";
 (() => {
+  var __create = Object.create;
+  var __defProp = Object.defineProperty;
+  var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
   var __getOwnPropNames = Object.getOwnPropertyNames;
+  var __getProtoOf = Object.getPrototypeOf;
+  var __hasOwnProp = Object.prototype.hasOwnProperty;
   var __commonJS = (cb, mod) => function __require() {
     return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
   };
+  var __copyProps = (to, from, except, desc) => {
+    if (from && typeof from === "object" || typeof from === "function") {
+      for (let key of __getOwnPropNames(from))
+        if (!__hasOwnProp.call(to, key) && key !== except)
+          __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+    }
+    return to;
+  };
+  var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+    // If the importer is in node compatibility mode or this is not an ESM
+    // file that has been converted to a CommonJS file using a Babel-
+    // compatible transform (i.e. "__esModule" has not been set), then set
+    // "default" to the CommonJS "module.exports" for node compatibility.
+    isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+    mod
+  ));
 
   // node_modules/autocompleter/autocomplete.js
   var require_autocomplete = __commonJS({
@@ -354,28 +375,34 @@
   });
 
   // src/bundles/autocompletes.ts
-  var autocomplete = require_autocomplete();
+  var import_autocompleter = __toESM(require_autocomplete(), 1);
   var addAutocompletes = (autocompletes) => autocompletes.forEach(({ autocompleteName, filter }) => {
     const inputEl = document.querySelector(`#${autocompleteName}`);
     const optionsRoute = `/${autocompleteName}s/all`;
-    autocomplete({
+    (0, import_autocompleter.default)({
       input: inputEl,
       fetch: function(text, update) {
         window.fetch(optionsRoute).then((res) => res.json()).then((data) => {
           text = text.toLowerCase();
-          var suggestions = data.filter(
+          const suggestions = data.filter(
             (data2) => data2.nom.toLowerCase().includes(text)
           );
           update(
-            filter ? suggestions.filter((suggestion) => suggestion[filter]) : suggestions
+            filter ? suggestions.filter(
+              (suggestion) => suggestion[filter]
+            ) : suggestions
           );
         });
       },
-      onSelect: function(suggestion) {
-        const { nom } = suggestion;
-        this.input.value = nom;
+      onSelect: function(item) {
+        const suggestion = item;
+        if (suggestion) {
+          const { nom } = suggestion;
+          this.input.value = nom;
+        }
       },
-      render: function(suggestion) {
+      render: function(item) {
+        const suggestion = item;
         if (suggestion) {
           const nom = suggestion.nom;
           const div = document.createElement("div");

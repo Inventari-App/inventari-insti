@@ -106,7 +106,7 @@ export const showInvoice = async (req: Request, res: Response) => {
       invoice,
       items,
       invoiceJSON: JSON.stringify(invoice),
-      isResponsable: invoice.responsable._id.equals(req.user?.id),
+      isResponsable: invoice.responsable._id.equals(req.currentUser?.id),
       localizeBoolean,
     },
   );
@@ -139,7 +139,7 @@ export const printInvoice = async (req: Request, res: Response) => {
     items,
     center,
     invoiceJSON: JSON.stringify(invoice),
-    isResponsable: invoice.responsable._id.equals(req.user?.id),
+    isResponsable: invoice.responsable._id.equals(req.currentUser?.id),
     twoDecimals,
   });
 };
@@ -187,8 +187,8 @@ export const updateInvoice = async (req: Request, res: Response) => {
       { new: true },
     ).populate("responsable");
 
-    if (req.user && req.headers.host) {
-      await emailModified({ invoice, user: req.user, host: req.headers.host });
+    if (req.currentUser && req.headers.host) {
+      await emailModified({ invoice, user: req.currentUser, host: req.headers.host });
     }
 
     req.flash("success", "Comanda actualitzada correctament!");

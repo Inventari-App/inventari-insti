@@ -1,27 +1,20 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
-    "typeRoots": ["node_modules/@types", "src/types"],
-    "paths": {
-      "@/*": ["src/*"]
-    },
+    "target": "ES2020",
     "module": "ESNext",
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "target": "ES6",
-    "outDir": "./dist",
-    "rootDir": "./src",
+    "moduleResolution": "Node",
     "strict": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "outDir": "./dist",
+    "baseUrl": "./src",
+    "paths": {
+      "*": ["types/*"]
+    }
   },
-  "include": [
-    "src/**/*.ts"
-, "src/bundles/alpinejs.js"  ],
-  "exclude": [
-    "node_modules",
-    "src/public/**/*"
-  ]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
 }
 

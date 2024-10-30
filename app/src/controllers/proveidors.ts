@@ -28,7 +28,7 @@ export const showProveidor = async (
   next: NextFunction,
 ) => {
   try {
-    const user = req.user;
+    const user = req.currentUser;
     const proveidor = await Proveidor.findById(req.params.id).populate(
       "responsable",
     );
