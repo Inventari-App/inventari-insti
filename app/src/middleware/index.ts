@@ -1,10 +1,10 @@
-import User from "../models/user.ts";
-import Invoice from "../models/invoice.ts";
+import User from "../models/user";
+import Invoice from "../models/invoice";
 import fetch from "node-fetch";
 import { Schema } from "joi";
 import { NextFunction, Request, Response } from "express";
 import { Model } from "mongoose";
-import type { User as UserI } from "../types/models.d.ts";
+import type { User as UserI } from "../types/models";
 
 export const validateSchema =
   (schema: Schema) => (req: Request, res: Response, next: NextFunction) => {
