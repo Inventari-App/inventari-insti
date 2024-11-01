@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "concurrently \"npm run build\" \"npm run start-server\"",
     "start-server": "cross-env NODE_ENV=prod ts-node ./src/app.ts",
-    "dev-server": "cross-env NODE_ENV=dev ts-node-dev --respawn --transpile-only --loader ts-node/esm -r tsconfig-paths/register src/app.ts",
+    "dev-server": "cross-env NODE_ENV=dev node --loader ts-node/esm src/app.ts",
     "dev": "concurrently \"npm run build-watch\" \"npm run dev-server\"",
     "build": "esbuild ./src/bundles/*.ts --bundle --outdir=./src/public/bundles",
     "build-watch": "esbuild ./src/bundles/*.ts --bundle --watch --outdir=./src/public/bundles"
