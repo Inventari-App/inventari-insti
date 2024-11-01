@@ -1,7 +1,7 @@
 import { load } from 'ts-dotenv';
 import { handleRouteError, handleError } from './middleware/index';
-import sessionConfig from './database.ts';
-import configureApp from './config.ts';
+import sessionConfig from './database';
+import configureApp from './config';
 
 const env = load({
   PORT: Number,
