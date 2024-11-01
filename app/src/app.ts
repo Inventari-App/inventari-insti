@@ -1,5 +1,5 @@
 import { load } from 'ts-dotenv';
-import { handleRouteError, handleError } from './middleware';
+import { handleRouteError, handleError } from './middleware/index.js';
 import sessionConfig from './database';
 import configureApp from './config';
 
