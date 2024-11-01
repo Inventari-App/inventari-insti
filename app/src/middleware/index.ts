@@ -4,7 +4,7 @@ import fetch from "node-fetch";
 import { Schema } from "joi";
 import { NextFunction, Request, Response } from "express";
 import { Model } from "mongoose";
-import { type User as UserI } from "types/models.d.ts";
+import type { User as UserI } from "../types/models.d.ts";
 
 export const validateSchema =
   (schema: Schema) => (req: Request, res: Response, next: NextFunction) => {
