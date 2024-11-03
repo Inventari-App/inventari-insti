@@ -12,7 +12,9 @@ exports.loginVerify = (req, res) => {
     res.redirect('/login');
   }
 };
-  // Assuming you already have the view code in views/index.ejs
+
+// Assuming you already have the view code in views/index.ejs
+exports.index = (req, res) => {
   res.render('index', { appTargetUrl: appTargetUrl(), redirect: appTargetUrl("landing") });
 
   // Redirecting to app for now
