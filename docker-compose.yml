@@ -15,6 +15,7 @@ services:
     restart: always
     volumes:
       - ./app:/app
+      - /app/node_modules
 
   landing-page:
     build:
