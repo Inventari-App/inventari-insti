@@ -15,6 +15,8 @@ services:
     networks:
       - my_network
     restart: always
+    volumes:
+      - ./app:/app
 
   landing-page:
     build:
@@ -25,6 +27,8 @@ services:
     networks:
       - my_network
     restart: always
+    volumes:
+      - ./landing-page:/landing-page
 
   # cron_delete_rubbish:
   #   image: alpine
