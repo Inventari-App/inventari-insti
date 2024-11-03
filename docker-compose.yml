@@ -28,6 +28,7 @@ services:
     restart: always
     volumes:
       - ./landing-page:/landing-page
+      - /landing-page/node_modules
 
   # cron_delete_rubbish:
   #   image: alpine

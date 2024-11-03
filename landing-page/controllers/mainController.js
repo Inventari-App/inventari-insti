@@ -1,12 +1,13 @@
 const appTargetUrl = require("../helpers/getAppUrl");
 const cookieParser = require('cookie-parser');
+const verifyPassword = require("../helpers/verifyPassword")
 
 exports.loginVerify = (req, res) => {
   const { password } = req.body;
-  const hardcodedPassword = "Bali&Jero2023";
+  const isCorrectPassword = verifyPassword(password)
 
-  if (password === hardcodedPassword) {
-    res.cookie('authenticated', true, { httpOnly: true });
+  if (isCorrectPassword) {
+    res.cookie('secret', 'pNSc7dbMnpvDeM7', { httpOnly: true });
     res.redirect('/');
   } else {
     res.redirect('/login');
@@ -24,3 +25,4 @@ exports.index = (req, res) => {
 exports.login = (req, res) => {
   res.render('login', { appTargetUrl: appTargetUrl(), redirect: "/" });
 };
+
