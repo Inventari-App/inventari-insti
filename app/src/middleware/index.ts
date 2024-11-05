@@ -1,10 +1,10 @@
-import User from "../models/user";
-import Invoice from "../models/invoice";
+import User from "../models/user.ts";
+import Invoice from "../models/invoice.ts";
 import fetch from "node-fetch";
 import { Schema } from "joi";
 import { NextFunction, Request, Response } from "express";
 import { Model } from "mongoose";
-import type { User as UserI } from "../types/models";
+import type { User as UserI } from "../types/models.d.ts";
 
 export const validateSchema =
   (schema: Schema) => (req: Request, res: Response, next: NextFunction) => {
@@ -33,7 +33,7 @@ export const isSameUser = async (
 ) => {
   const { id } = req.params;
   const user = await User.findById(id);
-  const reqUser: UserI = req.user
+  const reqUser = req.user as UserI
   if (!user._id.equals(reqUser?._id)) {
     req.flash("error", "No tens permisos per fer això!");
     return res.redirect(`/invoices`);
@@ -48,7 +48,7 @@ export const isSameUserOrAdmin = async (
 ) => {
   try {
     const { id } = req.params;
-    const user: UserI = await User.findById(id);
+    const user = await User.findById(id);
     if (user._id != user?.userId && !user?.isAdmin) {
       req.flash("error", "No tens permisos per fer això!");
       return res.redirect(`/invoices`);
@@ -64,7 +64,7 @@ export const isResponsable =
   (Model: Model<any>) =>
   async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
-    const reqUser: UserI = req.user
+    const reqUser = req.user as UserI
     const model = await Model.findById(id);
     if (!model.responsable.equals(reqUser?._id)) {
       req.flash("error", "No tens permisos per fer això!");
@@ -77,7 +77,7 @@ export const isResponsableOrAdmin =
   (Model: Model<any>) =>
   async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
-    const reqUser: UserI = req.user
+    const reqUser = req.user as UserI
     const model = await Model.findById(id);
     if (model.responsable._id != reqUser?._id && !reqUser?.isAdmin) {
       req.flash("error", "No tens permisos per fer això!");
@@ -92,7 +92,8 @@ export const isAdmin = async (
   next: NextFunction,
 ) => {
   try {
-    const user: UserI = await User.findById(req.user?.id);
+    const reqUser = req.user as UserI
+    const user = await User.findById(reqUser.id);
     if (!user.isAdmin) {
       req.flash("error", "No tens permisos per fer això!");
       return res.redirect(`/invoices`);

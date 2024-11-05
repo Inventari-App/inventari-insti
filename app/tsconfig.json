@@ -12,7 +12,9 @@
     "baseUrl": "./src",
     "paths": {
       "*": ["types/*"]
-    }
+    },
+    "sourceMap": true,
+    "allowImportingTsExtensions": true
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "dist"]

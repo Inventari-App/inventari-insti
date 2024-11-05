@@ -4,14 +4,13 @@
   "exports": "./app.ts",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "concurrently \"npm run build\" \"npm run start-server\"",
-    "start-server": "cross-env NODE_ENV=prod node ./dist/app.js",
-    "build-ts": "tsc",
-    "dev-server": "cross-env NODE_ENV=dev node --loader ts-node/esm src/app.ts",
+    "start": "npm run build && npm run start-server",
+    "start-server": "cross-env NODE_ENV=production node ./dist/app.js",
+    "build": "tsc && esbuild ./src/bundles/*.ts --bundle --outdir=./src/public/bundles",
     "dev": "concurrently \"npm run build-watch\" \"npm run dev-server\"",
-    "build": "esbuild ./src/bundles/*.ts --bundle --outdir=./src/public/bundles",
-    "build-watch": "esbuild ./src/bundles/*.ts --bundle --watch --outdir=./src/public/bundles"
+    "dev-server": "cross-env NODE_ENV=development ts-node-esm src/app.ts",
+    "build-watch": "esbuild ./src/bundles/*.ts --bundle --watch --outdir=./src/public/bundles",
+    "build-ts": "tsc -p tsconfig.json"
   },
   "dependencies": {
     "@google-cloud/recaptcha-enterprise": "^5.1.0",
@@ -90,9 +89,9 @@
     "prettier": "^3.3.3",
     "ts-dotenv": "^0.9.1",
     "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.6.2",
-    "typescript-eslint": "^8.8.0",
-    "ts-node-dev": "^2.0.0"
+    "typescript-eslint": "^8.8.0"
   }
 }

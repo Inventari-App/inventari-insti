@@ -1,20 +1,20 @@
-import express from "express";
+import express, { Request } from "express";
 import path from "path";
 import bodyParser from "body-parser";
 import methodOverride from "method-override";
 import session from "express-session";
 import mongoSanitize from "express-mongo-sanitize";
 import ejsMate from "ejs-mate";
-import configHelmet from "./helmet";
-import configurePassport from "./passport";
-import enforceHttps from "./utils/enforceHttps";
-import configureFlash from "./flash";
-import appRouter from "./routers/appRouter";
+import configHelmet from "./helmet.ts";
+import configurePassport from "./passport.ts";
+import enforceHttps from "./utils/enforceHttps.ts";
+import configureFlash from "./flash.ts";
+import appRouter from "./routers/appRouter.ts";
 import contextService from "request-context";
 import cors from "cors";
-import Department from "./models/department";
-import { SessionConfig } from "./database";
-import { User } from "types/models";
+import Department from "./models/department.ts";
+import { SessionConfig } from "./database.ts";
+import type { User } from "./types/models.d.ts";
 
 export default function configureApp(sessionConfig: SessionConfig) {
   const app = express();
@@ -53,7 +53,7 @@ export default function configureApp(sessionConfig: SessionConfig) {
   // Save user info (centerId) on each db operation
   app.use(contextService.middleware("request"));
   // Save user context
-  app.use((req, _res, next) => {
+  app.use((req: Request, _res, next) => {
     contextService.set("request:user", req.currentUser);
     next();
   });

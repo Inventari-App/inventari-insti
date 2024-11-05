@@ -2,7 +2,7 @@ import { load } from 'ts-dotenv';
 import session from "express-session";
 import connectMongo from "connect-mongo";
 import mongoose from "mongoose";
-import { isProduction } from "./utils/helpers";
+import { isProduction } from "./utils/helpers.ts";
 
 export interface SessionConfig {
   store: any;
