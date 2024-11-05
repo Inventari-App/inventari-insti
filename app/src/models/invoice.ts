@@ -1,7 +1,6 @@
 import contextPlugin from "mongoose-request-context";
 import mongoose, { Document } from "mongoose";
 import { addCenterFilter } from "../db/middlewares";
-// @ts-expect-error mongoose-sequence is not typed
 import AutoIncrementFactory from "mongoose-sequence";
 import { ObjectId } from 'mongoose';
 import { User } from "../types/models";

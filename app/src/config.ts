@@ -1,4 +1,4 @@
-import express, { Request } from "express";
+import express, { Express, type Request } from "express";
 import path from "path";
 import bodyParser from "body-parser";
 import methodOverride from "method-override";
@@ -54,7 +54,7 @@ export default function configureApp(sessionConfig: SessionConfig) {
   app.use(contextService.middleware("request"));
   // Save user context
   app.use((req: Request, _res, next) => {
-    contextService.set("request:user", req.currentUser);
+    contextService.set("request:user", req.currentUser as Express.Request);
     next();
   });
   // Save department context

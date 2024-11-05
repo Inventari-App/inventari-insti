@@ -1,4 +1,3 @@
-"use strict";
 (() => {
   // node_modules/alpinejs/dist/module.esm.js
   var flushPending = false;

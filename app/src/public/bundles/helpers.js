@@ -1,4 +1,3 @@
-"use strict";
 (() => {
   // src/bundles/helpers.ts
   function localizeBoolean(val) {

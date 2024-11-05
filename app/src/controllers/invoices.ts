@@ -8,7 +8,7 @@ import Center from "../models/center";
 import { NextFunction, Request, Response } from "express";
 import { Document } from "mongoose";
 import { User as UserI } from "../types/models";
-import User from "@/models/user";
+import User from "../models/user";
 
 const protocol = getProtocol();
 

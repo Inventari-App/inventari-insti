@@ -1,4 +1,3 @@
-"use strict";
 (() => {
   var __create = Object.create;
   var __defProp = Object.defineProperty;
@@ -375,7 +374,7 @@
   });
 
   // src/bundles/autocompletes.ts
-  var import_autocompleter = __toESM(require_autocomplete(), 1);
+  var import_autocompleter = __toESM(require_autocomplete());
   var addAutocompletes = (autocompletes) => autocompletes.forEach(({ autocompleteName, filter }) => {
     const inputEl = document.querySelector(`#${autocompleteName}`);
     const optionsRoute = `/${autocompleteName}s/all`;
