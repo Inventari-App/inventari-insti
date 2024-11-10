@@ -7,7 +7,7 @@
     "start-server": "cross-env NODE_ENV=production node ./dist/app.js",
     "build": "tsc && esbuild ./src/bundles/*.ts --bundle --outdir=./src/public/bundles",
     "dev": "concurrently \"npm run build-watch\" \"npm run dev-server\"",
-    "dev-server": "cross-env TS_NODE_FILES=true TS_NODE_TRANSPILE_ONLY=true NODE_PATH=src nodemon src/app.ts",
+    "dev-server": "cross-env TS_NODE_FILES=true TS_NODE_TRANSPILE_ONLY=true NODE_PATH=src nodemon --exec 'node --inspect -r ts-node/register' src/app.ts",
     "build-watch": "esbuild ./src/bundles/*.ts --bundle --watch --outdir=./src/public/bundles",
     "build-ts": "tsc -p tsconfig.json"
   },
