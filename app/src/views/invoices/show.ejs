@@ -65,7 +65,7 @@
 <% } %>
 
 <%
-  const isAdmin = currentUser && currentUser.isAdmin
+  const isAdmin = user && user.isAdmin
   if(isAdmin || isResponsable) {
 %>
   <div class="card-body">

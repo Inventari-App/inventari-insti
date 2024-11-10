@@ -12,7 +12,7 @@ const validateInvoice = validateSchema(invoiceSchema);
 const isInvoiceResponsableOrAdmin = isResponsableOrAdmin(Invoice);
 
 const checkUserHasDepartment = async (req: Request, res: Response, next: NextFunction) => {
-  const user = req.currentUser;
+  const user = req.user;
   const department = await Department.findById(user?.department);
   if (!department) {
     req.flash("error", "Usuari no vinculat a departament.");

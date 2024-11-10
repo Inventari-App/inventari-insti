@@ -29,7 +29,7 @@ export const showPlanta = async (
   next: NextFunction,
 ) => {
   try {
-    const user = req.currentUser;
+    const user = req.user;
     const planta = await Planta.findById(req.params.id).populate("responsable");
 
     if (!planta) {

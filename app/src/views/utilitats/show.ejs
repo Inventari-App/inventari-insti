@@ -37,7 +37,7 @@
                             <%= area.preu %>€
                         </li>
                     </ul>
-                    <% if( currentUser && area.responsable.equals(currentUser.id)) { %>
+                    <% if( user && area.responsable.equals(user.id)) { %>
                     <div class="card-body">
                         <a href="/areas/<%=area.id%>/edit" class="card-link btn btn-info" class="card-link">Editar
                             Area</a>

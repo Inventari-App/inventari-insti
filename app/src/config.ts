@@ -54,12 +54,12 @@ export default function configureApp(sessionConfig: SessionConfig) {
   app.use(contextService.middleware("request"));
   // Save user context
   app.use((req: Request, _res, next) => {
-    contextService.set("request:user", req.currentUser as Express.Request);
+    contextService.set("request:user", req.user as Express.Request);
     next();
   });
   // Save department context
   app.use(async (req, _res, next) => {
-    const user: User = req.currentUser
+    const user: User = req.user
     try {
       const department = await Department.findById(user?.department).exec();
       contextService.set("request:department", department?.nom);

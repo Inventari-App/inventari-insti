@@ -24,7 +24,7 @@ export const createItem =
     try {
       const data = req.body;
       const model = new Model(data);
-      model.responsable = req.currentUser?._id;
+      model.responsable = req.user?._id;
       await model.save();
 
       req.flash("success", `${capitalize(modelName)} creat/da correctament!`);

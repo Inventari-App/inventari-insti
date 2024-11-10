@@ -42,7 +42,7 @@ export const createArticle = async (
 ) => {
   try {
     const articleBody = req.body.article;
-    const user = req.currentUser;
+    const user = req.user;
     const department = await Department.findById(user?.department);
     const article = new Article({
       ...articleBody,
@@ -91,7 +91,7 @@ export const showArticle = async (
 
     res.render("articles/show", {
       article,
-      isAdmin: req.currentUser?.isAdmin,
+      isAdmin: req.user?.isAdmin,
       isOwner: responsable && responsable._id.equals(user?.id),
     });
   } catch (err) {

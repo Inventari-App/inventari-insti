@@ -8,7 +8,7 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
 
-        <% if (currentUser) { %>
+        <% if (user) { %>
           <li class="nav-item">
             <a class="nav-link px-2" aria-current="location" href="/articles">Articles</a>
           </li>
@@ -22,7 +22,7 @@
           </li>
         <% } %>
 
-        <% if (currentUser && currentUser.isAdmin) { %>
+        <% if (user && user.isAdmin) { %>
           <li class="nav-item">
             <a class="nav-link px-2" aria-current="location" href="/items">Items</a>
           </li>
@@ -38,15 +38,15 @@
       </ul>
     </div>
 
-    <% if(currentUser) { %>
+    <% if(user) { %>
       <div class="navbar-text mx-4">
         <%= center.name %>
         <span>|</span>
-        <%= currentUser.username %>
+        <%= user.username %>
       </div>
     <% } %>
     <div class="navbar-nav ml-auto">
-      <% if(!currentUser) { %>
+      <% if(!user) { %>
         <a class="nav-link px-2" href="/login">Connexió</a>
         <a class="nav-link px-2" href="/register">Registre</a>
         <% } else { %>

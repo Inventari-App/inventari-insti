@@ -5,7 +5,7 @@ export {}
 declare global {
   namespace Express {
     export interface Request {
-      currentUser?: UserModel;
+      user?: UserModel;
       isAuthenticated?: () => boolean;
       flash?: (type: string, message: string) => void;
     }

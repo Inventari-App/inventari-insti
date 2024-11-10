@@ -46,7 +46,7 @@ router.get(
   "/users/new",
   isAdmin,
   catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const center = await Center.findById(req.currentUser?.center);
+    const center = await Center.findById(req.user?.center);
     if (!center) return next();
 
     res.render("users/new", { center });
@@ -63,8 +63,8 @@ router.get(
     res.render("users/show", {
       user,
       center,
-      isAdmin: req.currentUser?.isAdmin,
-      isOwner: user.id == req.currentUser?.id,
+      isAdmin: req.user?.isAdmin,
+      isOwner: user.id == req.user?.id,
       localizeBoolean,
     });
   }),
@@ -96,7 +96,7 @@ router.get("/users");
 router.get(
   "/login",
   (_req: Request, res: Response, next: NextFunction) => {
-    if (res.locals?.currentUser) {
+    if (res.locals?.user) {
       return res.redirect("/");
     }
     next();
