@@ -13,6 +13,7 @@ const {
   verifyUser,
   createCenter,
   sendPasswordReset,
+  registerFirstCenterAdmin,
 } = require("../controllers/users");
 const { isAdmin, isSameUserOrAdmin, validateRecaptcha } = require("../middleware");
 const Center = require("../models/center");
@@ -24,7 +25,8 @@ router.get("/register", (req, res) => {
 
 router.get("/verify", catchAsync(verifyUser))
 
-router.post("/register-center", catchAsync(validateRecaptcha), catchAsync(createCenter))
+// router.post("/register-center", catchAsync(validateRecaptcha), catchAsync(createCenter))
+router.post("/register-center", catchAsync(validateRecaptcha), catchAsync(registerFirstCenterAdmin))
 
 router.post("/register", catchAsync(createUser))
 

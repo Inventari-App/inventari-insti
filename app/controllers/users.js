@@ -6,10 +6,15 @@ const { useNodemailer } = require("../nodemailer/sendEmail");
 const { getProtocol } = require("../utils/helpers");
 const protocol = getProtocol();
 
-async function createCenter(req, res, next) {
+async function registerFirstCenterAdmin(req, res, next) {
   try {
     const { center: centerName, name, surname, email, password, token } = req.body;
-    const center = await new Center({ name: centerName }).save();
+    const center = await Center.findOne({ email })
+
+    if (!center) {
+      throw new Error('No center was found')
+    }
+
     const user = new User({
       email,
       username: email,
@@ -47,8 +52,7 @@ async function createCenter(req, res, next) {
     res.redirect("/login");
   } catch (e) {
     req.flash("error", e.message);
-    res.redirect("register");
-    next(e)
+    res.redirect(req.get('Referer'));
   }
 }
 
@@ -247,6 +251,7 @@ module.exports = {
   deleteUser,
   verifyUser,
   createUser,
-  createCenter,
+  createCenter: registerFirstCenterAdmin,
   sendPasswordReset,
+  registerFirstCenterAdmin,
 };
