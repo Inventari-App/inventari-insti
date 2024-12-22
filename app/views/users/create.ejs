@@ -4,6 +4,7 @@
 
 <div class="col-6 offset-3">
   <form action="/create" method="POST" class="validated-form">
+    <input name="verificationHash" value="<%= verificationHash %>" hidden />
     <input name="centerId" value="<%= center.id %>" hidden />
     <input name="email" value="<%= email %>" hidden />
     <div class="mb-3">

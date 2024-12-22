@@ -99,8 +99,8 @@ async function inviteUser(req, res, next) {
 
 async function createUser(req, res, next) {
   try {
-    const { email, password, centerId, name, surname, hash, department } = req.body;
-    const invitation = Invitation.findOne({ email, verificationHash: hash })
+    const { email, password, centerId, name, surname, verificationHash, department } = req.body;
+    const invitation = await Invitation.findOne({ email, verificationHash })
     const OnedayInMs = 24 * 60 * 60 * 1000
     const expirationDateInMs = new Date().getTime() + OnedayInMs
     const isExpired = invitation && invitation.verificationTs > expirationDateInMs
@@ -135,7 +135,7 @@ async function createUser(req, res, next) {
 
     // User is saved here
     await User.register(user, password);
-    
+
     invitation.set('verified', true)
     await invitation.save()
 

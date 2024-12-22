@@ -37,11 +37,18 @@ router.get("/users/create", catchAsync(async (req, res) => {
     .findById(req.query.invitationId)
     .populate("center")
     .exec()
-  res.render("users/create", {
-    center: invitation.center,
-    email: invitation.email,
-    departments,
-  })
+
+  if (!invitation.verified) {
+    res.render("users/create", {
+      center: invitation.center,
+      email: invitation.email,
+      verificationHash: invitation.verificationHash,
+      departments,
+    })
+  } else {
+    req.flash("error", "El link ha expirat o es invalid")
+    res.render("/login")
+  }
 }));
 
 router.post("/create", catchAsync(createUser));
