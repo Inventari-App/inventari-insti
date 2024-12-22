@@ -29,7 +29,7 @@ export default function RegisterForm() {
     e.preventDefault();
 
     if (formData.password !== formData.repeatPassword) {
-      alert("Passwords do not match!");
+      alert("Els passwords no coincideixen");
       return;
     }
     const { success, data, error } = await fetch(
@@ -55,24 +55,20 @@ export default function RegisterForm() {
   };
 
   return (
-    <div id="register" className="py-16 px-4">
+    <div id="register" className="py-16 px-4 bg-blue-50">
       <ToastContainer />
-      <h2 className="text-3xl font-bold text-center mb-12">Register</h2>
+      <h2 className="text-3xl font-bold text-center mb-12">Registre d'Administradors</h2>
       <form
         onSubmit={handleSubmit}
         className="max-w-md mx-auto bg-white shadow-lg p-8 rounded-lg"
       >
         {[
-          { label: "Email", name: "email", type: "email" },
-          { label: "Name", name: "name", type: "text" },
-          { label: "Surname", name: "surname", type: "text" },
-          { label: "Password", name: "password", type: "password" },
-          {
-            label: "Repeat Password",
-            name: "repeatPassword",
-            type: "password",
-          },
-        ].map(({ label, name, type }) => (
+          { label: "Email", name: "email", type: "email", placeholder: "Email corporatiu del teu centre" },
+          { label: "Nom", name: "name", type: "text", placeholder: "Nom del Administrador" },
+          { label: "Cognoms", name: "surname", type: "text", placeholder: "Cognoms del Administrador" },
+          { label: "Password", name: "password", type: "password", placeholder: "Password" },
+          { label: "Repeteix Password", name: "repeatPassword", type: "password", placeholder: "Repeteix Password" },
+        ].map(({ label, name, type, placeholder }) => (
           <div className="mb-6" key={name}>
             <label className="block mb-2 text-sm font-medium text-gray-700">
               {label}
@@ -84,6 +80,7 @@ export default function RegisterForm() {
               onChange={handleChange}
               required
               className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring focus:ring-blue-300"
+              placeholder={placeholder}
             />
           </div>
         ))}
@@ -91,7 +88,7 @@ export default function RegisterForm() {
           type="submit"
           className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-semibold shadow-lg hover:bg-blue-700"
         >
-          Register
+          Registra't
         </button>
       </form>
     </div>

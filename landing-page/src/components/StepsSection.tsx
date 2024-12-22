@@ -2,15 +2,16 @@ import { FaUser, FaRocket, FaTrophy } from "react-icons/fa";
 
 export default function StepsSection() {
   const steps = [
-    { step: 1, text: "Sign Up for an Account", icon: <FaUser /> },
-    { step: 2, text: "Explore Our Features", icon: <FaRocket /> },
-    { step: 3, text: "Achieve Your Goals", icon: <FaTrophy /> },
+    { step: 1, text: "Registra't com administrador del teu centre aqui mateix fent servir el correu corporatiu", icon: <FaUser /> },
+    { step: 2, text: "Configura el teu centre", icon: <FaTrophy /> },
+    { step: 3, text: "Afegeix els usuaris de cada departament", icon: <FaRocket /> },
+    { step: 4, text: "Comenca a gestionar el teu inventari", icon: <FaRocket /> },
   ];
 
   return (
-    <div className="py-16 px-4 bg-gray-50">
-      <h2 className="text-3xl font-bold text-center mb-12">How It Works</h2>
-      <div className="flex flex-col md:flex-row gap-8 justify-center">
+    <div className="py-16 px-4 bg-blue-50">
+      <h2 className="text-3xl font-bold text-center mb-12">Com funciona</h2>
+      <div className="grid grid-cols-3 lg:grid-cols-4 gap-10 px-10">
         {steps.map(({ step, text, icon }) => (
           <div
             key={step}
