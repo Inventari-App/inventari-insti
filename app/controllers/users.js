@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const Invitation = require("../models/invitation");
 const Center = require("../models/center");
 const { generateHash } = require("random-hash");
 const { getExpirationTs } = require("../utils/helpers");
@@ -26,10 +27,10 @@ async function registerFirstCenterAdmin(req, res, next) {
       verificationHash: generateHash({ length: 8 }),
     });
 
+    await User.register(user, password);
+
     center.users.push(user._id);
     center.save();
-
-    await User.register(user, password);
 
     const { sendEmail, message } = useNodemailer({
       to: user.email,
@@ -45,40 +46,35 @@ async function registerFirstCenterAdmin(req, res, next) {
       ),
     });
 
-    req.flash(
-      "info",
-      "Tens 24 hores per activar el teu usuari fent click al link que t'hem enviat per correu.",
-    );
-    res.redirect("/login");
+    res.json({ data: user, success: true })
   } catch (e) {
-    req.flash("error", e.message);
-    res.redirect(req.get('Referer'));
+    res.json({ success: true, error: e })
   }
 }
 
-async function createUser(req, res, next) {
+async function inviteUser(req, res, next) {
   try {
-    const { email, password, centerId } = req.body;
-    const user = new User({
+    const center = await Center.findById(req.body.centerId)
+    const invitation = new Invitation({
       ...req.body,
-      username: email,
-      center: centerId,
+      center: center._id,
       verificationTs: getExpirationTs(),
       verificationHash: generateHash({ length: 8 }),
     })
+    await invitation.save()
 
-    if (!user) {
-      throw new Error("Alguna cosa ha sortit malament al crear l'usuari")
+    if (!invitation) {
+      throw new Error("Alguna cosa ha sortit malament al invitar l'usuari")
     }
 
-    const center = await Center.findById(centerId);
-    center.users.push(user._id);
+    // const center = await Center.findById(centerId);
+    // center.users.push(invitation._id);
 
     // User is saved here
-    await User.register(user, password);
+    // await User.register(invitation, password);
 
     const { sendEmail, message } = useNodemailer({
-      to: user.email,
+      to: invitation.email,
       model: "user",
       reason: "verify",
     });
@@ -86,7 +82,7 @@ async function createUser(req, res, next) {
       subject: message.subject,
       text: message.text.replace(
         /{{url}}/,
-        `${protocol}://${req.headers.host}/verify?userId=${user.id}&token=${user.verificationHash}`,
+        `${protocol}://${req.headers.host}/users/create?invitationId=${invitation.id}&token=${invitation.verificationHash}`,
       ),
     });
     req.flash(
@@ -100,6 +96,61 @@ async function createUser(req, res, next) {
     next(e)
   }
 }
+
+async function createUser(req, res, next) {
+  try {
+    const { email, password, centerId, name, surname, hash, department } = req.body;
+    const invitation = Invitation.findOne({ email, verificationHash: hash })
+    const OnedayInMs = 24 * 60 * 60 * 1000
+    const expirationDateInMs = new Date().getTime() + OnedayInMs
+    const isExpired = invitation && invitation.verificationTs > expirationDateInMs
+
+    if (!invitation) {
+      console.error('Verification hash could not be found')
+      throw new Error("Alguna cosa ha sortit malament al crear l'usuari")
+    }
+
+    if (invitation.verified || isExpired) {
+      console.error('Invitation is expired')
+      throw new Error("Alguna cosa ha sortit malament al crear l'usuari")
+    }
+
+    const user = new User({
+      password,
+      name,
+      surname,
+      username: email,
+      email,
+      center: centerId,
+      department,
+      isVerified: true, // User can only be created by clicking invitation link
+    })
+
+    if (!user) {
+      throw new Error("Alguna cosa ha sortit malament al crear l'usuari")
+    }
+
+    const center = await Center.findById(centerId);
+    center.users.push(user._id);
+
+    // User is saved here
+    await User.register(user, password);
+    
+    invitation.set('verified', true)
+    await invitation.save()
+
+    req.flash(
+      "info",
+      "Enhorabona! Ja estas registrat, i pots entrar a l'aplicacio",
+    );
+    res.redirect("/login");
+  } catch (e) {
+    req.flash("error", e.message);
+    res.redirect("/login");
+    next(e)
+  }
+}
+
 
 async function sendPasswordReset(req, res, next) {
   const { username: email } = req.body;
@@ -250,6 +301,7 @@ module.exports = {
   updateUser,
   deleteUser,
   verifyUser,
+  inviteUser,
   createUser,
   createCenter: registerFirstCenterAdmin,
   sendPasswordReset,

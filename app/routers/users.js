@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 const catchAsync = require("../utils/catchAsync");
+const Invitation = require("../models/invitation");
 const User = require("../models/user");
 const Department = require("../models/department");
 const {
@@ -11,7 +12,7 @@ const {
   deleteUser,
   createUser,
   verifyUser,
-  createCenter,
+  inviteUser,
   sendPasswordReset,
   registerFirstCenterAdmin,
 } = require("../controllers/users");
@@ -26,9 +27,24 @@ router.get("/register", (req, res) => {
 router.get("/verify", catchAsync(verifyUser))
 
 // router.post("/register-center", catchAsync(validateRecaptcha), catchAsync(createCenter))
-router.post("/register-center", catchAsync(validateRecaptcha), catchAsync(registerFirstCenterAdmin))
+router.post("/register-center", catchAsync(registerFirstCenterAdmin))
 
-router.post("/register", catchAsync(createUser))
+router.post("/register", catchAsync(inviteUser))
+
+router.get("/users/create", catchAsync(async (req, res) => {
+  const departments = await Department.find()
+  const invitation = await Invitation
+    .findById(req.query.invitationId)
+    .populate("center")
+    .exec()
+  res.render("users/create", {
+    center: invitation.center,
+    email: invitation.email,
+    departments,
+  })
+}));
+
+router.post("/create", catchAsync(createUser));
 
 router.get("/users",
   isAdmin,
