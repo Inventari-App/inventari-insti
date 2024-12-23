@@ -22,7 +22,7 @@ services:
       context: ./landing-page
       dockerfile: Dockerfile
     ports:
-      - "3001:3001"
+      - "3001:80"
     networks:
       - my_network
     restart: always

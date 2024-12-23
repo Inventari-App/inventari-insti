@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 
-interface FormData {
+interface FormData extends Record<string, any> {
   email: string;
   name: string;
   surname: string;
@@ -20,19 +20,19 @@ export default function RegisterForm() {
     repeatPassword: "",
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target as HTMLInputElement;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (formData.password !== formData.repeatPassword) {
       alert("Els passwords no coincideixen");
       return;
     }
-    const { success, data, error } = await fetch(
+    const { error } = await fetch(
       "http://localhost:3000/register-center",
       {
         method: "POST",
