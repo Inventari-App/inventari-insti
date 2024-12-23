@@ -16,6 +16,7 @@ const {
   sendPasswordReset,
   registerFirstCenterAdmin,
 } = require("../controllers/users");
+const centre = require('../controllers/centre');
 const { isAdmin, isSameUserOrAdmin, validateRecaptcha } = require("../middleware");
 const Center = require("../models/center");
 const { localizeBoolean, sortByKey } = require("../utils/helpers");
@@ -206,5 +207,9 @@ router.post("/logout", (req, res, next) => {
     res.redirect(301, "/login");
   })
 });
+
+router.route('/verify-center')
+.get(catchAsync(centre.verify))
+
 
 module.exports = router;
