@@ -40,7 +40,7 @@ export default function RegisterForm() {
         ...prevState,
         email: success
           ? ""
-          : "L'email no coincideix amb cap email corporatiu dels centres registrats",
+          : "L'email no coincideix amb cap dels centres registrats",
       }));
     });
   }, 500);
@@ -138,20 +138,22 @@ export default function RegisterForm() {
           const value = formData[name];
           const error = value && errors[name];
           return (
-            <div className="mb-6" key={name}>
-              <label className="block mb-2 text-sm font-medium text-gray-700">
-                {label}
-              </label>
-              <input
-                type={type}
-                name={name}
-                value={value}
-                onChange={handleChange}
-                required
-                className={`w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring focus:ring-blue-300 ${error && errorClassName} ${value && !error && successClassName}`}
-                placeholder={placeholder}
-              />
-              <div className="text-red-500 text-xs mt-2">{error}</div>
+            <div className="relative mb-8">
+              <div key={name}>
+                <label className="block mb-2 text-sm font-medium text-gray-700">
+                  {label}
+                </label>
+                <input
+                  type={type}
+                  name={name}
+                  value={value}
+                  onChange={handleChange}
+                  required
+                  className={`w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring focus:ring-blue-300 ${error && errorClassName} ${value && !error && successClassName}`}
+                  placeholder={placeholder}
+                />
+              </div>
+              <div className="text-red-500 text-xs mt-1 absolute">{error}</div>
             </div>
           );
         })}
