@@ -57,6 +57,7 @@
         <th>Preu</th>
         <th>Iva</th>
         <th>Total</th>
+        <th>Proveidor</th>
       </tr>
     </thead>
     <tbody>
@@ -69,6 +70,7 @@
           <td><%= item?.preu %>€</td>
           <td><%= item?.iva %>%</td>
           <td><%= item?.subtotal %>€</td>
+          <td><%= item?.proveidor %></td>
         </tr>
       <% }) %>
     </tbody>
