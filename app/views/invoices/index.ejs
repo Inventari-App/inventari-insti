@@ -71,7 +71,7 @@
           </span>
         <td>
           <% if (isRebuda) { %>
-            <span style="width: 50%; cursor: unset; pointer-events: none;" class="btn received status">Rebuda</span>
+            <a href="/invoices/<%= invoice._id %>" style="width: 50%;" class="btn received status">Rebuda</a>
             <a onclick="window.open('/invoices/<%=invoice._id%>/print', '_blank')" style="width: 50%" class="btn btn-primary">Imprimeix</a>
           <% } else if (isAprovada) { %>
             <a href="/invoices/<%= invoice._id %>" style="min-width: 100%" class="btn approved status">Aprovada</a>

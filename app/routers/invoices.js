@@ -27,7 +27,7 @@ router.route('/')
 router.get('/new', isLoggedIn, checkUserHasDepartment, invoices.renderNewForm);
 
 router.route('/:id')
-  .get(isInvoiceAprovada, catchAsync(invoices.showInvoice))
+  .get(catchAsync(invoices.showInvoice))
   .put(isLoggedIn, isInvoiceResponsableOrAdmin, validateInvoice, catchAsync(invoices.updateInvoice))
   .delete(isLoggedIn, isInvoiceResponsableOrAdmin, catchAsync(invoices.deleteInvoice));
 
