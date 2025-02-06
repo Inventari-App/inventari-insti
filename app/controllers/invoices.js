@@ -83,7 +83,7 @@ module.exports.showInvoice = async (req, res, next) => {
     },
   });
 
-  const pageToRender = invoice.status === "approvada"
+  const pageToRender = invoice.status === "aprovada"
     ? "invoices/receive"
     : invoice.status === "rebuda"
       ? "invoices/view"
