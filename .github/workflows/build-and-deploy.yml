@@ -16,6 +16,8 @@ jobs:
           username: ${{secrets.USERNAME}}
 
           script: |
+            set -euo pipefail
+
             if [ -d "$HOME/inventari-insti" ]; then
               cd $HOME/inventari-insti
               git checkout master
@@ -25,6 +27,10 @@ jobs:
               git clone git@github.com:Inventari-App/inventari-insti.git
               cd $HOME/inventari-insti
             fi
+
+            DEPLOYED_SHA=$(git rev-parse HEAD)
+            echo "Deploying commit: $DEPLOYED_SHA"
+
             docker compose -f docker-compose.yml down
             docker image prune -a -f --filter "until=24h"
             docker builder prune -f --filter "until=24h"
