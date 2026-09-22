@@ -17,7 +17,26 @@
     <a class="btn received mb-3 filter-received" href="/invoices?status=rebuda">Rebudes</a>
 
   </div>
-  <a class="btn btn-primary mb-3" href="/invoices/new">Afegeix Comanda</a>
+  <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#migrationModal">Afegeix Comanda</button>
+</div>
+
+<div class="modal fade" id="migrationModal" tabindex="-1" aria-labelledby="migrationModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="migrationModalLabel">Hem canviat d'aplicació!</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tancar"></button>
+      </div>
+      <div class="modal-body">
+        <p>Aquesta versió de Control a Material ja no permet crear noves comandes. A partir d'ara cal fer-ho des de la nova aplicació.</p>
+        <p>D'ara en endavant, les noves comandes hauran de ser creades a la nova versió. Aquesta versió quedarà obsoleta per consultar l'històric de comandes. Gràcies per la vostra col·laboració.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Tancar</button>
+        <a class="btn btn-primary" href="https://controlamaterial.vercel.app/" target="_blank" rel="noopener noreferrer">Anar a la nova aplicació</a>
+      </div>
+    </div>
+  </div>
 </div>
 
 <table id="invoices-table" class="table table-striped align-middle">
